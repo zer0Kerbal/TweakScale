@@ -212,8 +212,9 @@ namespace TweakScale
                 var range = (UI_FloatEdit)Fields["tweakScale"].uiControlEditor;
                 range.minValue = scaleType.MinValue;
                 range.maxValue = scaleType.MaxValue;
-                range.incrementLarge = (float)Math.Round((range.maxValue - range.minValue) / 10, 2);
-                range.incrementSmall = (float)Math.Round(range.incrementLarge / 10, 2);
+                range.incrementLarge = (float)Math.Round(range.maxValue / 8, 3);
+                range.incrementSmall = (float)Math.Round(range.incrementLarge / 2, 3);
+                range.incrementSlide = (float)Math.Round(range.incrementSmall / 25, 3);
                 Fields["tweakScale"].guiUnits = scaleType.Suffix;
             }
             else
