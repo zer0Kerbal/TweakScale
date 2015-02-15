@@ -360,7 +360,12 @@ namespace TweakScale
         {
             if (isFreeScale)
             {
-                node.size = (int)(baseNode.size + (tweakScale - defaultScale) / (MaxSize - MinSize) * 5);
+                float tmpBaseNodeSize = baseNode.size;
+                if (tmpBaseNodeSize == 0)
+                {
+                    tmpBaseNodeSize = 0.5f;
+                }
+                node.size = (int)(tmpBaseNodeSize * tweakScale / defaultScale +0.49);
             }
             else
             {
