@@ -479,13 +479,13 @@ namespace TweakScale
 
             return Tuple.Create(nodeA, nodeB);
         }
-
+                
         /// <summary>
         /// Calculate the correct scale to use for scaling a part relative to another.
         /// </summary>
         /// <param name="a">Source part, from which we get the desired scale.</param>
         /// <param name="b">Target part, which will potentially be scaled.</param>
-        /// <returns>The difference in scale between <paramref name="a"/> and <paramref name="b"/>, or null if the parts are incompatible.</returns>
+        /// <returns>The difference in scale between the (scaled) attachment nodes connecting <paramref name="a"/> and <paramref name="b"/>, or null if somethinng went wrong.</returns>
         private static float? GetRelativeScaling(TweakScale a, TweakScale b)
         {
             if (a == null || b == null)
@@ -495,23 +495,26 @@ namespace TweakScale
 
             if (!nodes.HasValue)
                 return null;
-
+            
             var nodeA = nodes.Value.Item1;
             var nodeB = nodes.Value.Item2;
 
-            if (!a.ScaleType.AttachNodes.ContainsKey(nodeA.id) ||
-                !b.ScaleType.AttachNodes.ContainsKey(nodeB.id))
+            var aIdx = a._prefabPart.attachNodes.FindIndex( t => t.id == nodeA.id);
+            var bIdx = b._prefabPart.attachNodes.FindIndex( t => t.id == nodeB.id);
+            if (aIdx < 0 || bIdx < 0
+                || aIdx >= a._prefabPart.attachNodes.Count
+                || aIdx >= a._prefabPart.attachNodes.Count)
                 return null;
-
-            var scaleA = a.ScaleType.AttachNodes[nodeA.id];
-            var scaleB = b.ScaleType.AttachNodes[nodeB.id];
-            var baseA = a.ScaleType.BaseScale;
-            var baseB = b.ScaleType.BaseScale;
-
-            if (scaleA.Family != scaleB.Family)
-                return null;
-
-            return (scaleA.Scale*baseB)/(scaleB.Scale*baseA);
+            
+            var sizeA = (float)a._prefabPart.attachNodes[aIdx].size;
+            var sizeB = (float)b._prefabPart.attachNodes[bIdx].size;
+            
+            if (sizeA == 0)
+                sizeA = 0.5f;
+            if (sizeB == 0)
+                sizeB = 0.5f;
+            
+            return (sizeA * a.tweakScale/a.defaultScale)/(sizeB * b.tweakScale/b.defaultScale);
         }
 
         /// <summary>
@@ -528,8 +531,8 @@ namespace TweakScale
             if (!factor.HasValue)
                 return;
 
-            b.tweakScale = a.tweakScale * factor.Value;
-            if (a.ScaleFactors.Length > 0)
+            b.tweakScale = b.tweakScale * factor.Value;
+            if (b.ScaleFactors.Length > 0)
             {
                 b.tweakName = Tools.ClosestIndex(b.tweakScale, b.ScaleFactors);
             }
@@ -544,14 +547,16 @@ namespace TweakScale
             foreach (var child in part.children)
             {
                 var ts = child.GetComponent<TweakScale>();
-                var factor = GetRelativeScaling(this, ts);
-                if (!factor.HasValue)
-                    continue;
+ //               var factor = GetRelativeScaling(this, ts);
+ //               if (!factor.HasValue)
+ //                   continue;
 
-                if (factor.Value*currentScale == ts.tweakScale)
-                {
+        // no idea what this condition does
+        // but it will not work with the changed GetRelativeScaling method
+ //               if (factor.Value*currentScale == ts.tweakScale)
+ //               {
                     AutoScale(this, ts);
-                }
+ //               }
             }
         }
 
