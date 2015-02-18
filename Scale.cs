@@ -293,9 +293,9 @@ namespace TweakScale
             if (HighLogic.LoadedSceneIsEditor)
             {
                 _autoscaleEnabled = HotkeyManager.Instance.AddHotkey("Autoscale", new[] {KeyCode.LeftShift},
-                    new[] {KeyCode.LeftControl, KeyCode.L}, true);
+                    new[] {KeyCode.LeftControl, KeyCode.L}, false);
                 _chainingEnabled = HotkeyManager.Instance.AddHotkey("Scale chaining", new[] {KeyCode.LeftShift},
-                    new[] {KeyCode.LeftControl, KeyCode.K}, true);
+                    new[] {KeyCode.LeftControl, KeyCode.K}, false);
             }
         }
 
@@ -527,12 +527,15 @@ namespace TweakScale
             if (a == null || b == null)
                 return;
 
+            if (a.ScaleType != b.ScaleType)
+                return;
+
             var factor = GetRelativeScaling(a,b);
             if (!factor.HasValue)
                 return;
 
             b.tweakScale = b.tweakScale * factor.Value;
-            if (b.ScaleFactors.Length > 0)
+            if (!b.isFreeScale && (b.ScaleFactors.Length > 0))
             {
                 b.tweakName = Tools.ClosestIndex(b.tweakScale, b.ScaleFactors);
             }
@@ -547,16 +550,14 @@ namespace TweakScale
             foreach (var child in part.children)
             {
                 var ts = child.GetComponent<TweakScale>();
- //               var factor = GetRelativeScaling(this, ts);
- //               if (!factor.HasValue)
- //                   continue;
+                var factor = GetRelativeScaling(this, ts);
+                if (!factor.HasValue)
+                    continue;
 
-        // no idea what this condition does
-        // but it will not work with the changed GetRelativeScaling method
- //               if (factor.Value*currentScale == ts.tweakScale)
- //               {
+                if (Math.Abs(factor.Value - (tweakScale / currentScale)) <= 1e-4f)
+                {
                     AutoScale(this, ts);
- //               }
+                }
             }
         }
 
