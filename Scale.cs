@@ -633,29 +633,33 @@ namespace TweakScale
                 return;
             }
 
-            if (_firstUpdateWithParent && part.HasParent())
+            if (HighLogic.LoadedSceneIsEditor)
             {
-                if (_autoscaleEnabled)
+                if (_firstUpdateWithParent && part.HasParent() && _autoscaleEnabled.State )
                 {
                     AutoScale(part.parent.GetComponent<TweakScale>(), this);
                 }
-                _firstUpdateWithParent = false;
+
+                if ( currentScale >= 0f)
+                {
+                    var changed = currentScale != (isFreeScale ? tweakScale : ScaleFactors[tweakName]);
+
+                    if (changed) // user has changed the scale tweakable
+                    {
+                        // If the user has changed the scale of the part before attaching it, we want to keep that scale.
+                        _firstUpdateWithParent = false;
+                        OnTweakScaleChanged();
+                    }
+                    else if (part.transform.GetChild(0).localScale != _savedScale) // editor frequently nukes our OnStart resize some time later
+                    {
+                        UpdateByWidth(false, true);
+                    }
+                }
             }
 
-            if (HighLogic.LoadedSceneIsEditor && currentScale >= 0f)
+            if (_firstUpdateWithParent && part.HasParent())
             {
-                var changed = currentScale != (isFreeScale ? tweakScale : ScaleFactors[tweakName]);
-
-                if (changed) // user has changed the scale tweakable
-                {
-                    // If the user has changed the scale of the part before attaching it, we want to keep that scale.
-                    _firstUpdateWithParent = false;
-                    OnTweakScaleChanged();
-                }
-                else if (part.transform.GetChild(0).localScale != _savedScale) // editor frequently nukes our OnStart resize some time later
-                {
-                    UpdateByWidth(false, true);
-                }
+                _firstUpdateWithParent = false;
             }
 
             foreach (var upd in _updaters.OfType<IUpdateable>())
