@@ -138,8 +138,8 @@ namespace TweakScale
         public readonly bool IsFreeScale = false;
         public readonly string[] TechRequired = { "", "", "", "", "" };
         public readonly Dictionary<string, NodeInfo> AttachNodes = new Dictionary<string, NodeInfo>();
-        public readonly float MinValue = 0.625f;
-        public readonly float MaxValue = 5.0f;
+        public readonly float MinValue = 0f;
+        public readonly float MaxValue = 0f;
         public readonly float DefaultScale = 1.25f;
         public readonly string Suffix = "m";
         public readonly string Name;
@@ -221,6 +221,21 @@ namespace TweakScale
             }
 
             var tmpScale = Tools.ConfigValue(config, "defaultScale", source.DefaultScale);
+            // fallback for MinValue and MaxValue
+            if (MaxValue == 0f)
+            {
+                if (AllScaleFactors.Length > 0)
+                    MaxValue = AllScaleFactors.Max();
+                else
+                    MaxValue = tmpScale * 4.0f;
+            }
+            if (MinValue == 0f)
+            {
+                if (AllScaleFactors.Length > 0)
+                    MaxValue = AllScaleFactors.Min();
+                else
+                    MinValue = tmpScale * 0.5f;
+            }
             if (!IsFreeScale)
             {
                 tmpScale = Tools.Closest(tmpScale, AllScaleFactors);

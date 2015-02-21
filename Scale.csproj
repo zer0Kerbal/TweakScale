@@ -32,6 +32,8 @@
     <CustomCommands>
       <CustomCommands>
         <Command type="AfterBuild" command="cp ./bin/Release/Scale.dll ./GameData/TweakScale/plugins/" workingdir="." />
+        <Command type="AfterBuild" command="cp -r ./GameData/TweakScale ../ksp_090/GameData/" workingdir="." />
+        <Command type="Execute" command="../ksp_090/KSP.x86" workingdir="../ksp_090/" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
