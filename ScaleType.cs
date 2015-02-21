@@ -141,6 +141,9 @@ namespace TweakScale
         public readonly float MinValue = 0f;
         public readonly float MaxValue = 0f;
         public readonly float DefaultScale = 1.25f;
+        public readonly float IncrementLarge = 0;
+        public readonly float IncrementSmall = 0;
+        public readonly float IncrementSlide = 0;
         public readonly string Suffix = "m";
         public readonly string Name;
         public readonly string Family;
@@ -205,6 +208,10 @@ namespace TweakScale
             Name          = Tools.ConfigValue(config, "name",         "unnamed scaletype");
             Family        = Tools.ConfigValue(config, "family",       "default");
             AttachNodes   = GetNodeFactors(config.GetNode("ATTACHNODES"), source.AttachNodes);
+            IncrementLarge= Tools.ConfigValue(config, "incrementLarge",     source.IncrementLarge);
+            IncrementSmall= Tools.ConfigValue(config, "incrementSmall",     source.IncrementSmall);
+            IncrementSlide= Tools.ConfigValue(config, "incrementSlide",     source.IncrementSlide);
+
             if (Name == "TweakScale")
             {
                 Name = source.Name;
@@ -241,6 +248,10 @@ namespace TweakScale
                 tmpScale = Tools.Closest(tmpScale, AllScaleFactors);
             }
             DefaultScale = Tools.Clamp(tmpScale, MinValue, MaxValue);
+            if (IncrementLarge == 0)
+                IncrementLarge = MaxValue;
+            if (IncrementSlide == 0)
+                IncrementSlide = MaxValue / 200f;
 
             Exponents = ScaleExponents.CreateExponentsForModule(config, source.Exponents);
         }
