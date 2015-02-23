@@ -269,7 +269,8 @@ namespace TweakScale
                 tweakScale = ScaleFactors[tweakName];
             }
 
-            if (!doUpdate)
+            if (!doUpdate
+                && (Math.Abs(ScalingFactor.absolute.linear - 1f) > 1e-5f))
             {
                 UpdateByWidth(false, true);
                 foreach (var updater in _updaters)
