@@ -239,7 +239,7 @@ namespace TweakScale
             if (MinValue == 0f)
             {
                 if (AllScaleFactors.Length > 0)
-                    MaxValue = AllScaleFactors.Min();
+                    MinValue = AllScaleFactors.Min();
                 else
                     MinValue = tmpScale * 0.5f;
             }
