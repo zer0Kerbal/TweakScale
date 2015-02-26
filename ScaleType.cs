@@ -217,14 +217,21 @@ namespace TweakScale
                 Name = source.Name;
             }
 
-            if (_scaleFactors.Length != _scaleNames.Length)
+            if (!IsFreeScale && (_scaleFactors.Length != _scaleNames.Length))
             {
-                Tools.LogWf("Wrong number of scaleFactors compared to scaleNames: {0} scaleFactors vs {1} scaleNames", _scaleFactors.Length, _scaleNames.Length);
+                Tools.LogWf("Wrong number of scaleFactors compared to scaleNames in scaleType \"{0}\": {1} scaleFactors vs {2} scaleNames", Name, _scaleFactors.Length, _scaleNames.Length);
             }
 
-            if (TechRequired.Length < _scaleFactors.Length)
+            int numTechs = TechRequired.Length;
+            if (numTechs != _scaleFactors.Length)
             {
-                TechRequired = TechRequired.Concat("".Repeat()).Take(_scaleFactors.Length).ToArray();
+                if (numTechs > 0)
+                    Tools.LogWf("Wrong number of techRequired compared to scaleFactors in scaleType \"{0}\": {1} scaleFactors vs {2} techRequired", Name, _scaleFactors.Length, TechRequired.Length);
+
+                if (numTechs < _scaleFactors.Length)
+                {
+                    TechRequired = TechRequired.Concat("".Repeat()).Take(_scaleFactors.Length).ToArray();
+                }
             }
 
             var tmpScale = Tools.ConfigValue(config, "defaultScale", source.DefaultScale);
@@ -232,16 +239,22 @@ namespace TweakScale
             if (MaxValue == 0f)
             {
                 if (AllScaleFactors.Length > 0)
-                    MaxValue = AllScaleFactors.Max();
+                    MaxValue = _scaleFactors.Max();
                 else
+                {
+                    Tools.LogWf("ScaleType \"{0}\" is missing a maxScale", Name);
                     MaxValue = tmpScale * 4.0f;
+                }
             }
             if (MinValue == 0f)
             {
                 if (AllScaleFactors.Length > 0)
-                    MinValue = AllScaleFactors.Min();
+                    MinValue = _scaleFactors.Min();
                 else
+                {
                     MinValue = tmpScale * 0.5f;
+                    Tools.LogWf("ScaleType \"{0}\" is missing a minScale", Name);
+                }
             }
             if (!IsFreeScale)
             {
