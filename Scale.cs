@@ -572,7 +572,7 @@ namespace TweakScale
                 tweakScale = ScaleFactors[tweakName];
             }
 
-            if (_chainingEnabled)
+            if ((_chainingEnabled != null) && _chainingEnabled.State)
             {
                 ChainScale();
             }
@@ -636,9 +636,10 @@ namespace TweakScale
 
             if (HighLogic.LoadedSceneIsEditor)
             {
-                if (_firstUpdateWithParent && part.HasParent() && _autoscaleEnabled.State )
+                if (_firstUpdateWithParent && part.HasParent())
                 {
-                    AutoScale(part.parent.GetComponent<TweakScale>(), this);
+                    if((_autoscaleEnabled != null) && _autoscaleEnabled.State)
+                        AutoScale(part.parent.GetComponent<TweakScale>(), this);
                 }
 
                 if ( currentScale >= 0f)
