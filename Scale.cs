@@ -30,7 +30,7 @@ namespace TweakScale
         /// The selected scale. Different from currentScale only for destination single update, where currentScale is set to match this.
         /// </summary>
         [KSPField(isPersistant = true, guiActiveEditor = true, guiName = "Scale", guiFormat = "S4", guiUnits = "m")]
-        [UI_FloatEdit(scene = UI_Scene.Editor, minValue = 0.625f, maxValue = 5, incrementLarge = 1.25f, incrementSmall = 0.125f, incrementSlide = 0.001f)]
+        [UI_ScaleEdit(scene = UI_Scene.Editor)]
 // ReSharper disable once InconsistentNaming
         public float tweakScale = 1;
 
@@ -177,8 +177,8 @@ namespace TweakScale
             {
                 if (!isFreeScale)
                     return ScaleFactors.Min();
-                var range = (UI_FloatEdit)Fields["tweakScale"].uiControlEditor;
-                return range.minValue;
+                var range = (UI_ScaleEdit)Fields["tweakScale"].uiControlEditor;
+                return range.MinValue();
             }
         }
 
@@ -191,8 +191,8 @@ namespace TweakScale
             {
                 if (!isFreeScale)
                     return ScaleFactors.Max();
-                var range = (UI_FloatEdit)Fields["tweakScale"].uiControlEditor;
-                return range.maxValue;
+                var range = (UI_ScaleEdit)Fields["tweakScale"].uiControlEditor;
+                return range.MaxValue();
             }
         }
 
@@ -209,11 +209,8 @@ namespace TweakScale
             if (isFreeScale)
             {
                 Fields["tweakScale"].guiActiveEditor = true;
-                var range = (UI_FloatEdit)Fields["tweakScale"].uiControlEditor;
-                range.minValue = scaleType.MinValue;
-                range.maxValue = scaleType.MaxValue;
-                range.incrementLarge = scaleType.IncrementLarge;
-                range.incrementSmall = scaleType.IncrementSmall;
+                var range = (UI_ScaleEdit)Fields["tweakScale"].uiControlEditor;
+                range.intervals = scaleType.ScaleFactors;
                 range.incrementSlide = scaleType.IncrementSlide;
                 Fields["tweakScale"].guiUnits = scaleType.Suffix;
             }

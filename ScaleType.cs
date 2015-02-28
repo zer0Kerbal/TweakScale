@@ -131,19 +131,17 @@ namespace TweakScale
 
         private static readonly ScaleType DefaultScaleType = new ScaleType();
 
-        private readonly float[] _scaleFactors = { 0.625f, 1.25f, 2.5f, 3.75f, 5f };
+        private readonly float[] _scaleFactors = {};
         private readonly string[] _scaleNames = { "62.5cm", "1.25m", "2.5m", "3.75m", "5m" };
         public readonly Dictionary<string, ScaleExponents> Exponents = new Dictionary<string, ScaleExponents>();
 
         public readonly bool IsFreeScale = false;
-        public readonly string[] TechRequired = { "", "", "", "", "" };
+        public readonly string[] TechRequired = {};
         public readonly Dictionary<string, NodeInfo> AttachNodes = new Dictionary<string, NodeInfo>();
         public readonly float MinValue = 0f;
         public readonly float MaxValue = 0f;
         public readonly float DefaultScale = 1.25f;
-        public readonly float IncrementLarge = 0;
-        public readonly float IncrementSmall = 0;
-        public readonly float IncrementSlide = 0;
+        public readonly float[] IncrementSlide = {};
         public readonly string Suffix = "m";
         public readonly string Name;
         public readonly string Family;
@@ -208,8 +206,6 @@ namespace TweakScale
             Name          = Tools.ConfigValue(config, "name",         "unnamed scaletype");
             Family        = Tools.ConfigValue(config, "family",       "default");
             AttachNodes   = GetNodeFactors(config.GetNode("ATTACHNODES"), source.AttachNodes);
-            IncrementLarge= Tools.ConfigValue(config, "incrementLarge",     source.IncrementLarge);
-            IncrementSmall= Tools.ConfigValue(config, "incrementSmall",     source.IncrementSmall);
             IncrementSlide= Tools.ConfigValue(config, "incrementSlide",     source.IncrementSlide);
 
             if (Name == "TweakScale")
@@ -222,7 +218,40 @@ namespace TweakScale
                 Tools.LogWf("Wrong number of scaleFactors compared to scaleNames in scaleType \"{0}\": {1} scaleFactors vs {2} scaleNames", Name, _scaleFactors.Length, _scaleNames.Length);
             }
 
-            int numTechs = TechRequired.Length;
+            var tmpScale = Tools.ConfigValue(config, "defaultScale", source.DefaultScale);
+            // fallback for missing scaleFactors
+            if (_scaleFactors.Length == 0)
+            {
+                Tools.LogWf("scaleType \"{0}\" has no scaleFactors!", Name);
+                if (!IsFreeScale)
+                    _scaleFactors = new float[] { 0.625f, 1.25f, 2.5f, 3.75f, 5f };
+                else
+                {
+                    if (MinValue > 0 && MaxValue > 0)
+                    {
+                        if (tmpScale > MinValue && tmpScale < MaxValue)
+                            _scaleFactors = new float[] { MinValue, tmpScale, MaxValue };
+                        else
+                            _scaleFactors = new float[] { MinValue, MaxValue };
+                    }
+                    else if (tmpScale > 0)
+                        _scaleFactors = new float[] { tmpScale/10f,tmpScale/2, tmpScale, tmpScale*2, tmpScale*4f };
+                }
+            }
+
+            if (!IsFreeScale)
+            {
+                tmpScale = Tools.Closest(tmpScale, AllScaleFactors);
+            }
+            DefaultScale = Tools.Clamp(tmpScale, _scaleFactors.Min(), _scaleFactors.Max());
+
+            if (IncrementSlide.Length == 0)
+            {
+                IncrementSlide = new float[1];
+                IncrementSlide[0] = tmpScale / 50f;
+            }
+
+            var numTechs = TechRequired.Length;
             if (numTechs != _scaleFactors.Length)
             {
                 if (numTechs > 0)
@@ -230,41 +259,12 @@ namespace TweakScale
 
                 if (numTechs < _scaleFactors.Length)
                 {
-                    TechRequired = TechRequired.Concat("".Repeat()).Take(_scaleFactors.Length).ToArray();
+                    var lastTech = TechRequired[TechRequired.Length - 1];
+                    TechRequired = TechRequired.Concat(lastTech.Repeat()).Take(_scaleFactors.Length).ToArray();
                 }
             }
 
-            var tmpScale = Tools.ConfigValue(config, "defaultScale", source.DefaultScale);
-            // fallback for MinValue and MaxValue
-            if (MaxValue == 0f)
-            {
-                if (AllScaleFactors.Length > 0)
-                    MaxValue = _scaleFactors.Max();
-                else
-                {
-                    Tools.LogWf("ScaleType \"{0}\" is missing a maxScale", Name);
-                    MaxValue = tmpScale * 4.0f;
-                }
-            }
-            if (MinValue == 0f)
-            {
-                if (AllScaleFactors.Length > 0)
-                    MinValue = _scaleFactors.Min();
-                else
-                {
-                    MinValue = tmpScale * 0.5f;
-                    Tools.LogWf("ScaleType \"{0}\" is missing a minScale", Name);
-                }
-            }
-            if (!IsFreeScale)
-            {
-                tmpScale = Tools.Closest(tmpScale, AllScaleFactors);
-            }
-            DefaultScale = Tools.Clamp(tmpScale, MinValue, MaxValue);
-            if (IncrementLarge == 0)
-                IncrementLarge = MaxValue;
-            if (IncrementSlide == 0)
-                IncrementSlide = MaxValue / 200f;
+            //Debug.Log("[TweakScale]" + this.ToString());
 
             Exponents = ScaleExponents.CreateExponentsForModule(config, source.Exponents);
         }
@@ -291,13 +291,20 @@ namespace TweakScale
 
         public override string ToString()
         {
-            var result = "ScaleType {\n";
-            result += "	isFreeScale = " + IsFreeScale + "\n";
-            result += "	scaleFactors = " + ScaleFactors + "\n";
-            result += " scaleNodes = " + ScaleNodes + "\n";
-            result += "	minValue = " + MinValue + "\n";
-            result += "	maxValue = " + MaxValue + "\n";
-            return result + "}";
+            var result = "ScaleType {";
+            result += "\n name = " + Name;
+            result += "\n isFreeScale = " + IsFreeScale;
+            result += "\n scaleFactors = ";
+            foreach (var s in ScaleFactors)
+                result += s + "  ";
+            result += "\n incrementSlide = ";
+            foreach (var s in IncrementSlide)
+                result += s + "  ";
+            result += "\n defaultScale = " + DefaultScale;
+            //result += " scaleNodes = " + ScaleNodes + "\n";
+            //result += "	minValue = " + MinValue + "\n";
+            //result += "	maxValue = " + MaxValue + "\n";
+            return result + "\n}";
         }
 
         public override bool Equals(object obj)
