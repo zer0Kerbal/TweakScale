@@ -206,6 +206,10 @@ namespace TweakScale
             defaultScale = scaleType.DefaultScale;
             Fields["tweakScale"].guiActiveEditor = false;
             Fields["tweakName"].guiActiveEditor = false;
+            ScaleFactors = scaleType.ScaleFactors;
+            if (ScaleFactors.Length <= 0)
+                return;
+
             if (isFreeScale)
             {
                 Fields["tweakScale"].guiActiveEditor = true;
@@ -218,10 +222,6 @@ namespace TweakScale
             {
                 Fields["tweakName"].guiActiveEditor = scaleType.ScaleFactors.Length > 1;
                 var options = (UI_ChooseOption)Fields["tweakName"].uiControlEditor;
-
-                if (ScaleFactors.Length <= 0)
-                    return;
-                ScaleFactors = scaleType.ScaleFactors;
                 ScaleNodes = scaleType.ScaleNodes;
                 options.options = scaleType.ScaleNames;
             }
@@ -620,6 +620,8 @@ namespace TweakScale
 
             _invalidCfg = true;
             Tools.LogWf("{0}({1}) has no valid scale factors. This is probably caused by an invalid TweakScale configuration for the part.", part.name, part.partInfo.title);
+            Debug.Log("[TweakScale]" + this.ToString());
+            Debug.Log("[TweakScale]" + ScaleType.ToString());
             return true;
         }
 
@@ -674,6 +676,24 @@ namespace TweakScale
                 Setup();
             }
             return (float)(DryCost - part.partInfo.cost + part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
+        }
+
+        public override string ToString()
+        {
+            var result = "TweakScale{\n";
+            result += "\n _invalidCfg = " + _invalidCfg;
+            result += "\n _setupRun = " + _setupRun;
+            result += "\n isFreeScale = " + isFreeScale;
+            result += "\n " + ScaleFactors.Length  + " scaleFactors = ";
+            foreach (var s in ScaleFactors)
+                result += s + "  ";
+            result += "\n tweakScale = "   + tweakScale;
+            result += "\n currentScale = " + currentScale;
+            result += "\n defaultScale = " + defaultScale;
+            //result += " scaleNodes = " + ScaleNodes + "\n";
+            //result += "   minValue = " + MinValue + "\n";
+            //result += "   maxValue = " + MaxValue + "\n";
+            return result + "\n}";
         }
     }
 }

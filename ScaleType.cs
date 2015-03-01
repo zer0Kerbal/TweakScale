@@ -131,7 +131,7 @@ namespace TweakScale
 
         private static readonly ScaleType DefaultScaleType = new ScaleType();
 
-        private readonly float[] _scaleFactors = {};
+        private readonly float[] _scaleFactors = {-1};
         private readonly string[] _scaleNames = { "62.5cm", "1.25m", "2.5m", "3.75m", "5m" };
         public readonly Dictionary<string, ScaleExponents> Exponents = new Dictionary<string, ScaleExponents>();
 
@@ -161,6 +161,8 @@ namespace TweakScale
         {
             get
             {
+                if (TechRequired.Length == 0)
+                    return _scaleFactors;
                 var result = _scaleFactors.ZipFilter(TechRequired, Tech.IsUnlocked).ToArray();
                 return result;
             }
@@ -170,6 +172,9 @@ namespace TweakScale
         {
             get
             {
+                if (TechRequired.Length == 0)
+                    return _scaleNames;
+
                 var result = _scaleNames.ZipFilter(TechRequired, Tech.IsUnlocked).ToArray();
                 return result;
             }
@@ -223,6 +228,7 @@ namespace TweakScale
             if (_scaleFactors.Length == 0)
             {
                 Tools.LogWf("scaleType \"{0}\" has no scaleFactors!", Name);
+                Debug.Log("[TweakScale]" + this.ToString());
                 if (!IsFreeScale)
                     _scaleFactors = new float[] { 0.625f, 1.25f, 2.5f, 3.75f, 5f };
                 else
@@ -255,18 +261,19 @@ namespace TweakScale
             if (numTechs != _scaleFactors.Length)
             {
                 if (numTechs > 0)
-                    Tools.LogWf("Wrong number of techRequired compared to scaleFactors in scaleType \"{0}\": {1} scaleFactors vs {2} techRequired", Name, _scaleFactors.Length, TechRequired.Length);
-
-                if (numTechs < _scaleFactors.Length)
                 {
-                    var lastTech = TechRequired[TechRequired.Length - 1];
-                    TechRequired = TechRequired.Concat(lastTech.Repeat()).Take(_scaleFactors.Length).ToArray();
+                    Tools.LogWf("Wrong number of techRequired compared to scaleFactors in scaleType \"{0}\": {1} scaleFactors vs {2} techRequired", Name, _scaleFactors.Length, TechRequired.Length);
+                    if (numTechs < _scaleFactors.Length)
+                    {
+                        var lastTech = TechRequired[TechRequired.Length - 1];
+                        TechRequired = TechRequired.Concat(lastTech.Repeat()).Take(_scaleFactors.Length).ToArray();
+                    }
                 }
             }
 
-            //Debug.Log("[TweakScale]" + this.ToString());
-
             Exponents = ScaleExponents.CreateExponentsForModule(config, source.Exponents);
+
+            Debug.Log("[TweakScale]" + this.ToString());
         }
 
         private Dictionary<string, NodeInfo> GetNodeFactors(ConfigNode node, Dictionary<string, NodeInfo> source)
@@ -294,11 +301,20 @@ namespace TweakScale
             var result = "ScaleType {";
             result += "\n name = " + Name;
             result += "\n isFreeScale = " + IsFreeScale;
-            result += "\n scaleFactors = ";
-            foreach (var s in ScaleFactors)
+            result += "\n " + _scaleFactors.Length  + " scaleFactors = ";
+            foreach (var s in _scaleFactors)
                 result += s + "  ";
-            result += "\n incrementSlide = ";
+            result += "\n " + _scaleNames.Length  + " scaleNames = ";
+            foreach (var s in _scaleNames)
+                result += s + "  ";
+            result += "\n " + IncrementSlide.Length + " incrementSlide = ";
             foreach (var s in IncrementSlide)
+                result += s + "  ";
+            result += "\n " + TechRequired.Length + " TechRequired = ";
+            foreach (var s in TechRequired)
+                result += s + "  ";
+            result += "\n " + ScaleFactors.Length  + " ScaleFactors = ";
+            foreach (var s in ScaleFactors)
                 result += s + "  ";
             result += "\n defaultScale = " + DefaultScale;
             //result += " scaleNodes = " + ScaleNodes + "\n";
