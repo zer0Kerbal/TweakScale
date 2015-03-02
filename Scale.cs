@@ -29,10 +29,10 @@ namespace TweakScale
         /// <summary>
         /// The selected scale. Different from currentScale only for destination single update, where currentScale is set to match this.
         /// </summary>
-        [KSPField(isPersistant = true, guiActiveEditor = true, guiName = "Scale", guiFormat = "S4", guiUnits = "m")]
+        [KSPField(isPersistant = false, guiActiveEditor = true, guiName = "Scale", guiFormat = "S4", guiUnits = "m")]
         [UI_ScaleEdit(scene = UI_Scene.Editor)]
 // ReSharper disable once InconsistentNaming
-        public float tweakScale = 1;
+        public float tweakScale = -1;
 
         /// <summary>
         /// Index into scale values array.
@@ -59,16 +59,9 @@ namespace TweakScale
         /// <summary>
         /// Whether the part should be freely scalable or limited to destination list of allowed values.
         /// </summary>
-        [KSPField(isPersistant = true)]
+        [KSPField(isPersistant = false)]
 // ReSharper disable once InconsistentNaming
         public bool isFreeScale = false;
-
-        /// <summary>
-        /// The version of TweakScale last used to change this part. Intended for use in the case of non-backward-compatible changes.
-        /// </summary>
-        [KSPField(isPersistant = true)]
-// ReSharper disable once InconsistentNaming
-        public string version;
 
         /// <summary>
         /// The scale exponentValue array. If isFreeScale is false, the part may only be one of these scales.
@@ -204,6 +197,10 @@ namespace TweakScale
         {
             isFreeScale = scaleType.IsFreeScale;
             defaultScale = scaleType.DefaultScale;
+            if (currentScale == -1)
+                currentScale = defaultScale;
+            if (tweakScale == -1)
+                tweakScale = currentScale;
             Fields["tweakScale"].guiActiveEditor = false;
             Fields["tweakName"].guiActiveEditor = false;
             ScaleFactors = scaleType.ScaleFactors;
@@ -301,12 +298,6 @@ namespace TweakScale
         {
             base.OnLoad(node);
             Setup();
-        }
-
-        public override void OnSave(ConfigNode node)
-        {
-            version = GetType().Assembly.GetName().Version.ToString();
-            base.OnSave(node);
         }
 
         /// <summary>
