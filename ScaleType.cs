@@ -57,15 +57,15 @@ namespace TweakScale
         /// </summary>
         /// <param name="name">The name of the ScaleType to fetch.</param>
         /// <returns>The specified ScaleType or the default ScaleType if none exists by that name.</returns>
-        private static ScaleType GetScaleConfig(string name)
+        /*private static ScaleType GetScaleConfig(string name)
         {
             var config = GameDatabase.Instance.GetConfigs("SCALETYPE").FirstOrDefault(a => a.name == name);
-            if (config == null && name != "default")
+            if (config == null)
             {
                 Tools.LogWf("No SCALETYPE with name {0}", name);
             }
-            return (object)config == null ? DefaultScaleType : new ScaleType(config.config);
-        }
+            return config; // == null ? DefaultScaleType : new ScaleType(config.config);
+        }*/
 
         public class NodeInfo
         {
@@ -129,25 +129,25 @@ namespace TweakScale
             }
         }
 
-        private static readonly ScaleType DefaultScaleType = new ScaleType();
+        //private static readonly ScaleType DefaultScaleType = new ScaleType();
 
-        private readonly float[] _scaleFactors = {-1};
-        private readonly string[] _scaleNames = { "62.5cm", "1.25m", "2.5m", "3.75m", "5m" };
+        private readonly float[] _scaleFactors = {};
+        private readonly string[] _scaleNames = {};
         public readonly Dictionary<string, ScaleExponents> Exponents = new Dictionary<string, ScaleExponents>();
 
-        public readonly bool IsFreeScale = false;
+        public readonly bool IsFreeScale = true;
         public readonly string[] TechRequired = {};
-        public readonly Dictionary<string, NodeInfo> AttachNodes = new Dictionary<string, NodeInfo>();
-        public readonly float MinValue = 0f;
-        public readonly float MaxValue = 0f;
-        public readonly float DefaultScale = 1.25f;
+        //public readonly Dictionary<string, NodeInfo> AttachNodes = new Dictionary<string, NodeInfo>();
+        //public readonly float MinValue = 0f;
+        //public readonly float MaxValue = 0f;
+        public readonly float DefaultScale = -1;
         public readonly float[] IncrementSlide = {};
-        public readonly string Suffix = "m";
-        public readonly string Name;
+        public readonly string Suffix = null;
+        public readonly string Name = null;
         public readonly string Family;
-        public float BaseScale {
+        /*public float BaseScale {
             get { return AttachNodes["base"].Scale; }
-        }
+        }*/
 
         public float[] AllScaleFactors
         {
@@ -185,95 +185,141 @@ namespace TweakScale
         private ScaleType()
         {
             ScaleNodes = new int[] {};
-            AttachNodes = new Dictionary<string, NodeInfo>();
-            AttachNodes["base"] = new NodeInfo("", 1);
+            //AttachNodes = new Dictionary<string, NodeInfo>();
+            //AttachNodes["base"] = new NodeInfo("", 1);
         }
 
-        public ScaleType(ConfigNode config)
+        // config is a part config
+        public ScaleType(ConfigNode partConfig)
         {
-            ScaleNodes = new int[] {};
-            if ((object)config == null || Tools.ConfigValue(config, "name", "default") == "default")
+            float MinValue = -1;
+            float MaxValue = -1;
+            if ((object)partConfig != null )
             {
-                return; // Default values.
+                Name = Tools.ConfigValue(partConfig, "type", Name);
+                if (Name != null)
+                {
+                    ConfigNode scaleConfig = GameDatabase.Instance.GetConfigs("SCALETYPE").FirstOrDefault(a => a.name == Name).config;
+                    if (scaleConfig != null)
+                    {
+                        // search scaletype for values
+                        IsFreeScale = Tools.ConfigValue(scaleConfig, "freeScale", IsFreeScale);
+                        DefaultScale = Tools.ConfigValue(scaleConfig, "defaultScale", DefaultScale);
+                        MinValue = Tools.ConfigValue(scaleConfig, "minScale", -1f);          // deprecated!
+                        MaxValue = Tools.ConfigValue(scaleConfig, "maxScale", -1f);          // deprecated!
+                        Suffix = Tools.ConfigValue(scaleConfig, "suffix", Suffix);
+                        _scaleFactors = Tools.ConfigValue(scaleConfig, "scaleFactors", _scaleFactors);
+                        ScaleNodes = Tools.ConfigValue(scaleConfig, "scaleNodes", ScaleNodes);         // currently not used!
+                        _scaleNames = Tools.ConfigValue(scaleConfig, "scaleNames", _scaleNames).Select(a => a.Trim()).ToArray();
+                        TechRequired = Tools.ConfigValue(scaleConfig, "techRequired", TechRequired).Select(a => a.Trim()).ToArray();
+                        Family = Tools.ConfigValue(scaleConfig, "family", "default");
+                        //AttachNodes   = GetNodeFactors(scaleConfig.GetNode("ATTACHNODES"), AttachNodes);  // currently not used!
+                        IncrementSlide = Tools.ConfigValue(scaleConfig, "incrementSlide", IncrementSlide); // deprecated!
+
+                        Exponents = ScaleExponents.CreateExponentsForModule(scaleConfig, Exponents);
+                        //Debug.Log("[TweakScale] scaleConfig:" + scaleConfig.ToString());
+                        //Debug.Log("[TweakScale] scaleConfig:" + this.ToString());
+                        //Debug.Log("[TweakScale]" + Exponents.ToString());
+                    }
+                }
+                else
+                    Name = "";
+
+                // search part config for overrides
+                IsFreeScale   = Tools.ConfigValue(partConfig, "freeScale",    IsFreeScale);
+                DefaultScale  = Tools.ConfigValue(partConfig, "defaultScale", DefaultScale);
+                MinValue      = Tools.ConfigValue(partConfig, "minScale",     MinValue);
+                MaxValue      = Tools.ConfigValue(partConfig, "maxScale",     MaxValue);
+                Suffix        = Tools.ConfigValue(partConfig, "suffix",       Suffix);
+                _scaleFactors = Tools.ConfigValue(partConfig, "scaleFactors", _scaleFactors);
+                ScaleNodes    = Tools.ConfigValue(partConfig, "scaleNodes",   ScaleNodes);
+                _scaleNames   = Tools.ConfigValue(partConfig, "scaleNames",   _scaleNames).Select(a => a.Trim()).ToArray();
+                TechRequired  = Tools.ConfigValue(partConfig, "techRequired", TechRequired).Select(a=>a.Trim()).ToArray();
+                Name          = Tools.ConfigValue(partConfig, "name",         "unnamed scaletype");
+                Family        = Tools.ConfigValue(partConfig, "family",       "default");
+                //AttachNodes   = GetNodeFactors(partConfig.GetNode("ATTACHNODES"), AttachNodes);
+                IncrementSlide= Tools.ConfigValue(partConfig, "incrementSlide", IncrementSlide);
+
+                Exponents = ScaleExponents.CreateExponentsForModule(partConfig, Exponents);
+                //Debug.Log("[TweakScale] partConfig:" + partConfig.ToString());
+                //Debug.Log("[TweakScale] partConfig:" + this.ToString());
+                //Debug.Log("[TweakScale]" + Exponents.ToString());
             }
 
-            var type = Tools.ConfigValue(config, "type", "default");
-            var source = GetScaleConfig(type);
-
-            IsFreeScale   = Tools.ConfigValue(config, "freeScale",    source.IsFreeScale);
-            MinValue      = Tools.ConfigValue(config, "minScale",     source.MinValue);
-            MaxValue      = Tools.ConfigValue(config, "maxScale",     source.MaxValue);
-            Suffix        = Tools.ConfigValue(config, "suffix",       source.Suffix);
-            _scaleFactors = Tools.ConfigValue(config, "scaleFactors", source._scaleFactors);
-            ScaleNodes    = Tools.ConfigValue(config, "scaleNodes",   source.ScaleNodes);
-            _scaleNames   = Tools.ConfigValue(config, "scaleNames",   source._scaleNames).Select(a => a.Trim()).ToArray();
-            TechRequired  = Tools.ConfigValue(config, "techRequired", source.TechRequired).Select(a=>a.Trim()).ToArray();
-            Name          = Tools.ConfigValue(config, "name",         "unnamed scaletype");
-            Family        = Tools.ConfigValue(config, "family",       "default");
-            AttachNodes   = GetNodeFactors(config.GetNode("ATTACHNODES"), source.AttachNodes);
-            IncrementSlide= Tools.ConfigValue(config, "incrementSlide",     source.IncrementSlide);
-
-            if (Name == "TweakScale")
+            if (_scaleFactors.Length > 1)
             {
-                Name = source.Name;
+                bool error = false;
+                for (int i=0; i<_scaleNames.Length-1; i++)
+                    if (_scaleFactors[i + 1] >= _scaleFactors[i])
+                        error = true;
+                if (error)
+                {
+                    Tools.LogWf("scaleType {0}: scaleFactors must be in ascending order!", Name);
+                }
             }
 
+            // fill in missing values
+            if ((DefaultScale <= 0) && (_scaleFactors.Length == 0))
+            {
+                DefaultScale = 100;
+                if (Suffix == null)
+                    Suffix = "%";
+                if (IncrementSlide.Length == 0)
+                    IncrementSlide = new float[] {1f, 1f, 1f, 2f, 5f}; 
+            }
+            if ((DefaultScale > 0) && (_scaleFactors.Length == 0))
+            {
+                _scaleFactors = new float[] { DefaultScale/10f, DefaultScale/4f, DefaultScale/2f, DefaultScale, DefaultScale*2f, DefaultScale*4f };
+            }
+            else if ((DefaultScale <= 0) && (_scaleFactors.Length > 0))
+            {
+                DefaultScale = _scaleFactors[0];
+            }
+            else if ((MinValue > 0) &&  (MaxValue > 0))
+            {
+                // Legacy support: min/maxValue
+                if (MinValue > 0 && MaxValue > 0)
+                {
+                    if (DefaultScale > MinValue && DefaultScale < MaxValue)
+                        _scaleFactors = new float[] { MinValue, DefaultScale, MaxValue };
+                    else
+                        _scaleFactors = new float[] { MinValue, MaxValue };
+                }
+            }
             if (!IsFreeScale && (_scaleFactors.Length != _scaleNames.Length))
             {
                 Tools.LogWf("Wrong number of scaleFactors compared to scaleNames in scaleType \"{0}\": {1} scaleFactors vs {2} scaleNames", Name, _scaleFactors.Length, _scaleNames.Length);
-            }
-
-            var tmpScale = Tools.ConfigValue(config, "defaultScale", source.DefaultScale);
-            // fallback for missing scaleFactors
-            if (_scaleFactors.Length == 0)
-            {
-                Tools.LogWf("scaleType \"{0}\" has no scaleFactors!", Name);
-                Debug.Log("[TweakScale]" + this.ToString());
-                if (!IsFreeScale)
-                    _scaleFactors = new float[] { 0.625f, 1.25f, 2.5f, 3.75f, 5f };
-                else
-                {
-                    if (MinValue > 0 && MaxValue > 0)
-                    {
-                        if (tmpScale > MinValue && tmpScale < MaxValue)
-                            _scaleFactors = new float[] { MinValue, tmpScale, MaxValue };
-                        else
-                            _scaleFactors = new float[] { MinValue, MaxValue };
-                    }
-                    else if (tmpScale > 0)
-                        _scaleFactors = new float[] { tmpScale/10f,tmpScale/2, tmpScale, tmpScale*2, tmpScale*4f };
-                }
+                _scaleNames = new string[_scaleFactors.Length];
+                for (int i=0; i<_scaleFactors.Length; i++)
+                    _scaleNames[i] = _scaleFactors[i].ToString();
             }
 
             if (!IsFreeScale)
             {
-                tmpScale = Tools.Closest(tmpScale, AllScaleFactors);
+                DefaultScale = Tools.Closest(DefaultScale, AllScaleFactors);
             }
-            DefaultScale = Tools.Clamp(tmpScale, _scaleFactors.Min(), _scaleFactors.Max());
+            DefaultScale = Tools.Clamp(DefaultScale, _scaleFactors.Min(), _scaleFactors.Max());
 
             if (IncrementSlide.Length == 0)
             {
-                IncrementSlide = new float[1];
-                IncrementSlide[0] = tmpScale / 50f;
+                IncrementSlide = new float[_scaleFactors.Length-1];
+                for (var i=0; i<_scaleFactors.Length-1; i++)
+                    IncrementSlide[i] = (_scaleFactors[i+1]-_scaleFactors[i])/50f;
             }
 
             var numTechs = TechRequired.Length;
-            if (numTechs != _scaleFactors.Length)
+            if ((numTechs > 0) && (numTechs != _scaleFactors.Length))
             {
-                if (numTechs > 0)
+                Tools.LogWf("Wrong number of techRequired compared to scaleFactors in scaleType \"{0}\": {1} scaleFactors vs {2} techRequired", Name, _scaleFactors.Length, TechRequired.Length);
+                if (numTechs < _scaleFactors.Length)
                 {
-                    Tools.LogWf("Wrong number of techRequired compared to scaleFactors in scaleType \"{0}\": {1} scaleFactors vs {2} techRequired", Name, _scaleFactors.Length, TechRequired.Length);
-                    if (numTechs < _scaleFactors.Length)
-                    {
-                        var lastTech = TechRequired[TechRequired.Length - 1];
-                        TechRequired = TechRequired.Concat(lastTech.Repeat()).Take(_scaleFactors.Length).ToArray();
-                    }
+                    var lastTech = TechRequired[TechRequired.Length - 1];
+                    TechRequired = TechRequired.Concat(lastTech.Repeat()).Take(_scaleFactors.Length).ToArray();
                 }
             }
 
-            Exponents = ScaleExponents.CreateExponentsForModule(config, source.Exponents);
-
-            Debug.Log("[TweakScale]" + this.ToString());
+            Debug.Log("[TweakScale] finished config:" + this.ToString());
+            Debug.Log("[TweakScale]" + Exponents.ToString());
         }
 
         private Dictionary<string, NodeInfo> GetNodeFactors(ConfigNode node, Dictionary<string, NodeInfo> source)

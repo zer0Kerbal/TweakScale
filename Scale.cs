@@ -162,34 +162,6 @@ namespace TweakScale
         }
 
         /// <summary>
-        /// The smallest scale the part can be.
-        /// </summary>
-        private float MinSize
-        {
-            get
-            {
-                if (!isFreeScale)
-                    return ScaleFactors.Min();
-                var range = (UI_ScaleEdit)Fields["tweakScale"].uiControlEditor;
-                return range.MinValue();
-            }
-        }
-
-        /// <summary>
-        /// The largest scale the part can be.
-        /// </summary>
-        internal float MaxSize
-        {
-            get
-            {
-                if (!isFreeScale)
-                    return ScaleFactors.Max();
-                var range = (UI_ScaleEdit)Fields["tweakScale"].uiControlEditor;
-                return range.MaxValue();
-            }
-        }
-
-        /// <summary>
         /// Loads settings from <paramref name="scaleType"/>.
         /// </summary>
         /// <param name="scaleType">The settings to use.</param>
