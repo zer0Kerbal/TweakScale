@@ -235,7 +235,6 @@ namespace TweakScale
                 ScaleNodes    = Tools.ConfigValue(partConfig, "scaleNodes",   ScaleNodes);
                 _scaleNames   = Tools.ConfigValue(partConfig, "scaleNames",   _scaleNames).Select(a => a.Trim()).ToArray();
                 TechRequired  = Tools.ConfigValue(partConfig, "techRequired", TechRequired).Select(a=>a.Trim()).ToArray();
-                Name          = Tools.ConfigValue(partConfig, "name",         "unnamed scaletype");
                 Family        = Tools.ConfigValue(partConfig, "family",       "default");
                 //AttachNodes   = GetNodeFactors(partConfig.GetNode("ATTACHNODES"), AttachNodes);
                 IncrementSlide= Tools.ConfigValue(partConfig, "incrementSlide", IncrementSlide);
@@ -246,15 +245,17 @@ namespace TweakScale
                 //Debug.Log("[TweakScale]" + Exponents.ToString());
             }
 
-            if (_scaleFactors.Length > 1)
+            if (IsFreeScale && (_scaleFactors.Length > 1))
             {
                 bool error = false;
-                for (int i=0; i<_scaleNames.Length-1; i++)
-                    if (_scaleFactors[i + 1] >= _scaleFactors[i])
+                for (int i=0; i<_scaleFactors.Length-1; i++)
+                    if (_scaleFactors[i + 1] <= _scaleFactors[i])
                         error = true;
+
                 if (error)
                 {
-                    Tools.LogWf("scaleType {0}: scaleFactors must be in ascending order!", Name);
+                    Tools.LogWf("scaleFactors must be in ascending order! \n{0}", this.ToString());
+                    _scaleFactors = new float[0];
                 }
             }
 
@@ -288,7 +289,9 @@ namespace TweakScale
             }
             if (!IsFreeScale && (_scaleFactors.Length != _scaleNames.Length))
             {
-                Tools.LogWf("Wrong number of scaleFactors compared to scaleNames in scaleType \"{0}\": {1} scaleFactors vs {2} scaleNames", Name, _scaleFactors.Length, _scaleNames.Length);
+                if(_scaleNames.Length != 0)
+                    Tools.LogWf("Wrong number of scaleFactors compared to scaleNames in scaleType \"{0}\": {1} scaleFactors vs {2} scaleNames\n{3}", Name, _scaleFactors.Length, _scaleNames.Length, this.ToString());
+
                 _scaleNames = new string[_scaleFactors.Length];
                 for (int i=0; i<_scaleFactors.Length; i++)
                     _scaleNames[i] = _scaleFactors[i].ToString();
@@ -318,8 +321,8 @@ namespace TweakScale
                 }
             }
 
-            Debug.Log("[TweakScale] finished config:" + this.ToString());
-            Debug.Log("[TweakScale]" + Exponents.ToString());
+            //Debug.Log("[TweakScale] finished config:" + this.ToString());
+            //Debug.Log("[TweakScale]" + Exponents.ToString());
         }
 
         private Dictionary<string, NodeInfo> GetNodeFactors(ConfigNode node, Dictionary<string, NodeInfo> source)
@@ -358,9 +361,6 @@ namespace TweakScale
                 result += s + "  ";
             result += "\n " + TechRequired.Length + " TechRequired = ";
             foreach (var s in TechRequired)
-                result += s + "  ";
-            result += "\n " + ScaleFactors.Length  + " ScaleFactors = ";
-            foreach (var s in ScaleFactors)
                 result += s + "  ";
             result += "\n defaultScale = " + DefaultScale;
             //result += " scaleNodes = " + ScaleNodes + "\n";
