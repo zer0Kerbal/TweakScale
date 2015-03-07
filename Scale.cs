@@ -319,7 +319,7 @@ namespace TweakScale
         /// <param name="baseNode">The same node, as found on the prefab part.</param>
         private void RescaleNode(AttachNode node, AttachNode baseNode)
         {
-            if (isFreeScale)
+            if (isFreeScale || ScaleNodes == null || ScaleNodes.Length == 0)
             {
                 float tmpBaseNodeSize = baseNode.size;
                 if (tmpBaseNodeSize == 0)
@@ -330,14 +330,7 @@ namespace TweakScale
             }
             else
             {
-            	if (ScaleNodes.Length > 0)
-            	{
-            		node.size = baseNode.size + (1 * ScaleNodes[tweakName]);
-            	}
-            	else
-            	{
-                    node.size = (int)(baseNode.size + (Tools.ClosestIndex(tweakScale, ScaleType.AllScaleFactors) - Tools.ClosestIndex(defaultScale, ScaleType.AllScaleFactors)) / (float)ScaleType.AllScaleFactors.Length * 5);
-                }
+           		node.size = baseNode.size + (1 * ScaleNodes[tweakName]);
             }
             if (node.size < 0)
             {
