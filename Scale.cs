@@ -168,9 +168,18 @@ namespace TweakScale
         private void SetupFromConfig(ScaleType scaleType)
         {
             isFreeScale = scaleType.IsFreeScale;
-            defaultScale = scaleType.DefaultScale;
+            if (defaultScale == -1)
+                defaultScale = scaleType.DefaultScale;
+
             if (currentScale == -1)
                 currentScale = defaultScale;
+            else if (defaultScale != scaleType.DefaultScale)
+            {
+                Tools.Logf("defaultScale has changed for part {0}: keeping relative scale.", part.name);
+                currentScale *= scaleType.DefaultScale / defaultScale;
+                defaultScale = scaleType.DefaultScale;
+            }
+
             if (tweakScale == -1)
                 tweakScale = currentScale;
             Fields["tweakScale"].guiActiveEditor = false;
