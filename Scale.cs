@@ -29,7 +29,7 @@ namespace TweakScale
         /// <summary>
         /// The selected scale. Different from currentScale only for destination single update, where currentScale is set to match this.
         /// </summary>
-        [KSPField(isPersistant = false, guiActiveEditor = true, guiName = "Scale", guiFormat = "S4", guiUnits = "m")]
+        [KSPField(isPersistant = false, guiActiveEditor = true, guiName = "Scale", /*guiFormat = "S4",*/ guiUnits = "m")]
         [UI_ScaleEdit(scene = UI_Scene.Editor)]
 // ReSharper disable once InconsistentNaming
         public float tweakScale = -1;

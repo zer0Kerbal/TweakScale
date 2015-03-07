@@ -55,6 +55,7 @@
     <Compile Include="Tuple.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="HotkeyAble.cs" />
+    <Compile Include="UIPartActionScaleEdit.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
