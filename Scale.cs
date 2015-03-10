@@ -224,10 +224,9 @@ namespace TweakScale
 
             _updaters = TweakScaleUpdater.CreateUpdaters(part).ToArray();
 
+            var doUpdate = currentScale < 0f;
             SetupFromConfig(ScaleType = new ScaleType(ModuleNode));
 
-
-            var doUpdate = currentScale < 0f;
             if (doUpdate)
             {
                 tweakScale = currentScale = defaultScale;
