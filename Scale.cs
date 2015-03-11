@@ -108,6 +108,11 @@ namespace TweakScale
             Unset
         }
 
+        public bool IsRescaled()
+        {
+            return ((Math.Abs(currentScale/defaultScale) -1f) > 1e-5f);
+        }
+
         /// <summary>
         /// Whether this instance of TweakScale is the first. If not, log an error and make sure the TweakScale modules don't harmfully interact.
         /// </summary>
@@ -243,8 +248,7 @@ namespace TweakScale
                 tweakScale = ScaleFactors[tweakName];
             }
 
-            if (!doUpdate
-                && (Math.Abs(ScalingFactor.absolute.linear - 1f) > 1e-5f))
+            if (!doUpdate && IsRescaled())
             {
                 UpdateByWidth(false, true);
                 foreach (var updater in _updaters)
@@ -639,7 +643,10 @@ namespace TweakScale
             {
                 Setup();
             }
-            return (float)(DryCost - part.partInfo.cost + part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
+            if (IsRescaled())
+                return (float)(DryCost - part.partInfo.cost + part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
+            else
+                return 0;
         }
 
         public override string ToString()
