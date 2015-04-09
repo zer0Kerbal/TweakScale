@@ -110,7 +110,7 @@ namespace TweakScale
 
         public bool IsRescaled()
         {
-            return ((Math.Abs(currentScale/defaultScale) -1f) > 1e-5f);
+            return (Math.Abs(currentScale/defaultScale -1f) > 1e-5f);
         }
 
         /// <summary>
