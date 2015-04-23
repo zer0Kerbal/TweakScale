@@ -235,6 +235,12 @@ namespace TweakScale
                 IncrementSlide= Tools.ConfigValue(partConfig, "incrementSlide", IncrementSlide);
 
                 Exponents = ScaleExponents.CreateExponentsForModule(partConfig, Exponents);
+                ScaleExponents.CheckForDryCost(Exponents);
+
+//                string log = "finished ScaleExponents: ";
+//                foreach(var e in Exponents) { log += e.ToString() + ", \n"; }
+//                Debug.Log(log);
+
                 //Debug.Log("[TweakScale] partConfig:" + partConfig.ToString());
                 //Debug.Log("[TweakScale] partConfig:" + this.ToString());
                 //Debug.Log("[TweakScale]" + Exponents.ToString());

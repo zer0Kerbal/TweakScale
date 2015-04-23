@@ -394,6 +394,30 @@ namespace TweakScale
             }
         }
 
+        // if there is no dryCost exponent, use the mass exponent instead
+        public static void CheckForDryCost( Dictionary<string, ScaleExponents> Exponents)
+        {
+            if (!Exponents.ContainsKey("Part"))
+                return;
+
+            if (!Exponents.ContainsKey("TweakScale"))
+            {
+                string massExponent = Exponents["Part"]._exponents["mass"].Exponent;
+                ConfigNode node = new ConfigNode();
+                node.name = "TweakScale";
+                node.id = "TweakScale";
+                node.AddValue("!DryCost", massExponent);
+
+                Exponents.Add("TweakScale", new ScaleExponents(node));
+            }
+// untested: filling in an existing tweakscale node without DryCost value
+/*          else if (!Exponents["TweakScale"]._exponents.ContainsKey("DryCost"))
+            {
+                string massExponent = Exponents["Part"]._exponents["mass"].Exponent;
+                Exponents["TweakScale"]._exponents.Add("DryCost", new ScalingMode(massExponent, true));
+            }*/
+        }
+
         public static Dictionary<string, ScaleExponents> CreateExponentsForModule(ConfigNode node, Dictionary<string, ScaleExponents> parent)
         {
             var local = node.nodes
