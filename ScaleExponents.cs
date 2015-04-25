@@ -20,7 +20,7 @@ namespace TweakScale
         struct ScalingMode
         {
             public readonly string Exponent;
-            public readonly bool UseRelativeScaling;
+            public bool UseRelativeScaling;
 
             public ScalingMode(string exponent, bool useRelativeScaling)
                 : this()
@@ -410,8 +410,14 @@ namespace TweakScale
 
                 Exponents.Add("TweakScale", new ScaleExponents(node));
             }
-// untested: filling in an existing tweakscale node without DryCost value
-/*          else if (!Exponents["TweakScale"]._exponents.ContainsKey("DryCost"))
+            else if (Exponents["TweakScale"]._exponents.ContainsKey("DryCost"))
+            {
+                ScalingMode tmp = Exponents["TweakScale"]._exponents["DryCost"];
+                tmp.UseRelativeScaling = true;
+                Exponents["TweakScale"]._exponents["DryCost"] = tmp;
+            }
+            // untested: filling in an existing tweakscale node without DryCost value
+/*            else
             {
                 string massExponent = Exponents["Part"]._exponents["mass"].Exponent;
                 Exponents["TweakScale"]._exponents.Add("DryCost", new ScalingMode(massExponent, true));
