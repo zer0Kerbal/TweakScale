@@ -32,7 +32,7 @@
     <CustomCommands>
       <CustomCommands>
         <Command type="AfterBuild" command="cp ./bin/Release/Scale.dll ./GameData/TweakScale/plugins/" workingdir="." />
-        <Command type="AfterBuild" command="cp -r ./GameData/TweakScale ../ksp_090/GameData/" workingdir="." />
+        <Command type="AfterBuild" command="cp -r ./GameData/TweakScale ../ksp_100/GameData/" workingdir="." />
         <Command type="Execute" command="../ksp_090/KSP.x86" workingdir="../ksp_090/" />
       </CustomCommands>
     </CustomCommands>
@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\ksp_090\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\ksp_100\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="KSPAPIExtensions">
       <HintPath>GameData\TweakScale\plugins\KSPAPIExtensions.dll</HintPath>
@@ -69,7 +69,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
-      <HintPath>..\ksp_090\KSP_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\ksp_100\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
