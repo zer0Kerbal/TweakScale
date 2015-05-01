@@ -198,7 +198,8 @@ namespace TweakScale
                 Name = Tools.ConfigValue(partConfig, "type", Name);
                 if (Name != null)
                 {
-                    scaleConfig = GameDatabase.Instance.GetConfigs("SCALETYPE").FirstOrDefault(a => a.name == Name).config;
+                    var tmp = GameDatabase.Instance.GetConfigs("SCALETYPE").FirstOrDefault(a => a.name == Name);
+                    if (tmp != null) scaleConfig = tmp.config;
                     if (scaleConfig != null)
                     {
                         // search scaletype for values
