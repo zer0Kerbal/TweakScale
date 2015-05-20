@@ -247,13 +247,20 @@ namespace TweakScale
                 tweakName = Tools.ClosestIndex(tweakScale, ScaleFactors);
                 tweakScale = ScaleFactors[tweakName];
             }
-
             if (!doUpdate && IsRescaled())
             {
                 UpdateByWidth(false, true);
-                foreach (var updater in _updaters)
+                try
                 {
-                    updater.OnRescale(ScalingFactor);
+                    foreach (var updater in _updaters)
+                    {
+                        updater.OnRescale(ScalingFactor);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Tools.LogWf("Exception on Rescale: {0}", exception);
+                    _setupRun = true;
                 }
             }
             _setupRun = true;

@@ -199,11 +199,15 @@ namespace TweakScale
                 Tools.LogWf("Invalid exponent {0} for field {1}", exponentValue, name);
             }
 
-
             if (current.MemberType.GetInterface("IList") != null)
             {
                 var v = (IList)current.Value;
                 var v2 = (IList)baseValue.Value;
+                if(v == null)
+                {
+                    Tools.LogWf("current.Value == null!");
+                    return;
+                }
 
                 for (var i = 0; i < v.Count && i < v2.Count; ++i)
                 {
