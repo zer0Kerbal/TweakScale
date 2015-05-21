@@ -139,7 +139,7 @@ namespace TweakScale
         {
             get
             {
-                return GameDatabase.Instance.GetConfigs("PART").Single(c => c.name.Replace('_', '.') == part.partInfo.name)
+                return GameDatabase.Instance.GetConfigs("PART").FirstOrDefault(c => c.name.Replace('_', '.') == part.partInfo.name)
                     .config;
             }
         }
