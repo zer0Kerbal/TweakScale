@@ -363,7 +363,7 @@ namespace TweakScale
             {
                 dragCube.Size *= ScalingFactor.absolute.linear;
                 for (int i=0; i<dragCube.Area.Length; i++)
-                    dragCube.Area[i] *= ScalingFactor.absolute.linear;
+                    dragCube.Area[i] *= ScalingFactor.absolute.quadratic;
                 for (int i=0; i<dragCube.Depth.Length; i++)
                     dragCube.Depth[i] *= ScalingFactor.absolute.linear;
             }
