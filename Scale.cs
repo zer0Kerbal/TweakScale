@@ -357,6 +357,20 @@ namespace TweakScale
             }
         }
 
+        private void scaleDragCubes()
+        {
+            foreach (var dragCube in part.DragCubes.Cubes)
+            {
+                dragCube.Size *= ScalingFactor.absolute.linear;
+                for (int i=0; i<dragCube.Area.Length; i++)
+                    dragCube.Area[i] *= ScalingFactor.absolute.linear;
+                for (int i=0; i<dragCube.Depth.Length; i++)
+                    dragCube.Depth[i] *= ScalingFactor.absolute.linear;
+            }
+            part.DragCubes.ForceUpdate(true, true);
+            //Tools.Logf("DragScaling: part={0} factor={1}", part.name, ScalingFactor.absolute.linear);
+        }
+
         /// <summary>
         /// Updates properties that change linearly with scale.
         /// </summary>
@@ -372,6 +386,8 @@ namespace TweakScale
             _savedScale = part.transform.GetChild(0).localScale = ScalingFactor.absolute.linear * defaultTransformScale;
             part.transform.GetChild(0).hasChanged = true;
             part.transform.hasChanged = true;
+
+            scaleDragCubes();
 
             foreach (var node in part.attachNodes)
             {
