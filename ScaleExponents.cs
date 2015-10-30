@@ -199,6 +199,10 @@ namespace TweakScale
                 Tools.LogWf("Invalid exponent {0} for field {1}", exponentValue, name);
             }
 
+            double multiplyBy = 1;
+            if (!double.IsNaN(exponent))
+              multiplyBy = Math.Pow(scalingMode.UseRelativeScaling ? factor.relative.linear : factor.absolute.linear, exponent);
+
             if (current.MemberType.GetInterface("IList") != null)
             {
                 var v = (IList)current.Value;
@@ -219,15 +223,15 @@ namespace TweakScale
                     {
                         if (v[i] is float)
                         {
-                            v[i] = (float)v2[i] * Math.Pow(factor.relative.linear, exponent);
+                            v[i] = (float)v2[i] * multiplyBy;
                         }
                         else if (v[i] is double)
                         {
-                            v[i] = (double)v2[i] * Math.Pow(factor.relative.linear, exponent);
+                            v[i] = (double)v2[i] * multiplyBy;
                         }
                         else if (v[i] is Vector3)
                         {
-                            v[i] = (Vector3)v2[i] * (float)Math.Pow(factor.relative.linear, exponent);
+                            v[i] = (Vector3)v2[i] * (float)multiplyBy;
                         }
                     }
                 }
@@ -247,7 +251,7 @@ namespace TweakScale
             }
             else if (!double.IsNaN(exponent))
             {
-                current.Scale(Math.Pow(scalingMode.UseRelativeScaling ? factor.relative.linear : factor.absolute.linear, exponent), baseValue);
+                current.Scale(multiplyBy, baseValue);
             }
         }
 

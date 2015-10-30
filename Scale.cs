@@ -573,6 +573,7 @@ namespace TweakScale
                 updater.OnRescale(ScalingFactor);
             }
             currentScale = tweakScale;
+            GameEvents.onEditorShipModified.Fire(EditorLogic.fetch.ship);
         }
 
         /// <summary>
