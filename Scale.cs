@@ -663,11 +663,7 @@ namespace TweakScale
 
         public float GetModuleCost(float defaultCost)
         {
-            if (!_setupRun)
-            {
-                Setup();
-            }
-            if (IsRescaled())
+            if (_setupRun && IsRescaled())
                 return (float)(DryCost - part.partInfo.cost + part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
             else
                 return 0;
