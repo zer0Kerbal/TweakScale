@@ -24,7 +24,7 @@ namespace TweakScale
         }
     }
 
-    public class TweakScale : PartModule, IPartCostModifier
+    public class TweakScale : PartModule, IPartCostModifier, IPartMassModifier
     {
         /// <summary>
         /// The selected scale. Different from currentScale only for destination single update, where currentScale is set to match this.
@@ -664,10 +664,24 @@ namespace TweakScale
         public float GetModuleCost(float defaultCost)
         {
             if (_setupRun && IsRescaled())
-                return (float)(DryCost - part.partInfo.cost + part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
+              return (float)(DryCost - part.partInfo.cost + part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
+            else
+              return 0;
+        }
+        public float GetModuleMass(float defaultMass)
+        {
+            if (_setupRun && IsRescaled())
+            {
+                // todo: optimierung falls das auch in flight drankommt
+                var scalMode = ScaleType.Exponents["Part"]._exponents["mass"];
+                var multBy = ScaleType.Exponents["Part"].getMultFactor("mass", scalMode, ScalingFactor);
+                return multBy-1;
+            }
             else
                 return 0;
         }
+
+
 
         public override string ToString()
         {

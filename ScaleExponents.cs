@@ -17,7 +17,7 @@ namespace TweakScale
 
     public class ScaleExponents
     {
-        struct ScalingMode
+        public struct ScalingMode
         {
             public readonly string Exponent;
             public bool UseRelativeScaling;
@@ -32,7 +32,7 @@ namespace TweakScale
 
         private readonly string _id;
         private readonly string _name;
-        private readonly Dictionary<string, ScalingMode> _exponents;
+        public  readonly Dictionary<string, ScalingMode> _exponents;
         private readonly List<string> _ignores;
         private readonly Dictionary<string, ScaleExponents> _children;
 
@@ -254,6 +254,38 @@ namespace TweakScale
                 current.Scale(multiplyBy, baseValue);
             }
         }
+
+        public float getMultFactor(string name, ScalingMode scalingMode, ScalingFactor factor)
+        {
+            var exponentValue = scalingMode.Exponent;
+            var exponent = double.NaN;
+            double[] values = null;
+            if (exponentValue.Contains(','))
+            {
+                if (factor.index == -1)
+                {
+                    Tools.LogWf("Value list used for freescale part exponent field {0}: {1}", name, exponentValue);
+                    return 1;
+                }
+                values = Tools.ConvertString(exponentValue, new double[] { });
+                if (values.Length <= factor.index)
+                {
+                    Tools.LogWf("Too few values given for {0}. Expected at least {1}, got {2}: {3}", name, factor.index + 1, values.Length, exponentValue);
+                    return 1;
+                }
+            }
+            else if (!double.TryParse(exponentValue, out exponent))
+            {
+                Tools.LogWf("Invalid exponent {0} for field {1}", exponentValue, name);
+            }
+
+            double multiplyBy = 1;
+            if (!double.IsNaN(exponent))
+                multiplyBy = Math.Pow(scalingMode.UseRelativeScaling ? factor.relative.linear : factor.absolute.linear, exponent);
+
+            return (float)multiplyBy;
+        }
+
 
         private bool ShouldIgnore(Part part)
         {
