@@ -673,15 +673,11 @@ namespace TweakScale
             if (_setupRun && IsRescaled())
             {
                 // todo: optimierung falls das auch in flight drankommt
-                var scalMode = ScaleType.Exponents["Part"]._exponents["mass"];
-                var multBy = ScaleType.Exponents["Part"].getMultFactor("mass", scalMode, ScalingFactor);
-                return multBy-1;
+                return ScaleType.Exponents["Part"].getMassDelta(_prefabPart.mass, ScalingFactor);
             }
             else
-                return 0;
+              return 0;
         }
-
-
 
         public override string ToString()
         {

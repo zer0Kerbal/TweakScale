@@ -255,37 +255,44 @@ namespace TweakScale
             }
         }
 
-        public float getMultFactor(string name, ScalingMode scalingMode, ScalingFactor factor)
+        // mass delta (ScaledMass - prefabMass) for the getModuleCost method
+        // -> should only be called for the "Part" node
+        public float getMassDelta(float prefabMass, ScalingFactor factor)
         {
-            var exponentValue = scalingMode.Exponent;
+            if (!_exponents.ContainsKey("mass"))
+              return 0;
+
+            var exponentValue = _exponents["mass"].Exponent;
             var exponent = double.NaN;
-            double[] values = null;
+
             if (exponentValue.Contains(','))
             {
                 if (factor.index == -1)
                 {
-                    Tools.LogWf("Value list used for freescale part exponent field {0}: {1}", name, exponentValue);
-                    return 1;
+                    Tools.LogWf("Value list used for freescale part exponent field {0}: {1}", "mass", exponentValue);
+                    return 0;
                 }
-                values = Tools.ConvertString(exponentValue, new double[] { });
+                float[] values = null;
+                values = Tools.ConvertString(exponentValue, new float[] { });
                 if (values.Length <= factor.index)
                 {
-                    Tools.LogWf("Too few values given for {0}. Expected at least {1}, got {2}: {3}", name, factor.index + 1, values.Length, exponentValue);
-                    return 1;
+                    Tools.LogWf("Too few values given for {0}. Expected at least {1}, got {2}: {3}", "mass", factor.index + 1, values.Length, exponentValue);
+                    return 0;
                 }
+
+                return values[factor.index] - prefabMass;
             }
-            else if (!double.TryParse(exponentValue, out exponent))
+            else
             {
-                Tools.LogWf("Invalid exponent {0} for field {1}", exponentValue, name);
+                if (!double.TryParse(exponentValue, out exponent) || double.IsNaN(exponent))
+                {
+                    Tools.LogWf("Invalid exponent {0} for field {1}", exponentValue, "mass");
+                    return 0;
+                }
+
+                return prefabMass * (float)(Math.Pow(factor.absolute.linear, exponent)-1);
             }
-
-            double multiplyBy = 1;
-            if (!double.IsNaN(exponent))
-                multiplyBy = Math.Pow(scalingMode.UseRelativeScaling ? factor.relative.linear : factor.absolute.linear, exponent);
-
-            return (float)multiplyBy;
         }
-
 
         private bool ShouldIgnore(Part part)
         {
