@@ -1,4 +1,3 @@
-using KSPAPIExtensions;
 using System;
 using System.Linq;
 using TweakScale.Annotations;
@@ -199,6 +198,8 @@ namespace TweakScale
                 var range = (UI_ScaleEdit)Fields["tweakScale"].uiControlEditor;
                 range.intervals = scaleType.ScaleFactors;
                 range.incrementSlide = scaleType.IncrementSlide;
+                range.unit = scaleType.Suffix;
+                range.sigFigs = 3;
                 Fields["tweakScale"].guiUnits = scaleType.Suffix;
             }
             else
