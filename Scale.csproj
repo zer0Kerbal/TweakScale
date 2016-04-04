@@ -11,8 +11,6 @@
     <AssemblyName>Scale</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,13 +27,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CustomCommands>
-      <CustomCommands>
-        <Command type="AfterBuild" command="cp ./bin/Release/Scale.dll ./GameData/TweakScale/plugins/" workingdir="." />
-        <Command type="AfterBuild" command="cp -r ./GameData/TweakScale ../ksp_dev/GameData/" workingdir="." />
-        <Command type="Execute" command="../ksp_dev/KSP.x86" workingdir="../ksp_dev/" />
-      </CustomCommands>
-    </CustomCommands>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Checker.cs" />
@@ -55,27 +46,29 @@
     <Compile Include="Tuple.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="HotkeyAble.cs" />
-    <Compile Include="UIPartActionScaleEdit.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\ksp_dev\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\KSP 1.1\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="KSPAPIExtensions">
-      <HintPath>GameData\TweakScale\plugins\KSPAPIExtensions.dll</HintPath>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\KSP 1.1\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="Scale_Redist">
       <HintPath>GameData\TweakScale\plugins\Scale_Redist.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
-      <HintPath>..\ksp_dev\KSP_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\KSP 1.1\KSP_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\KSP 1.1\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="KSPUtil">
+      <HintPath>..\..\KSP 1.1\KSP_Data\Managed\KSPUtil.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)\Gamedata\TweakScale\plugins"</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
