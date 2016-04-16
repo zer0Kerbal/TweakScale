@@ -662,14 +662,20 @@ namespace TweakScale
             }
         }
 
-        public float GetModuleCost(float defaultCost)
+        public float GetModuleCost(float defaultCost, ModifierStagingSituation situation)
         {
             if (_setupRun && IsRescaled())
               return (float)(DryCost - part.partInfo.cost + part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
             else
               return 0;
         }
-        public float GetModuleMass(float defaultMass)
+
+        public ModifierChangeWhen GetModuleCostChangeWhen()
+        {
+            return ModifierChangeWhen.FIXED;
+        }
+
+        public float GetModuleMass(float defaultMass, ModifierStagingSituation situation)
         {
             if (_setupRun && IsRescaled())
             {
@@ -678,6 +684,11 @@ namespace TweakScale
             }
             else
               return 0;
+        }
+
+        public ModifierChangeWhen GetModuleMassChangeWhen()
+        {
+            return ModifierChangeWhen.FIXED;
         }
 
         public override string ToString()
