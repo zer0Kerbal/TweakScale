@@ -11,6 +11,8 @@
     <AssemblyName>Scale</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -27,6 +29,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" command="cp ./bin/Release/Scale.dll ./GameData/TweakScale/plugins/" workingdir="." />
+        <Command type="AfterBuild" command="cp -r ./GameData/TweakScale ../ksp_dev/GameData/" workingdir="." />
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Checker.cs" />
@@ -49,23 +57,23 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\KSP 1.1\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\ksp_dev\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\KSP 1.1\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\ksp_dev\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="Scale_Redist">
       <HintPath>GameData\TweakScale\plugins\Scale_Redist.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
-      <HintPath>..\..\KSP 1.1\KSP_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\ksp_dev\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\KSP 1.1\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\ksp_dev\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="KSPUtil">
-      <HintPath>..\..\KSP 1.1\KSP_Data\Managed\KSPUtil.dll</HintPath>
+      <HintPath>..\ksp_dev\KSP_Data\Managed\KSPUtil.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
