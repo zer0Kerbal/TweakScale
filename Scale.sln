@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scale", "Scale.csproj", "{7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scale_Redist", "Scale_Redist\Scale_Redist.csproj", "{2BE63D8B-350E-4EDD-959C-4B7397984364}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scale_Editor", "Scale_Editor\Scale_Editor.csproj", "{609C9905-6B3A-44AF-9E10-2B1A594CDEE4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,17 +15,12 @@ Global
 		{2BE63D8B-350E-4EDD-959C-4B7397984364}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BE63D8B-350E-4EDD-959C-4B7397984364}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BE63D8B-350E-4EDD-959C-4B7397984364}.Release|Any CPU.Build.0 = Release|Any CPU
-		{609C9905-6B3A-44AF-9E10-2B1A594CDEE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{609C9905-6B3A-44AF-9E10-2B1A594CDEE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{609C9905-6B3A-44AF-9E10-2B1A594CDEE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{609C9905-6B3A-44AF-9E10-2B1A594CDEE4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{70D38878-43DB-4F6E-8002-45ADA5391AF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{70D38878-43DB-4F6E-8002-45ADA5391AF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70D38878-43DB-4F6E-8002-45ADA5391AF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70D38878-43DB-4F6E-8002-45ADA5391AF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Scale.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
 		$1.FileWidth = 120
@@ -36,7 +29,6 @@ Global
 		$1.inheritsScope = text/plain
 		$1.scope = text/x-csharp
 		$0.CSharpFormattingPolicy = $2
-		$2.ElseIfNewLinePlacement = SameLine
 		$2.AfterDelegateDeclarationParameterComma = True
 		$2.inheritsSet = Mono
 		$2.inheritsScope = text/x-csharp
