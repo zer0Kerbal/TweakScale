@@ -372,12 +372,7 @@ namespace TweakScale
             //Tools.Logf("DragScaling: part={0} factor={1}", part.name, ScalingFactor.absolute.linear);
         }
 
-        /// <summary>
-        /// Updates properties that change linearly with scale.
-        /// </summary>
-        /// <param name="moveParts">Whether or not to move attached parts.</param>
-        /// <param name="absolute">Whether to use absolute or relative scaling.</param>
-        private void UpdateByWidth(bool moveParts, bool absolute)
+        private void scalePartTransform()
         {
             if (defaultTransformScale.x == 0.0f)
             {
@@ -387,6 +382,19 @@ namespace TweakScale
             _savedScale = part.transform.GetChild(0).localScale = ScalingFactor.absolute.linear * defaultTransformScale;
             part.transform.GetChild(0).hasChanged = true;
             part.transform.hasChanged = true;
+        }
+
+        /// <summary>
+        /// Updates properties that change linearly with scale.
+        /// </summary>
+        /// <param name="moveParts">Whether or not to move attached parts.</param>
+        /// <param name="absolute">Whether to use absolute or relative scaling.</param>
+        private void UpdateByWidth(bool moveParts, bool absolute)
+        {
+            // Workaround for the camera breaking when scaling the root part on revert or load.
+            // (hacky way to tell we did launch and not revert/load)
+            if ((part.vessel == null) || (part.parent != null))
+                scalePartTransform();
 
             scaleDragCubes();
 
