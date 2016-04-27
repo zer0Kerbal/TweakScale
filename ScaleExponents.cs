@@ -255,45 +255,6 @@ namespace TweakScale
             }
         }
 
-        // mass delta (ScaledMass - prefabMass) for the getModuleCost method
-        // -> should only be called for the "Part" node
-        public float getMassDelta(float prefabMass, ScalingFactor factor)
-        {
-            if (!_exponents.ContainsKey("mass"))
-              return 0;
-
-            var exponentValue = _exponents["mass"].Exponent;
-            var exponent = double.NaN;
-
-            if (exponentValue.Contains(','))
-            {
-                if (factor.index == -1)
-                {
-                    Tools.LogWf("Value list used for freescale part exponent field {0}: {1}", "mass", exponentValue);
-                    return 0;
-                }
-                float[] values = null;
-                values = Tools.ConvertString(exponentValue, new float[] { });
-                if (values.Length <= factor.index)
-                {
-                    Tools.LogWf("Too few values given for {0}. Expected at least {1}, got {2}: {3}", "mass", factor.index + 1, values.Length, exponentValue);
-                    return 0;
-                }
-
-                return values[factor.index] - prefabMass;
-            }
-            else
-            {
-                if (!double.TryParse(exponentValue, out exponent) || double.IsNaN(exponent))
-                {
-                    Tools.LogWf("Invalid exponent {0} for field {1}", exponentValue, "mass");
-                    return 0;
-                }
-
-                return prefabMass * (float)(Math.Pow(factor.absolute.linear, exponent)-1);
-            }
-        }
-
         private bool ShouldIgnore(Part part)
         {
             return _ignores.Any(v => part.Modules.Contains(v));
@@ -442,33 +403,45 @@ namespace TweakScale
         }
 
         // if there is no dryCost exponent, use the mass exponent instead
-        public static void CheckForDryCost( Dictionary<string, ScaleExponents> Exponents)
+        public static void treatMassAndCost( Dictionary<string, ScaleExponents> Exponents)
         {
             if (!Exponents.ContainsKey("Part"))
                 return;
 
+            if (!Exponents["Part"]._exponents.ContainsKey("mass"))
+                return;
+
+            string massExponent = Exponents["Part"]._exponents["mass"].Exponent;
             if (!Exponents.ContainsKey("TweakScale"))
             {
-                string massExponent = Exponents["Part"]._exponents["mass"].Exponent;
                 ConfigNode node = new ConfigNode();
                 node.name = "TweakScale";
                 node.id = "TweakScale";
                 node.AddValue("!DryCost", massExponent);
-
+                node.AddValue("MassScale", massExponent);
                 Exponents.Add("TweakScale", new ScaleExponents(node));
             }
-            else if (Exponents["TweakScale"]._exponents.ContainsKey("DryCost"))
+            else
             {
-                ScalingMode tmp = Exponents["TweakScale"]._exponents["DryCost"];
-                tmp.UseRelativeScaling = true;
-                Exponents["TweakScale"]._exponents["DryCost"] = tmp;
+                if (Exponents["TweakScale"]._exponents.ContainsKey("DryCost"))
+                {
+                    // force relative scaling
+                    ScalingMode tmp = Exponents["TweakScale"]._exponents["DryCost"];
+                    tmp.UseRelativeScaling = true;
+                    Exponents["TweakScale"]._exponents["DryCost"] = tmp;
+                }
+                else
+                {
+                    Exponents["TweakScale"]._exponents.Add("DryCost", new ScalingMode(massExponent, true));
+                }
+
+                // move mass exponent into TweakScale module
+                if (Exponents["TweakScale"]._exponents.ContainsKey("MassScale"))
+                  Tools.LogWf("treatMassAndCost: TweakScale/MassScale exponent already exists!");
+                else
+                  Exponents["TweakScale"]._exponents.Add("MassScale", new ScalingMode(massExponent, false));
             }
-            // untested: filling in an existing tweakscale node without DryCost value
-/*            else
-            {
-                string massExponent = Exponents["Part"]._exponents["mass"].Exponent;
-                Exponents["TweakScale"]._exponents.Add("DryCost", new ScalingMode(massExponent, true));
-            }*/
+            //Exponents["Part"]._exponents.Remove("mass");
         }
 
         public static Dictionary<string, ScaleExponents> CreateExponentsForModule(ConfigNode node, Dictionary<string, ScaleExponents> parent)

@@ -128,6 +128,12 @@ namespace TweakScale
         [KSPField(isPersistant = true)]
         public float DryCost;
 
+        /// <summary>
+        /// scaled mass
+        /// </summary>
+        [KSPField(isPersistant = false)]
+        public float MassScale = 1;
+
         private Hotkeyable _chainingEnabled;
         private Hotkeyable _autoscaleEnabled;
 
@@ -691,10 +697,7 @@ namespace TweakScale
         public float GetModuleMass(float defaultMass, ModifierStagingSituation situation)
         {
             if (_setupRun && IsRescaled())
-            {
-                // todo: optimierung falls das auch in flight drankommt
-                return ScaleType.Exponents["Part"].getMassDelta(_prefabPart.mass, ScalingFactor);
-            }
+              return _prefabPart.mass * (MassScale - 1f);
             else
               return 0;
         }
