@@ -584,6 +584,10 @@ namespace TweakScale
             }
             currentScale = tweakScale;
             GameEvents.onEditorShipModified.Fire(EditorLogic.fetch.ship);
+
+            UIPartActionWindow window = part.FindActionWindow();
+            if (window != null)
+                window.displayDirty = true;
         }
 
         /// <summary>
