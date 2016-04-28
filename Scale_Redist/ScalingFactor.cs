@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TweakScale
+﻿namespace TweakScale
 {
     public struct ScalingFactor
     {

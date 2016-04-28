@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-namespace TweakScale
+﻿namespace TweakScale
 {
     public interface IRescalable
     {
