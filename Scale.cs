@@ -94,6 +94,7 @@ namespace TweakScale
         private bool _firstUpdateWithParent = true;
         private bool _setupRun;
         private bool _invalidCfg;
+        private bool _firstUpdate = true;
 
         /// <summary>
         /// Updaters for different PartModules.
@@ -364,18 +365,27 @@ namespace TweakScale
             }
         }
 
-        private void scaleDragCubes()
+        private void scaleDragCubes(bool absolute)
         {
+            ScalingFactor.FactorSet factor;
+            if (absolute)
+              factor = ScalingFactor.absolute;
+            else
+              factor = ScalingFactor.relative;
+
+            if (factor.linear == 1)
+              return;
+
             foreach (var dragCube in part.DragCubes.Cubes)
             {
-                dragCube.Size *= ScalingFactor.absolute.linear;
+                dragCube.Size *= factor.linear;
                 for (int i=0; i<dragCube.Area.Length; i++)
-                    dragCube.Area[i] *= ScalingFactor.absolute.quadratic;
+                    dragCube.Area[i] *= factor.quadratic;
+
                 for (int i=0; i<dragCube.Depth.Length; i++)
-                    dragCube.Depth[i] *= ScalingFactor.absolute.linear;
+                    dragCube.Depth[i] *= factor.linear;
             }
             part.DragCubes.ForceUpdate(true, true);
-            //Tools.Logf("DragScaling: part={0} factor={1}", part.name, ScalingFactor.absolute.linear);
         }
 
         private void scalePartTransform()
@@ -403,7 +413,6 @@ namespace TweakScale
         {
             scalePartTransform();
 
-            scaleDragCubes();
 
             foreach (var node in part.attachNodes)
             {
@@ -582,6 +591,8 @@ namespace TweakScale
             }
 
             UpdateByWidth(true, false);
+            scaleDragCubes(false);
+
             UpdateWindow();
 
             foreach (var updater in _updaters)
@@ -643,6 +654,12 @@ namespace TweakScale
             if (CheckForDuplicateTweakScale() || CheckForInvalidCfg())
             {
                 return;
+            }
+
+            if (_firstUpdate)
+            {
+                scaleDragCubes(true);
+                _firstUpdate = false;
             }
 
             if (HighLogic.LoadedSceneIsEditor)
@@ -723,6 +740,33 @@ namespace TweakScale
             //result += "   minValue = " + MinValue + "\n";
             //result += "   maxValue = " + MaxValue + "\n";
             return result + "\n}";
+        }
+
+      /*[KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
+        public void debugOutput()
+        {
+            logDragCubes("debug");
+        }*/
+
+        private void logDragCubes(String call)
+        {
+            String str = "DragScaling: part=" + part.name;
+            try { str += "\nfactor: abs=" + ScalingFactor.absolute.linear.ToString() + ", rel=" + ScalingFactor.relative.linear.ToString(); }
+            catch (Exception) { }
+            str += "\ncall=" + call;
+            str += "\nnumCubes=" + part.DragCubes.Cubes.StupidCount();
+
+            foreach (var dragCube in part.DragCubes.Cubes)
+            {
+                str += "\n  size=" + dragCube.Size.ToString();
+                for (int i = 0; i < dragCube.Area.Length; i++)
+                    str += "\n    area[" + i + "]=" + dragCube.Area[i].ToString();
+
+                for (int i = 0; i < dragCube.Depth.Length; i++)
+                    str += "\n    depth[" + i + "]=" + dragCube.Depth[i].ToString();
+            }
+
+            Debug.LogWarning("[TweakScale]" + str + "\n" + StackTraceUtility.ExtractStackTrace());
         }
     }
 }
