@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using TweakScale.Annotations;
 using UnityEngine;
+//using ModuleWheels;
 
 namespace TweakScale
 {
@@ -279,8 +280,8 @@ namespace TweakScale
                 // first apply the exponents
                 if (updater is TSGenericUpdater)
                 {
-                    Tools.Logf("OnRescale:" + updater.ToString() +"\nmassScale="+MassScale.ToString());
                     updater.OnRescale(ScalingFactor);
+                    part.mass = _prefabPart.mass; // make sure we leave this in a clean state
                 }
             }
             foreach (var updater in _updaters)
@@ -289,7 +290,6 @@ namespace TweakScale
                 if (updater is TSGenericUpdater)
                     continue;
 
-                Tools.Logf("OnRescale:" + updater.ToString() + "\nmassScale=" + MassScale.ToString());
                 updater.OnRescale(ScalingFactor);
             }
         }
