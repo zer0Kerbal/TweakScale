@@ -260,10 +260,7 @@ namespace TweakScale
                 UpdateByWidth(false, true);
                 try
                 {
-                    foreach (var updater in _updaters)
-                    {
-                        updater.OnRescale(ScalingFactor);
-                    }
+                    CallUpdaters();
                 }
                 catch (Exception exception)
                 {
@@ -274,6 +271,28 @@ namespace TweakScale
             _setupRun = true;
         }
 
+        void CallUpdaters()
+        {
+            // two passes, to depend less on the order of this list
+            foreach (var updater in _updaters)
+            {
+                // first apply the exponents
+                if (updater is TSGenericUpdater)
+                {
+                    Tools.Logf("OnRescale:" + updater.ToString() +"\nmassScale="+MassScale.ToString());
+                    updater.OnRescale(ScalingFactor);
+                }
+            }
+            foreach (var updater in _updaters)
+            {
+                // then call other updaters (emitters, other mods)
+                if (updater is TSGenericUpdater)
+                    continue;
+
+                Tools.Logf("OnRescale:" + updater.ToString() + "\nmassScale=" + MassScale.ToString());
+                updater.OnRescale(ScalingFactor);
+            }
+        }
 
         public override void OnStart(StartState state)
         {
@@ -595,10 +614,8 @@ namespace TweakScale
 
             UpdateWindow();
 
-            foreach (var updater in _updaters)
-            {
-                updater.OnRescale(ScalingFactor);
-            }
+            CallUpdaters();
+
             currentScale = tweakScale;
             GameEvents.onEditorShipModified.Fire(EditorLogic.fetch.ship);
 
