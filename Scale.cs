@@ -287,37 +287,14 @@ namespace TweakScale
             }
 
             // MFT support
-            try
-            {
-                if (_prefabPart.Modules.Contains("ModuleFuelTanks"))
-                {
-                    var m = _prefabPart.Modules["ModuleFuelTanks"];
-                    var t = m.GetType();
-                    FieldInfo fieldInfo = t.GetField("totalVolume", BindingFlags.Public | BindingFlags.Instance );
-                    if (fieldInfo != null)
-                    {
-                        var oldVol = fieldInfo.GetValue(m);
-                        Double newVol = (Double)oldVol * 0.001d; // unit conversion
-                        newVol *= (double)ScalingFactor.absolute.cubic;
-
-                        var data = new BaseEventData(BaseEventData.Sender.USER);
-                        data.Set<string>("volName", "Tankage");
-                        data.Set<double>("newTotalVolume", newVol);
-                        part.SendEvent("OnPartVolumeChanged", data);
-                    }
-                    else Tools.LogWf("MFT interaction failed (fieldinfo=null)");
-                }
-            }
-            catch (Exception e)
-            {
-                Tools.LogWf("Exception during MFT interaction" +e.ToString());
-            }
+            ScaleMftModule();
 
             // scale crew capacity (balancing: conserve mass/kerbal)
-            if (_prefabPart.CrewCapacity > 0)
+            //  (editor UI does not recognize this yet)
+            /*if (_prefabPart.CrewCapacity > 0)
             {
                 part.CrewCapacity = (int)(_prefabPart.CrewCapacity * MassScale);
-            }
+            }*/
 
             foreach (var updater in _updaters)
             {
@@ -326,6 +303,31 @@ namespace TweakScale
                     continue;
 
                 updater.OnRescale(ScalingFactor);
+            }
+        }
+
+        void ScaleMftModule()
+        {
+            try
+            {
+                if (_prefabPart.Modules.Contains("ModuleFuelTanks"))
+                {
+                    var m = _prefabPart.Modules["ModuleFuelTanks"];
+                    FieldInfo fieldInfo = m.GetType().GetField("totalVolume", BindingFlags.Public | BindingFlags.Instance);
+                    if (fieldInfo != null)
+                    {
+                        double oldVol = (double)fieldInfo.GetValue(m) * 0.001d;
+                        var data = new BaseEventData(BaseEventData.Sender.USER);
+                        data.Set<string>("volName", "Tankage");
+                        data.Set<double>("newTotalVolume", oldVol * ScalingFactor.absolute.cubic);
+                        part.SendEvent("OnPartVolumeChanged", data);
+                    }
+                    else Tools.LogWf("MFT interaction failed (fieldinfo=null)");
+                }
+            }
+            catch (Exception e)
+            {
+                Tools.LogWf("Exception during MFT interaction" + e.ToString());
             }
         }
 
