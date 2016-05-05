@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using TweakScale.Annotations;
 using UnityEngine;
 //using ModuleWheels;
@@ -284,6 +285,40 @@ namespace TweakScale
                     part.mass = _prefabPart.mass; // make sure we leave this in a clean state
                 }
             }
+
+            // MFT support
+            try
+            {
+                if (_prefabPart.Modules.Contains("ModuleFuelTanks"))
+                {
+                    var m = _prefabPart.Modules["ModuleFuelTanks"];
+                    var t = m.GetType();
+                    FieldInfo fieldInfo = t.GetField("totalVolume", BindingFlags.Public | BindingFlags.Instance );
+                    if (fieldInfo != null)
+                    {
+                        var oldVol = fieldInfo.GetValue(m);
+                        Double newVol = (Double)oldVol * 0.001d; // unit conversion
+                        newVol *= (double)ScalingFactor.absolute.cubic;
+
+                        var data = new BaseEventData(BaseEventData.Sender.USER);
+                        data.Set<string>("volName", "Tankage");
+                        data.Set<double>("newTotalVolume", newVol);
+                        part.SendEvent("OnPartVolumeChanged", data);
+                    }
+                    else Tools.LogWf("MFT interaction failed (fieldinfo=null)");
+                }
+            }
+            catch (Exception e)
+            {
+                Tools.LogWf("Exception during MFT interaction" +e.ToString());
+            }
+
+            // scale crew capacity (balancing: conserve mass/kerbal)
+            if (_prefabPart.CrewCapacity > 0)
+            {
+                part.CrewCapacity = (int)(_prefabPart.CrewCapacity * MassScale);
+            }
+
             foreach (var updater in _updaters)
             {
                 // then call other updaters (emitters, other mods)
