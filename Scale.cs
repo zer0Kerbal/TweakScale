@@ -320,7 +320,7 @@ namespace TweakScale
                         var data = new BaseEventData(BaseEventData.Sender.USER);
                         data.Set<string>("volName", "Tankage");
                         data.Set<double>("newTotalVolume", oldVol * ScalingFactor.absolute.cubic);
-                        part.SendEvent("OnPartVolumeChanged", data);
+                        part.SendEvent("OnPartVolumeChanged", data, 0);
                     }
                     else Tools.LogWf("MFT interaction failed (fieldinfo=null)");
                 }
