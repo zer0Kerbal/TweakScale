@@ -296,6 +296,12 @@ namespace TweakScale
                 part.CrewCapacity = (int)(_prefabPart.CrewCapacity * MassScale);
             }*/
 
+            // send scaling part message
+            var data = new BaseEventData(BaseEventData.Sender.USER);
+            data.Set<float>("factorAbsolute", ScalingFactor.absolute.linear);
+            data.Set<float>("factorRelative", ScalingFactor.relative.linear);
+            part.SendEvent("OnPartScaleChanged", data, 0);
+
             foreach (var updater in _updaters)
             {
                 // then call other updaters (emitters, other mods)
@@ -822,5 +828,17 @@ namespace TweakScale
 
             Debug.LogWarning("[TweakScale]" + str + "\n" + StackTraceUtility.ExtractStackTrace());
         }
+
+        /*[KSPEvent(guiActive = false, active = true)]
+        void OnPartScaleChanged(BaseEventData data)
+        {
+            float factorAbsolute = data.Get<float>("factorAbsolute");
+            float factorRelative = data.Get<float>("factorRelative");
+            Debug.Log("PartMessage: OnPartScaleChanged:"
+                + "\npart=" + part.name
+                + "\nfactorRelative=" + factorRelative.ToString()
+                + "\nfactorAbsolute=" + factorAbsolute.ToString());
+
+        }*/
     }
 }
