@@ -458,6 +458,21 @@ namespace TweakScale
                 if (defaultTransformScale.x == 0.0f)
                 {
                     defaultTransformScale = trafo.localScale;
+                    _savedScale = defaultTransformScale * ScalingFactor.absolute.linear;
+                }
+
+                // check for flipped signs
+                if (defaultTransformScale.x * trafo.localScale.x < 0)
+                {
+                    defaultTransformScale.x *= -1;
+                }
+                if (defaultTransformScale.y * trafo.localScale.y < 0)
+                {
+                    defaultTransformScale.y *= -1;
+                }
+                if (defaultTransformScale.z * trafo.localScale.z < 0)
+                {
+                    defaultTransformScale.z *= -1;
                 }
 
                 _savedScale = trafo.localScale = ScalingFactor.absolute.linear * defaultTransformScale;
@@ -742,7 +757,7 @@ namespace TweakScale
                     }
                     else if (part.transform.GetChild(0).localScale != _savedScale) // editor frequently nukes our OnStart resize some time later
                     {
-                        UpdateByWidth(false, true);
+                        UpdateByWidth(false, true); // initial scaling for symmetry parts happens here
                     }
                 }
             }
