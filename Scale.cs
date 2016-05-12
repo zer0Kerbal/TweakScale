@@ -281,8 +281,12 @@ namespace TweakScale
                 // first apply the exponents
                 if (updater is TSGenericUpdater)
                 {
+                    float oldMass = part.mass;
+                    if (oldMass != _prefabPart.mass)
+                        Tools.LogWf("mass discrepancy: part=" +part.mass.ToString() +", prefab=" +_prefabPart.mass.ToString());
+
                     updater.OnRescale(ScalingFactor);
-                    part.mass = _prefabPart.mass; // make sure we leave this in a clean state
+                    part.mass = oldMass; // make sure we leave this in a clean state
                 }
             }
 
