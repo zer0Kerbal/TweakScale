@@ -283,9 +283,6 @@ namespace TweakScale
                 if (updater is TSGenericUpdater)
                 {
                     float oldMass = part.mass;
-                    if (oldMass != _prefabPart.mass)
-                        Tools.LogWf("mass discrepancy: part=" +part.mass.ToString() +", prefab=" +_prefabPart.mass.ToString());
-
                     updater.OnRescale(ScalingFactor);
                     part.mass = oldMass; // make sure we leave this in a clean state
                 }
@@ -345,14 +342,15 @@ namespace TweakScale
         public override void OnStart(StartState state)
         {
             base.OnStart(state);
-            if (part.parent != null)
-            {
-                _firstUpdateWithParent = false;
-            }
-            Setup();
 
             if (HighLogic.LoadedSceneIsEditor)
             {
+                if (part.parent != null)
+                {
+                    _firstUpdateWithParent = false;
+                }
+                Setup();
+
                 _autoscaleEnabled = HotkeyManager.Instance.AddHotkey("Autoscale", new[] {KeyCode.LeftShift},
                     new[] {KeyCode.LeftControl, KeyCode.L}, false);
                 _chainingEnabled = HotkeyManager.Instance.AddHotkey("Scale chaining", new[] {KeyCode.LeftShift},
@@ -360,31 +358,25 @@ namespace TweakScale
             }
 
             // scale IVA overlay
-            try
+            if (HighLogic.LoadedSceneIsFlight && enabled && (part.internalModel != null))
             {
-                if (HighLogic.LoadedSceneIsFlight && (part.internalModel != null))
-                {
-                    if (part.internalModel.transform == null)
-                        Debug.Log("part.internalmodel.transform==null");
-
-                    try { Debug.Log("part.internalmodel.transform.localScale=" + part.internalModel.transform.localScale.ToString()); } catch (Exception) { }
-                    _savedIvaScale = part.internalModel.transform.localScale * ScalingFactor.absolute.linear;
-                    part.internalModel.transform.localScale = _savedIvaScale;
-                    part.internalModel.transform.hasChanged = true;
-                    Debug.Log("part.internalmodel.transform.localScale=" + part.internalModel.transform.localScale.ToString());
-
-                    //if (HighLogic.LoadedSceneIsFlight && (_prefabPart.CrewCapacity > 0))
-                    //    GameEvents.onCrewTransferred.Add(OnCrewTransferred);
-                }
+                _savedIvaScale = part.internalModel.transform.localScale * ScalingFactor.absolute.linear;
+                part.internalModel.transform.localScale = _savedIvaScale;
+                part.internalModel.transform.hasChanged = true;
             }
-            catch (Exception) { Debug.Log("Exception on IVA Scaling"); }
-
         }
 
         public override void OnLoad(ConfigNode node)
         {
             base.OnLoad(node);
-            Setup();
+
+            if (HighLogic.LoadedSceneIsFlight)
+            {
+                if (IsRescaled())
+                    Setup();
+                else
+                    enabled = false;
+            }
         }
 
         /// <summary>
@@ -885,11 +877,11 @@ namespace TweakScale
 
         }*/
 
-        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
+        /*[KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
         public void debugOutput()
         {
             
-        }
+        }*/
 
     }
 }
