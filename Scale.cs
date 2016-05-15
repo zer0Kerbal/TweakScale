@@ -83,6 +83,7 @@ namespace TweakScale
         /// Like currentScale above, this is the current scale vector. If TweakScale supports non-uniform scaling in the future (e.g. changing only the length of destination booster), savedScale may represent such destination scaling, while currentScale won't.
         /// </summary>
         private Vector3 _savedScale;
+        private Vector3 _savedIvaScale;
 
         /// <summary>
         /// The exponentValue by which the part is scaled by default. When destination part uses MODEL { scale = ... }, this will be different from (1,1,1).
@@ -357,6 +358,27 @@ namespace TweakScale
                 _chainingEnabled = HotkeyManager.Instance.AddHotkey("Scale chaining", new[] {KeyCode.LeftShift},
                     new[] {KeyCode.LeftControl, KeyCode.K}, false);
             }
+
+            // scale IVA overlay
+            try
+            {
+                if (HighLogic.LoadedSceneIsFlight && (part.internalModel != null))
+                {
+                    if (part.internalModel.transform == null)
+                        Debug.Log("part.internalmodel.transform==null");
+
+                    try { Debug.Log("part.internalmodel.transform.localScale=" + part.internalModel.transform.localScale.ToString()); } catch (Exception) { }
+                    _savedIvaScale = part.internalModel.transform.localScale * ScalingFactor.absolute.linear;
+                    part.internalModel.transform.localScale = _savedIvaScale;
+                    part.internalModel.transform.hasChanged = true;
+                    Debug.Log("part.internalmodel.transform.localScale=" + part.internalModel.transform.localScale.ToString());
+
+                    //if (HighLogic.LoadedSceneIsFlight && (_prefabPart.CrewCapacity > 0))
+                    //    GameEvents.onCrewTransferred.Add(OnCrewTransferred);
+                }
+            }
+            catch (Exception) { Debug.Log("Exception on IVA Scaling"); }
+
         }
 
         public override void OnLoad(ConfigNode node)
@@ -765,6 +787,15 @@ namespace TweakScale
                     }
                 }
             }
+            else
+            {
+                if ((part.internalModel != null) && (part.internalModel.transform.localScale != _savedIvaScale)) // flight scene frequently nukes our OnStart resize some time later
+                {
+                    part.internalModel.transform.localScale = _savedIvaScale;
+                    part.internalModel.transform.hasChanged = true;
+                }
+
+            }
 
             if (_firstUpdateWithParent && part.HasParent())
             {
@@ -821,12 +852,6 @@ namespace TweakScale
             return result + "\n}";
         }
 
-      /*[KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
-        public void debugOutput()
-        {
-            logDragCubes("debug");
-        }*/
-
         private void logDragCubes(String call)
         {
             String str = "DragScaling: part=" + part.name;
@@ -859,5 +884,12 @@ namespace TweakScale
                 + "\nfactorAbsolute=" + factorAbsolute.ToString());
 
         }*/
+
+        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
+        public void debugOutput()
+        {
+            
+        }
+
     }
 }
