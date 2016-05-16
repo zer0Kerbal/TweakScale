@@ -274,6 +274,97 @@ namespace TweakScale
             _setupRun = true;
         }
 
+        void printCrew(string name)
+        {
+            string str = "PartCrew: " + name;
+            try
+            {
+                if (ShipConstruction.ShipManifest == null)
+                {
+                    Debug.Log("ShipManifest==null");
+                    return;
+                }
+
+                var c = ShipConstruction.ShipManifest.GetAllCrew(true);
+                if (c==null)
+                {
+                    Debug.Log("GetAllCrew==null");
+                    return;
+                }
+
+                str += "\nLength=" + c.Count.ToString();
+                for (int i = 0; i < c.Count; i++)
+                {
+                    str += "\n  " + i.ToString();
+                    if (c[i] != null)
+                        str += " " + c[i].type.ToString() +" '" +c[i].name +"'";
+                    else
+                        str += " null";
+                }
+                Debug.Log(str);
+            } catch (Exception e) { Debug.Log("Exception in printCrew\n" +e.ToString() +"\n" +str); }
+        }
+
+        void ScaleCrewCapacity()
+        {
+            // scale crew capacity (balancing: conserve mass/kerbal)
+            printCrew("old");
+            var cOld = part.CrewCapacity;
+            var cNew = (int)(_prefabPart.CrewCapacity * MassScale);
+
+            if (cOld == cNew)
+            {
+                Debug.Log("CrewCapacity: old=new=" +cNew.ToString());
+                return;
+            }
+            part.CrewCapacity = cNew;
+
+            if (HighLogic.LoadedSceneIsFlight)
+                return;
+
+            var manifests = ShipConstruction.ShipManifest.GetCrewableParts();
+            PartCrewManifest crew = null;
+            for (int i = 0; i < manifests.StupidCount(); i++)
+            {
+                if (manifests[i].PartID == part.craftID)
+                {
+                    crew = manifests[i];
+                    break;
+                }
+            }
+            if (crew == null)
+            {
+                Tools.LogWf("No PartManifest found!");
+                return;
+            }
+            if (cOld != crew.GetPartCrew().Count())
+            {
+                Debug.Log("Crew mismatch: part="+cOld +", crew=" + crew.GetPartCrew().Count().ToString());
+            } //else Debug.Log("Manifest found");
+
+            // clear seats (just for safety)
+            for (int i = 0; i < crew.GetPartCrew().Count(); i++)
+            {
+                if (crew.GetPartCrew()[i] != null)
+                {
+                    Debug.Log("Removing seat:" + i.ToString() + crew.GetPartCrew()[i].name);
+                    crew.RemoveCrewFromSeat(i);
+                }
+            } //Debug.Log("Cleared seats");
+
+            FieldInfo[] fields = typeof(PartCrewManifest).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (FieldInfo f in fields)
+            {
+                if (f.Name == "partCrew")
+                {
+                    f.SetValue(crew, new string[cNew]);
+                }
+            }
+
+            printCrew("new");
+            EditorLogic.fetch.UpdateUI();
+        }
+
         void CallUpdaters()
         {
             // two passes, to depend less on the order of this list
@@ -291,12 +382,11 @@ namespace TweakScale
             // MFT support
             ScaleMftModule();
 
-            // scale crew capacity (balancing: conserve mass/kerbal)
-            //  (editor UI does not recognize this yet)
-            /*if (_prefabPart.CrewCapacity > 0)
+            if (_prefabPart.CrewCapacity > 0)
             {
-                part.CrewCapacity = (int)(_prefabPart.CrewCapacity * MassScale);
-            }*/
+                try { ScaleCrewCapacity(); }
+                catch (Exception e) { Tools.LogWf("Exception in ScaleCrewCapacity:\n" + e.ToString()); }
+            }
 
             // send scaling part message
             var data = new BaseEventData(BaseEventData.Sender.USER);
