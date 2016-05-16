@@ -274,41 +274,11 @@ namespace TweakScale
             _setupRun = true;
         }
 
-        void printCrew(string name)
-        {
-            string str = "PartCrew: " + name;
-            try
-            {
-                if (ShipConstruction.ShipManifest == null)
-                {
-                    Debug.Log("ShipManifest==null");
-                    return;
-                }
 
-                var c = ShipConstruction.ShipManifest.GetAllCrew(true);
-                if (c==null)
-                {
-                    Debug.Log("GetAllCrew==null");
-                    return;
-                }
-
-                str += "\nLength=" + c.Count.ToString();
-                for (int i = 0; i < c.Count; i++)
-                {
-                    str += "\n  " + i.ToString();
-                    if (c[i] != null)
-                        str += " " + c[i].type.ToString() +" '" +c[i].name +"'";
-                    else
-                        str += " null";
-                }
-                Debug.Log(str);
-            } catch (Exception e) { Debug.Log("Exception in printCrew\n" +e.ToString() +"\n" +str); }
-        }
 
         void ScaleCrewCapacity()
         {
             // scale crew capacity (balancing: conserve mass/kerbal)
-            printCrew("old");
             var cOld = part.CrewCapacity;
             var cNew = (int)(_prefabPart.CrewCapacity * MassScale);
 
@@ -352,6 +322,10 @@ namespace TweakScale
                 }
             } //Debug.Log("Cleared seats");
 
+            // close crew tab (otherwise it will not update correctly)
+            if (EditorLogic.fetch.editorScreen == EditorScreen.Crew)
+                EditorLogic.fetch.SelectPanelParts();
+
             FieldInfo[] fields = typeof(PartCrewManifest).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (FieldInfo f in fields)
             {
@@ -361,8 +335,7 @@ namespace TweakScale
                 }
             }
 
-            printCrew("new");
-            EditorLogic.fetch.UpdateUI();
+            ShipConstruction.ShipManifest.SetPartManifest(part.craftID, crew);
         }
 
         void CallUpdaters()
@@ -954,6 +927,38 @@ namespace TweakScale
 
             Debug.LogWarning("[TweakScale]" + str + "\n" + StackTraceUtility.ExtractStackTrace());
         }
+
+        /*void logCrew(string call)
+        {
+            string str = "Crew: " + call;
+            try
+            {
+                if (ShipConstruction.ShipManifest == null)
+                {
+                    Debug.Log("ShipManifest==null");
+                    return;
+                }
+
+                var c = ShipConstruction.ShipManifest.GetAllCrew(true);
+                if (c == null)
+                {
+                    Debug.Log("GetAllCrew==null");
+                    return;
+                }
+
+                str += "\nLength=" + c.Count.ToString();
+                for (int i = 0; i < c.Count; i++)
+                {
+                    str += "\n  " + i.ToString();
+                    if (c[i] != null)
+                        str += " " + c[i].type.ToString() + " '" + c[i].name + "'";
+                    else
+                        str += " null";
+                }
+                Debug.Log(str);
+            }
+            catch (Exception e) { Debug.Log("Exception in printCrew\n" + e.ToString() + "\n" + str); }
+        }*/
 
         /*[KSPEvent(guiActive = false, active = true)]
         void OnPartScaleChanged(BaseEventData data)
