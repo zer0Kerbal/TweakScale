@@ -715,21 +715,26 @@ namespace TweakScale
         }
 
         /// <summary>
-        /// Scale children with the part.
+        /// Propagate relative scaling factor to children.
         /// </summary>
         private void ChainScale()
         {
             foreach (var child in part.children)
             {
-                var ts = child.GetComponent<TweakScale>();
-                var factor = GetRelativeScaling(this, ts);
-                if (!factor.HasValue)
+                var b = child.GetComponent<TweakScale>();
+                if (b == null)
                     continue;
 
-                if (Math.Abs(factor.Value - (tweakScale / currentScale)) <= 1e-4f)
+                float factor = ScalingFactor.relative.linear;
+                if (Math.Abs(factor - 1) <= 1e-4f)
+                    continue;
+
+                b.tweakScale *= factor;
+                if (!b.isFreeScale && (b.ScaleFactors.Length > 0))
                 {
-                    AutoScale(this, ts);
+                    b.tweakName = Tools.ClosestIndex(b.tweakScale, b.ScaleFactors);
                 }
+                b.OnTweakScaleChanged();
             }
         }
 
