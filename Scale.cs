@@ -626,9 +626,6 @@ namespace TweakScale
         /// </summary>
         private void UpdateWindow() // redraw the right-click window with the updated stats
         {
-            if (!HasResources)
-                return;
-
             foreach (var win in FindObjectsOfType<UIPartActionWindow>().Where(win => win.part == part))
             {
                 // This causes the slider to be non-responsive - i.e. after you click once, you must click again, not drag the slider.
