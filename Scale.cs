@@ -626,8 +626,9 @@ namespace TweakScale
         /// </summary>
         private void UpdateWindow() // redraw the right-click window with the updated stats
         {
-            if (isFreeScale || !HasResources)
+            if (!HasResources)
                 return;
+
             foreach (var win in FindObjectsOfType<UIPartActionWindow>().Where(win => win.part == part))
             {
                 // This causes the slider to be non-responsive - i.e. after you click once, you must click again, not drag the slider.
@@ -762,10 +763,6 @@ namespace TweakScale
 
             currentScale = tweakScale;
             GameEvents.onEditorShipModified.Fire(EditorLogic.fetch.ship);
-
-            UIPartActionWindow window = part.FindActionWindow();
-            if (window != null)
-                window.displayDirty = true;
         }
 
         /// <summary>
