@@ -6,15 +6,6 @@ using UnityEngine;
 
 namespace TweakScale
 {
-    [KSPAddon(KSPAddon.Startup.MainMenu, false)]
-    class ScaleExponentsLoader : RescalableRegistratorAddon
-    {
-        public override void OnStart()
-        {
-            ScaleExponents.LoadGlobalExponents();
-        }
-    }
-
     public class ScaleExponents
     {
         public struct ScalingMode
@@ -53,6 +44,7 @@ namespace TweakScale
         {
             if (_globalListLoaded)
                 return;
+
             var tmp = GameDatabase.Instance.GetConfigs(ExponentConfigName)
                 .Select(a => new ScaleExponents(a.config));
 
@@ -446,6 +438,8 @@ namespace TweakScale
 
         public static Dictionary<string, ScaleExponents> CreateExponentsForModule(ConfigNode node, Dictionary<string, ScaleExponents> parent)
         {
+            //Debug.Log("CreateExponentsForModule: node=" + node.ToString());
+
             var local = node.nodes
                 .OfType<ConfigNode>()
                 .Where(IsExponentBlock)

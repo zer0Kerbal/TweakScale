@@ -196,6 +196,8 @@ namespace TweakScale
             if ((object)partConfig != null )
             {
                 Name = Tools.ConfigValue(partConfig, "type", Name);
+                ScaleExponents.LoadGlobalExponents();
+
                 if (Name != null)
                 {
                     var tmp = GameDatabase.Instance.GetConfigs("SCALETYPE").FirstOrDefault(a => a.name == Name);

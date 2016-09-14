@@ -148,8 +148,7 @@ namespace TweakScale
         {
             get
             {
-                return GameDatabase.Instance.GetConfigs("PART").FirstOrDefault(c => c.name.Replace('_', '.') == part.partInfo.name)
-                    .config;
+                return GameDatabase.Instance.GetConfigs("PART").FirstOrDefault(c => c.name.Replace('_', '.') == part.name).config;
             }
         }
 
@@ -181,6 +180,9 @@ namespace TweakScale
         /// <param name="scaleType">The settings to use.</param>
         private void SetupFromConfig(ScaleType scaleType)
         {
+            Debug.Log("SetupFromConfig: defaultScale=" + defaultScale.ToString() + ", currentScale=" + currentScale.ToString() + ", tweakScale=" + tweakScale.ToString());
+            if (ScaleType == null) Debug.LogError("TweakScale: Scaletype==null! part=" + part.name);
+
             isFreeScale = scaleType.IsFreeScale;
             if (defaultScale == -1)
                 defaultScale = scaleType.DefaultScale;
@@ -221,44 +223,37 @@ namespace TweakScale
             }
         }
 
+        protected virtual void SetupPrefab()
+        {
+            ScaleType = new ScaleType(ModuleNode);
+            SetupFromConfig(ScaleType);
+            tweakScale = currentScale = defaultScale;
+        }
+
         /// <summary>
         /// Sets up values from ScaleType, creates updaters, and sets up initial values.
         /// </summary>
         protected virtual void Setup()
         {
-            if (part.partInfo == null)
-            {
-                return;
-            }
-
             if (_setupRun)
             {
                 return;
             }
+            _prefabPart = part.partInfo.partPrefab;
 
-            _prefabPart = PartLoader.getPartInfoByName(part.partInfo.name).partPrefab;
-
+            Debug.Log("TweakScale:Setup: part="+part.name );
             _updaters = TweakScaleUpdater.CreateUpdaters(part).ToArray();
 
-            var doUpdate = currentScale < 0f;
-            SetupFromConfig(ScaleType = new ScaleType(ModuleNode));
-
-            if (doUpdate)
-            {
-                tweakScale = currentScale = defaultScale;
-                DryCost = (float)(part.partInfo.cost - _prefabPart.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
-                if (DryCost < 0)
-                {
-                    DryCost = 0;
-                }
-            }
+            ScaleType = (_prefabPart.Modules["TweakScale"] as TweakScale).ScaleType;
+            SetupFromConfig(ScaleType);
 
             if (!isFreeScale && ScaleFactors.Length != 0)
             {
                 tweakName = Tools.ClosestIndex(tweakScale, ScaleFactors);
                 tweakScale = ScaleFactors[tweakName];
             }
-            if (!doUpdate && IsRescaled())
+
+            if (IsRescaled())
             {
                 UpdateByWidth(false, true);
                 try
@@ -268,7 +263,16 @@ namespace TweakScale
                 catch (Exception exception)
                 {
                     Tools.LogWf("Exception on Rescale: {0}", exception);
-                    _setupRun = true;
+                }
+            }
+            else
+            {
+                AvailablePart ap = PartLoader.getPartInfoByName(part.name);
+                DryCost = (float)(ap.cost - part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
+                if (DryCost < 0)
+                {
+                    Debug.LogError("TweakScale: part=" + part.name + ", DryCost=" + DryCost.ToString());
+                    DryCost = 0;
                 }
             }
             _setupRun = true;
@@ -404,6 +408,7 @@ namespace TweakScale
 
         public override void OnStart(StartState state)
         {
+            Debug.Log("OnStart: part=" + part.name);
             base.OnStart(state);
 
             if (HighLogic.LoadedSceneIsEditor)
@@ -433,9 +438,20 @@ namespace TweakScale
         {
             base.OnLoad(node);
 
-            if (HighLogic.LoadedSceneIsFlight)
+            if (part.partInfo == null)
             {
-                if (IsRescaled())
+                // Loading of the prefab from the part config
+                Debug.Log("OnLoad(Prefab): part=" + part.name);
+                _prefabPart = part;
+                SetupPrefab();
+
+            }
+            else
+            {
+                // Loading of the part from a saved craft
+                Debug.Log("OnLoad: part=" + part.name);
+                tweakScale = currentScale;
+                if (HighLogic.LoadedSceneIsEditor || IsRescaled())
                     Setup();
                 else
                     enabled = false;
@@ -971,11 +987,18 @@ namespace TweakScale
 
         }*/
 
-        /*[KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
+        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
         public void debugOutput()
         {
-            
-        }*/
+            Debug.Log(this.ToString());
+            /*Debug.Log(part.name
+                +": \nmass=" +part.mass.ToString()
+                +"\nmodMass=" +part.GetModuleMass(0).ToString()
+                +"\ntsMass="+GetModuleMass(0, 0).ToString()
+                +"\ntsMassScale="+MassScale.ToString()
+                +"\nprefabMass="+_prefabPart.mass.ToString()
+                );*/
+        }
 
     }
 }
