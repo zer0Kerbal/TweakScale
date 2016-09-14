@@ -657,13 +657,14 @@ namespace TweakScale
         /// <returns>The AttachNodes between the two parts.</returns>
         private static Tuple<AttachNode, AttachNode>? NodesBetween(Part a, Part b)
         {
-            var nodeA = a.findAttachNodeByPart(b);
+            /*var nodeA = a.findAttachNodeByPart(b);
             var nodeB = b.findAttachNodeByPart(a);
 
             if (nodeA == null || nodeB == null)
                 return null;
 
-            return Tuple.Create(nodeA, nodeB);
+            return Tuple.Create(nodeA, nodeB);*/
+            return null;
         }
                 
         /// <summary>
