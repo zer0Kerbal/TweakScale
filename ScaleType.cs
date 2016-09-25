@@ -290,10 +290,22 @@ namespace TweakScale
                     IncrementSlide[i] = (_scaleFactors[i+1]-_scaleFactors[i])/50f;
             }
 
+            if (IsFreeScale)
+            {
+                // workaround for stock bug in tweakable UI_ScaleEdit:
+                // add a tiny dummy interval to the range because the highest one is bugged
+                var tmp = _scaleFactors;
+                _scaleFactors = new float[tmp.Length + 1];
+                for (int i = 0; i < tmp.Length; i++)
+                    _scaleFactors[i] = tmp[i];
+
+                _scaleFactors[tmp.Length] = _scaleFactors[tmp.Length - 1] + 0.1f * IncrementSlide.Max();
+            }
+
             var numTechs = TechRequired.Length;
             if ((numTechs > 0) && (numTechs != _scaleFactors.Length))
             {
-                Tools.LogWf("Wrong number of techRequired compared to scaleFactors in scaleType \"{0}\": {1} scaleFactors vs {2} techRequired", Name, _scaleFactors.Length, TechRequired.Length);
+                //Tools.LogWf("Wrong number of techRequired compared to scaleFactors in scaleType \"{0}\": {1} scaleFactors vs {2} techRequired", Name, _scaleFactors.Length, TechRequired.Length);
                 if (numTechs < _scaleFactors.Length)
                 {
                     var lastTech = TechRequired[TechRequired.Length - 1];
