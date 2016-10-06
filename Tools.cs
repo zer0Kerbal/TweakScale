@@ -14,8 +14,6 @@ namespace TweakScale
     /// </summary>
     public static class Tools
     {
-        private static FieldInfo windowListField;
-
         /// <summary>
         /// Clamps the exponentValue <paramref name="x"/> between <paramref name="min"/> and <paramref name="max"/>.
         /// </summary>
