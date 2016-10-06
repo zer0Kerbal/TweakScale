@@ -282,13 +282,27 @@ namespace TweakScale
 
         void ScaleCrewCapacity()
         {
-            // scale crew capacity (balancing: conserve mass/kerbal)
-            var cOld = part.CrewCapacity;
-            var cNew = (int)(_prefabPart.CrewCapacity * MassScale);
 
+            if (!ScaleType.Exponents.ContainsKey("Part")
+                || !ScaleType.Exponents["Part"]._exponents.ContainsKey("crewCapacity"))
+            {
+                //Debug.Log("No exponent found for crewCapacity");
+                return;
+            }
+
+            double exponent = 0;
+            var expString = ScaleType.Exponents["Part"]._exponents["crewCapacity"].Exponent;
+            if (!double.TryParse(expString, out exponent))
+            {
+                Debug.Log("could not parse crewCapacity exponent: '" +expString +"'");
+                return;
+            }
+
+            var cOld = part.CrewCapacity;
+            var cNew = (int)(_prefabPart.CrewCapacity * Math.Pow(ScalingFactor.absolute.linear, exponent));
             if (cOld == cNew)
             {
-                Debug.Log("CrewCapacity: old=new=" +cNew.ToString());
+                //Debug.Log("CrewCapacity: old=new=" +cNew.ToString());
                 return;
             }
             part.CrewCapacity = cNew;
@@ -313,7 +327,7 @@ namespace TweakScale
             }
             if (cOld != crew.GetPartCrew().Count())
             {
-                Debug.Log("Crew mismatch: part="+cOld +", crew=" + crew.GetPartCrew().Count().ToString());
+                Tools.LogWf("Crew mismatch: part="+cOld +", crew=" + crew.GetPartCrew().Count().ToString());
             }
 
             // clear seats (just for safety)
@@ -983,18 +997,18 @@ namespace TweakScale
 
         }*/
 
-        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
+        /*[KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
         public void debugOutput()
         {
             Debug.Log(this.ToString());
-            /*Debug.Log(part.name
+            Debug.Log(part.name
                 +": \nmass=" +part.mass.ToString()
                 +"\nmodMass=" +part.GetModuleMass(0).ToString()
                 +"\ntsMass="+GetModuleMass(0, 0).ToString()
                 +"\ntsMassScale="+MassScale.ToString()
                 +"\nprefabMass="+_prefabPart.mass.ToString()
-                );*/
-        }
+                );
+        }*/
 
     }
 }
