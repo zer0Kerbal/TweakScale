@@ -314,30 +314,25 @@ namespace TweakScale
             if (cOld != crew.GetPartCrew().Count())
             {
                 Debug.Log("Crew mismatch: part="+cOld +", crew=" + crew.GetPartCrew().Count().ToString());
-            } //else Debug.Log("Manifest found");
+            }
 
             // clear seats (just for safety)
             for (int i = 0; i < crew.GetPartCrew().Count(); i++)
             {
                 if (crew.GetPartCrew()[i] != null)
                 {
-                    Debug.Log("Removing seat:" + i.ToString() + crew.GetPartCrew()[i].name);
+                    Debug.Log("TweakScale: Clearing seat " + i.ToString() +" (" +crew.GetPartCrew()[i].name +")");
                     crew.RemoveCrewFromSeat(i);
                 }
-            } //Debug.Log("Cleared seats");
+            }
 
             // close crew tab (otherwise it will not update correctly)
             if (EditorLogic.fetch.editorScreen == EditorScreen.Crew)
                 EditorLogic.fetch.SelectPanelParts();
 
-            FieldInfo[] fields = typeof(PartCrewManifest).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-            foreach (FieldInfo f in fields)
-            {
-                if (f.Name == "partCrew")
-                {
-                    f.SetValue(crew, new string[cNew]);
-                }
-            }
+            crew.partCrew = new string[cNew];
+            for (int i = 0; i < cNew; i++)
+                crew.partCrew[i] = string.Empty;
 
             ShipConstruction.ShipManifest.SetPartManifest(part.craftID, crew);
         }
