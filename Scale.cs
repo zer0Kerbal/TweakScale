@@ -354,11 +354,11 @@ namespace TweakScale
             // MFT support
             ScaleMftModule();
 
-            if (_prefabPart.CrewCapacity > 0)
+            /*if (_prefabPart.CrewCapacity > 0)
             {
                 try { ScaleCrewCapacity(); }
                 catch (Exception e) { Tools.LogWf("Exception in ScaleCrewCapacity:\n" + e.ToString()); }
-            }
+            }*/
 
             // send scaling part message
             var data = new BaseEventData(BaseEventData.Sender.USER);
