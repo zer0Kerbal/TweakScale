@@ -78,6 +78,10 @@ namespace TweakScale
             }
             if (field == null && property == null)
             {
+                // handle special cases
+                if ((obj is PartModule) && (name == "inputResources" || name == "outputResources"))
+                    return Create((obj as PartModule).resHandler, name);
+
                 Tools.LogWf("No valid member found for {0} in {1}", name, objectType.Name);
                 return null;
             }
