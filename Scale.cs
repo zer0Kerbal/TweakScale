@@ -544,6 +544,8 @@ namespace TweakScale
 
         private void scalePartTransform()
         {
+            part.rescaleFactor = _prefabPart.rescaleFactor * ScalingFactor.absolute.linear;
+
             var trafo = part.partTransform.FindChild("model");
             if (trafo != null)
             {
