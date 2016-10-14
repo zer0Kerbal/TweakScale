@@ -278,63 +278,38 @@ namespace TweakScale
             _setupRun = true;
         }
 
-
-
-        void ScaleCrewCapacity()
+        private void updateCrewManifest()
         {
-            // scale crew capacity (balancing: conserve mass/kerbal)
-            var cOld = part.CrewCapacity;
-            var cNew = (int)(_prefabPart.CrewCapacity * MassScale);
+            if (!HighLogic.LoadedSceneIsEditor) { return; } //only run the following block in the editor; it updates the crew-assignment GUI
 
-            if (cOld == cNew)
-            {
-                Debug.Log("CrewCapacity: old=new=" +cNew.ToString());
-                return;
-            }
-            part.CrewCapacity = cNew;
+            VesselCrewManifest vcm = ShipConstruction.ShipManifest;
+            if (vcm == null) { return; }
+            PartCrewManifest pcm = vcm.GetPartCrewManifest(part.craftID);
+            if (pcm == null) { return; }
 
-            if (HighLogic.LoadedSceneIsFlight)
-                return;
+            int len = pcm.partCrew.Length;
+            int newLen = Math.Min(part.CrewCapacity, _prefabPart.CrewCapacity);
+            if (len == newLen) { return; }
 
-            var manifests = ShipConstruction.ShipManifest.GetCrewableParts();
-            PartCrewManifest crew = null;
-            for (int i = 0; i < manifests.StupidCount(); i++)
-            {
-                if (manifests[i].PartID == part.craftID)
-                {
-                    crew = manifests[i];
-                    break;
-                }
-            }
-            if (crew == null)
-            {
-                Tools.LogWf("No PartManifest found!");
-                return;
-            }
-            if (cOld != crew.GetPartCrew().Count())
-            {
-                Debug.Log("Crew mismatch: part="+cOld +", crew=" + crew.GetPartCrew().Count().ToString());
-            }
-
-            // clear seats (just for safety)
-            for (int i = 0; i < crew.GetPartCrew().Count(); i++)
-            {
-                if (crew.GetPartCrew()[i] != null)
-                {
-                    Debug.Log("TweakScale: Clearing seat " + i.ToString() +" (" +crew.GetPartCrew()[i].name +")");
-                    crew.RemoveCrewFromSeat(i);
-                }
-            }
-
-            // close crew tab (otherwise it will not update correctly)
             if (EditorLogic.fetch.editorScreen == EditorScreen.Crew)
-                EditorLogic.fetch.SelectPanelParts();
+              EditorLogic.fetch.SelectPanelParts();
 
-            crew.partCrew = new string[cNew];
-            for (int i = 0; i < cNew; i++)
-                crew.partCrew[i] = string.Empty;
+            Debug.Log("updateCrewCapacity: part=" + part.CrewCapacity + ", prefab=" + _prefabPart.CrewCapacity + ", manifest=" + len +", newLen=" +newLen);
+            for (int i = 0; i < len; i++)
+              pcm.RemoveCrewFromSeat(i);
 
-            ShipConstruction.ShipManifest.SetPartManifest(part.craftID, crew);
+            pcm.partCrew = new string[newLen];
+            for (int i = 0; i < newLen; i++)
+              pcm.partCrew[i] = string.Empty;
+
+            ShipConstruction.ShipManifest.SetPartManifest(part.craftID, pcm);
+        }
+
+        void onEditorShipModified(ShipConstruct ship)
+        {
+            if (part.CrewCapacity >= _prefabPart.CrewCapacity) { return; }
+
+            updateCrewManifest();
         }
 
         void CallUpdaters()
@@ -345,20 +320,23 @@ namespace TweakScale
                 // first apply the exponents
                 if (updater is TSGenericUpdater)
                 {
-                    float oldMass = part.mass;
-                    updater.OnRescale(ScalingFactor);
-                    part.mass = oldMass; // make sure we leave this in a clean state
+                    try
+                    {
+                        float oldMass = part.mass;
+                        updater.OnRescale(ScalingFactor);
+                        part.mass = oldMass; // make sure we leave this in a clean state
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogWarning("Exception on rescale: " + e.ToString());
+                    }
                 }
             }
+            if (_prefabPart.CrewCapacity > 0)
+              updateCrewManifest();
 
             // MFT support
             ScaleMftModule();
-
-            /*if (_prefabPart.CrewCapacity > 0)
-            {
-                try { ScaleCrewCapacity(); }
-                catch (Exception e) { Tools.LogWf("Exception in ScaleCrewCapacity:\n" + e.ToString()); }
-            }*/
 
             // send scaling part message
             var data = new BaseEventData(BaseEventData.Sender.USER);
@@ -413,6 +391,11 @@ namespace TweakScale
                     _firstUpdateWithParent = false;
                 }
                 Setup();
+
+                if (_prefabPart.CrewCapacity > 0)
+                {
+                    GameEvents.onEditorShipModified.Add(onEditorShipModified);
+                }
 
                 _autoscaleEnabled = HotkeyManager.Instance.AddHotkey("Autoscale", new[] {KeyCode.LeftShift},
                     new[] {KeyCode.LeftControl, KeyCode.L}, false);
@@ -985,18 +968,11 @@ namespace TweakScale
 
         }*/
 
-        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
+        /*[KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
         public void debugOutput()
         {
-            Debug.Log(this.ToString());
-            /*Debug.Log(part.name
-                +": \nmass=" +part.mass.ToString()
-                +"\nmodMass=" +part.GetModuleMass(0).ToString()
-                +"\ntsMass="+GetModuleMass(0, 0).ToString()
-                +"\ntsMassScale="+MassScale.ToString()
-                +"\nprefabMass="+_prefabPart.mass.ToString()
-                );*/
-        }
+            Debug.Log("crewCapacity=" +part.CrewCapacity);
 
+        }*/
     }
 }

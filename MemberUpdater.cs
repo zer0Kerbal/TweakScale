@@ -82,6 +82,7 @@ namespace TweakScale
                     return Create((obj as PartModule).resHandler, name);
 
                 Tools.LogWf("No valid member found for {0} in {1}", name, objectType.Name);
+
                 return null;
             }
 
@@ -163,6 +164,10 @@ namespace TweakScale
             {
                 RescaleFloatRange((float)scale);
                 Set((double)newValue * scale);
+            }
+            else if (MemberType == typeof(int))
+            {
+                Set((int)Math.Round((int)(newValue) * scale));
             }
             else if (MemberType == typeof(Vector3))
             {
