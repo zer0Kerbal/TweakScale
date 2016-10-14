@@ -180,7 +180,6 @@ namespace TweakScale
         /// <param name="scaleType">The settings to use.</param>
         private void SetupFromConfig(ScaleType scaleType)
         {
-            Debug.Log("SetupFromConfig: defaultScale=" + defaultScale.ToString() + ", currentScale=" + currentScale.ToString() + ", tweakScale=" + tweakScale.ToString());
             if (ScaleType == null) Debug.LogError("TweakScale: Scaletype==null! part=" + part.name);
 
             isFreeScale = scaleType.IsFreeScale;
@@ -240,8 +239,6 @@ namespace TweakScale
                 return;
             }
             _prefabPart = part.partInfo.partPrefab;
-
-            Debug.Log("TweakScale:Setup: part="+part.name );
             _updaters = TweakScaleUpdater.CreateUpdaters(part).ToArray();
 
             ScaleType = (_prefabPart.Modules["TweakScale"] as TweakScale).ScaleType;
@@ -294,7 +291,6 @@ namespace TweakScale
             if (EditorLogic.fetch.editorScreen == EditorScreen.Crew)
               EditorLogic.fetch.SelectPanelParts();
 
-            Debug.Log("updateCrewCapacity: part=" + part.CrewCapacity + ", prefab=" + _prefabPart.CrewCapacity + ", manifest=" + len +", newLen=" +newLen);
             for (int i = 0; i < len; i++)
               pcm.RemoveCrewFromSeat(i);
 
@@ -381,7 +377,6 @@ namespace TweakScale
 
         public override void OnStart(StartState state)
         {
-            Debug.Log("OnStart: part=" + part.name);
             base.OnStart(state);
 
             if (HighLogic.LoadedSceneIsEditor)
@@ -419,7 +414,6 @@ namespace TweakScale
             if (part.partInfo == null)
             {
                 // Loading of the prefab from the part config
-                Debug.Log("OnLoad(Prefab): part=" + part.name);
                 _prefabPart = part;
                 SetupPrefab();
 
@@ -427,7 +421,6 @@ namespace TweakScale
             else
             {
                 // Loading of the part from a saved craft
-                Debug.Log("OnLoad: part=" + part.name);
                 tweakScale = currentScale;
                 if (HighLogic.LoadedSceneIsEditor || IsRescaled())
                     Setup();
@@ -902,59 +895,6 @@ namespace TweakScale
             //result += "   maxValue = " + MaxValue + "\n";
             return result + "\n}";
         }
-
-        private void logDragCubes(String call)
-        {
-            String str = "DragScaling: part=" + part.name;
-            try { str += "\nfactor: abs=" + ScalingFactor.absolute.linear.ToString() + ", rel=" + ScalingFactor.relative.linear.ToString(); }
-            catch (Exception) { }
-            str += "\ncall=" + call;
-            str += "\nnumCubes=" + part.DragCubes.Cubes.StupidCount();
-
-            foreach (var dragCube in part.DragCubes.Cubes)
-            {
-                str += "\n  size=" + dragCube.Size.ToString();
-                for (int i = 0; i < dragCube.Area.Length; i++)
-                    str += "\n    area[" + i + "]=" + dragCube.Area[i].ToString();
-
-                for (int i = 0; i < dragCube.Depth.Length; i++)
-                    str += "\n    depth[" + i + "]=" + dragCube.Depth[i].ToString();
-            }
-
-            Debug.LogWarning("[TweakScale]" + str + "\n" + StackTraceUtility.ExtractStackTrace());
-        }
-
-        /*void logCrew(string call)
-        {
-            string str = "Crew: " + call;
-            try
-            {
-                if (ShipConstruction.ShipManifest == null)
-                {
-                    Debug.Log("ShipManifest==null");
-                    return;
-                }
-
-                var c = ShipConstruction.ShipManifest.GetAllCrew(true);
-                if (c == null)
-                {
-                    Debug.Log("GetAllCrew==null");
-                    return;
-                }
-
-                str += "\nLength=" + c.Count.ToString();
-                for (int i = 0; i < c.Count; i++)
-                {
-                    str += "\n  " + i.ToString();
-                    if (c[i] != null)
-                        str += " " + c[i].type.ToString() + " '" + c[i].name + "'";
-                    else
-                        str += " null";
-                }
-                Debug.Log(str);
-            }
-            catch (Exception e) { Debug.Log("Exception in printCrew\n" + e.ToString() + "\n" + str); }
-        }*/
 
         /*[KSPEvent(guiActive = false, active = true)]
         void OnPartScaleChanged(BaseEventData data)
