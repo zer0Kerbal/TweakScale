@@ -2,7 +2,6 @@
 using System.Reflection;
 using UnityEngine;
 
-
 namespace TweakScale
 {
     public class MemberUpdater
@@ -168,6 +167,20 @@ namespace TweakScale
             else if (MemberType == typeof(Vector3))
             {
                 Set((Vector3)newValue * (float)scale);
+            }
+            else if (MemberType == typeof(FloatCurve))
+            {
+                var curve = (newValue as FloatCurve).Curve;
+                var tmp = new AnimationCurve();
+                for (int i = 0; i < curve.length; i++)
+                {
+                    var k = curve.keys[i];
+                    k.value *= (float)scale;
+                    k.inTangent *= (float)scale;
+                    k.outTangent *= (float)scale;
+                    tmp.AddKey(k);
+                }
+                (Value as FloatCurve).Curve = tmp;
             }
         }
 
