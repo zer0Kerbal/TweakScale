@@ -331,6 +331,9 @@ namespace TweakScale
             if (_prefabPart.CrewCapacity > 0)
               updateCrewManifest();
 
+            if (part.Modules.Contains("ModuleDataTransmitter"))
+              updateAntennaPowerDisplay();
+
             // MFT support
             ScaleMftModule();
 
@@ -373,6 +376,27 @@ namespace TweakScale
             {
                 Tools.LogWf("Exception during MFT interaction" + e.ToString());
             }
+        }
+
+        private void updateAntennaPowerDisplay()
+        {
+            var m = part.Modules["ModuleDataTransmitter"] as ModuleDataTransmitter;
+            double p = m.antennaPower / 1000;
+            Char suffix = 'k';
+            if (p >= 1000)
+            {
+                p /= 1000f;
+                suffix = 'M';
+                if (p >= 1000)
+                {
+                    p /= 1000;
+                    suffix = 'G';
+                }
+            }
+            p = Math.Round(p, 2);
+            string str = p.ToString() + suffix;
+            if (m.antennaCombinable) { str += " (Combinable)"; }
+            m.powerText = str;
         }
 
         public override void OnStart(StartState state)
