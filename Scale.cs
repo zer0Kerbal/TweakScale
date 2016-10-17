@@ -829,6 +829,8 @@ namespace TweakScale
             {
                 scaleDragCubes(true);
                 _firstUpdate = false;
+                if (HighLogic.LoadedSceneIsEditor)
+                    UpdateByWidth(false, true);  // cloned parts seem to need this (otherwise the node positions revert)
             }
 
             if (HighLogic.LoadedSceneIsEditor)
@@ -848,10 +850,6 @@ namespace TweakScale
                         // If the user has changed the scale of the part before attaching it, we want to keep that scale.
                         _firstUpdateWithParent = false;
                         OnTweakScaleChanged();
-                    }
-                    else if (part.transform.GetChild(0).localScale != _savedScale) // editor frequently nukes our OnStart resize some time later
-                    {
-                        UpdateByWidth(false, true); // initial scaling for symmetry parts happens here
                     }
                 }
             }
