@@ -194,8 +194,11 @@ namespace TweakScale
 
         private static IEnumerable<Type> GetAllTypes()
         {
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            int numAsm = assemblies.Length;
+            for (int i=0; i<numAsm; i++)
             {
+                var assembly = assemblies[i];
                 Type[] types;
                 try
                 {
@@ -206,9 +209,10 @@ namespace TweakScale
                     types = Type.EmptyTypes;
                 }
 
-                foreach (var type in types)
+                int numTypes = types.Length;
+                for (int it=0; it< numTypes; it++)
                 {
-                    yield return type;
+                    yield return types[it];
                 }
             }
         }

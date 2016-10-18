@@ -123,28 +123,6 @@ namespace TweakScale
         private Hotkeyable _autoscaleEnabled;
 
         /// <summary>
-        /// The ConfigNode that belongs to the part this modules affects.
-        /// </summary>
-        private ConfigNode PartNode
-        {
-            get
-            {
-                return GameDatabase.Instance.GetConfigs("PART").FirstOrDefault(c => c.name.Replace('_', '.') == part.name).config;
-            }
-        }
-
-        /// <summary>
-        /// The ConfigNode that belongs to this module.
-        /// </summary>
-        public ConfigNode ModuleNode
-        {
-            get
-            {
-                return PartNode.GetNodes("MODULE").FirstOrDefault(n => n.GetValue("name") == moduleName);
-            }
-        }
-
-        /// <summary>
         /// The current scaling factor.
         /// </summary>
         public ScalingFactor ScalingFactor
@@ -205,6 +183,9 @@ namespace TweakScale
 
         protected virtual void SetupPrefab()
         {
+            var PartNode = GameDatabase.Instance.GetConfigs("PART").FirstOrDefault(c => c.name.Replace('_', '.') == part.name).config;
+            var ModuleNode = PartNode.GetNodes("MODULE").FirstOrDefault(n => n.GetValue("name") == moduleName);
+
             ScaleType = new ScaleType(ModuleNode);
             SetupFromConfig(ScaleType);
             tweakScale = currentScale = defaultScale;
@@ -292,9 +273,11 @@ namespace TweakScale
         void CallUpdaters()
         {
             // two passes, to depend less on the order of this list
-            foreach (var updater in _updaters)
+            int len = _updaters.Length;
+            for (int i=0; i< len; i++)
             {
                 // first apply the exponents
+                var updater = _updaters[i];
                 if (updater is TSGenericUpdater)
                 {
                     try
@@ -324,8 +307,10 @@ namespace TweakScale
             data.Set<float>("factorRelative", ScalingFactor.relative.linear);
             part.SendEvent("OnPartScaleChanged", data, 0);
 
-            foreach (var updater in _updaters)
+            len = _updaters.Length;
+            for (int i=0; i< len; i++)
             {
+                var updater = _updaters[i];
                 // then call other updaters (emitters, other mods)
                 if (updater is TSGenericUpdater)
                     continue;
@@ -511,8 +496,10 @@ namespace TweakScale
             if (factor.linear == 1)
               return;
 
-            foreach (var dragCube in part.DragCubes.Cubes)
+            int len = part.DragCubes.Cubes.Count;
+            for (int ic= 0; ic< len; ic++)
             {
+                DragCube dragCube = part.DragCubes.Cubes[ic];
                 dragCube.Size *= factor.linear;
                 for (int i=0; i<dragCube.Area.Length; i++)
                     dragCube.Area[i] *= factor.quadratic;
@@ -564,8 +551,10 @@ namespace TweakScale
         {
             ScalePartTransform();
 
-            foreach (var node in part.attachNodes)
+            int len = part.attachNodes.Count;
+            for (int i=0; i< len; i++)
             {
+                var node = part.attachNodes[i];
                 var nodesWithSameId = part.attachNodes
                     .Where(a => a.id == node.id)
                     .ToArray();
@@ -591,8 +580,10 @@ namespace TweakScale
             }
             if (moveParts)
             {
-                foreach (var child in part.children)
+                int numChilds = part.children.Count;
+                for (int i=0; i<numChilds; i++)
                 {
+                    var child = part.children[i];
                     if (child.srfAttachNode == null || child.srfAttachNode.attachedPart != part)
                         continue;
 
@@ -711,8 +702,10 @@ namespace TweakScale
         /// </summary>
         private void ChainScale()
         {
-            foreach (var child in part.children)
+            int len = part.children.Count;
+            for (int i=0; i< len; i++)
             {
+                var child = part.children[i];
                 var b = child.GetComponent<TweakScale>();
                 if (b == null)
                     continue;
@@ -847,9 +840,11 @@ namespace TweakScale
                 _firstUpdateWithParent = false;
             }
 
-            foreach (var upd in _updaters.OfType<IUpdateable>())
+            int len = _updaters.Length;
+            for (int i=0; i< len; i++)
             {
-                upd.OnUpdate();
+                if (_updaters[i] is IUpdateable)
+                    (_updaters[i] as IUpdateable).OnUpdate();
             }
         }
 

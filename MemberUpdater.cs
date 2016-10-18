@@ -62,8 +62,11 @@ namespace TweakScale
                         () => 
                         {
                             string acc = "";
-                            foreach (var f in fields) 
-                                ConcatSafely("field", () => {return f.ToString_rec(1); }, ref acc);
+                            int numFields = fields.Count;
+                            for (int i = 0; i < numFields; i++)
+                            {
+                                ConcatSafely("field", () => { return fields[i].ToString_rec(1); }, ref acc);
+                            }
                             return acc;
                         }, ref debuglog);
                     Tools.LogWf(debuglog);
