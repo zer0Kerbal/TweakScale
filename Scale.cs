@@ -7,24 +7,6 @@ using UnityEngine;
 
 namespace TweakScale
 {
-    /// <summary>
-    /// Converts from Gaius' GoodspeedTweakScale to updated TweakScale.
-    /// </summary>
-    public class GoodspeedTweakScale : TweakScale
-    {
-        private bool _updated;
-
-        protected override void Setup()
-        {
-            base.Setup();
-            if (_updated)
-                return;
-            tweakName = (int)tweakScale;
-            tweakScale = ScaleFactors[tweakName];
-            _updated = true;
-        }
-    }
-
     public class TweakScale : PartModule, IPartCostModifier, IPartMassModifier
     {
         /// <summary>
@@ -80,9 +62,8 @@ namespace TweakScale
         private Part _prefabPart;
 
         /// <summary>
-        /// Like currentScale above, this is the current scale vector. If TweakScale supports non-uniform scaling in the future (e.g. changing only the length of destination booster), savedScale may represent such destination scaling, while currentScale won't.
+        /// Cached scale vector, we need this because the game regularly reverts the scaling of the IVA overlay
         /// </summary>
-        private Vector3 _savedScale;
         private Vector3 _savedIvaScale;
 
         /// <summary>
@@ -252,7 +233,7 @@ namespace TweakScale
 
             if (IsRescaled())
             {
-                UpdateByWidth(false, true);
+                ScalePart(false, true);
                 try
                 {
                     CallUpdaters();
@@ -275,7 +256,7 @@ namespace TweakScale
             _setupRun = true;
         }
 
-        private void updateCrewManifest()
+        private void UpdateCrewManifest()
         {
             if (!HighLogic.LoadedSceneIsEditor) { return; } //only run the following block in the editor; it updates the crew-assignment GUI
 
@@ -301,11 +282,11 @@ namespace TweakScale
             ShipConstruction.ShipManifest.SetPartManifest(part.craftID, pcm);
         }
 
-        void onEditorShipModified(ShipConstruct ship)
+        void OnEditorShipModified(ShipConstruct ship)
         {
             if (part.CrewCapacity >= _prefabPart.CrewCapacity) { return; }
 
-            updateCrewManifest();
+            UpdateCrewManifest();
         }
 
         void CallUpdaters()
@@ -329,10 +310,10 @@ namespace TweakScale
                 }
             }
             if (_prefabPart.CrewCapacity > 0)
-              updateCrewManifest();
+              UpdateCrewManifest();
 
             if (part.Modules.Contains("ModuleDataTransmitter"))
-              updateAntennaPowerDisplay();
+              UpdateAntennaPowerDisplay();
 
             // MFT support
             ScaleMftModule();
@@ -378,7 +359,7 @@ namespace TweakScale
             }
         }
 
-        private void updateAntennaPowerDisplay()
+        private void UpdateAntennaPowerDisplay()
         {
             var m = part.Modules["ModuleDataTransmitter"] as ModuleDataTransmitter;
             double p = m.antennaPower / 1000;
@@ -413,7 +394,7 @@ namespace TweakScale
 
                 if (_prefabPart.CrewCapacity > 0)
                 {
-                    GameEvents.onEditorShipModified.Add(onEditorShipModified);
+                    GameEvents.onEditorShipModified.Add(OnEditorShipModified);
                 }
 
                 _autoscaleEnabled = HotkeyManager.Instance.AddHotkey("Autoscale", new[] {KeyCode.LeftShift},
@@ -519,7 +500,7 @@ namespace TweakScale
             }
         }
 
-        private void scaleDragCubes(bool absolute)
+        private void ScaleDragCubes(bool absolute)
         {
             ScalingFactor.FactorSet factor;
             if (absolute)
@@ -542,7 +523,7 @@ namespace TweakScale
             part.DragCubes.ForceUpdate(true, true);
         }
 
-        private void scalePartTransform()
+        private void ScalePartTransform()
         {
             part.rescaleFactor = _prefabPart.rescaleFactor * ScalingFactor.absolute.linear;
 
@@ -552,7 +533,6 @@ namespace TweakScale
                 if (defaultTransformScale.x == 0.0f)
                 {
                     defaultTransformScale = trafo.localScale;
-                    _savedScale = defaultTransformScale * ScalingFactor.absolute.linear;
                 }
 
                 // check for flipped signs
@@ -569,7 +549,7 @@ namespace TweakScale
                     defaultTransformScale.z *= -1;
                 }
 
-                _savedScale = trafo.localScale = ScalingFactor.absolute.linear * defaultTransformScale;
+                trafo.localScale = ScalingFactor.absolute.linear * defaultTransformScale;
                 trafo.hasChanged = true;
                 part.partTransform.hasChanged = true;
             }
@@ -580,10 +560,9 @@ namespace TweakScale
         /// </summary>
         /// <param name="moveParts">Whether or not to move attached parts.</param>
         /// <param name="absolute">Whether to use absolute or relative scaling.</param>
-        private void UpdateByWidth(bool moveParts, bool absolute)
+        private void ScalePart(bool moveParts, bool absolute)
         {
-            scalePartTransform();
-
+            ScalePartTransform();
 
             foreach (var node in part.attachNodes)
             {
@@ -616,6 +595,7 @@ namespace TweakScale
                 {
                     if (child.srfAttachNode == null || child.srfAttachNode.attachedPart != part)
                         continue;
+
                     var attachedPosition = child.transform.localPosition + child.transform.localRotation * child.srfAttachNode.position;
                     var targetPosition = attachedPosition * ScalingFactor.relative.linear;
                     child.transform.Translate(targetPosition - attachedPosition, part.transform);
@@ -765,8 +745,8 @@ namespace TweakScale
                 ChainScale();
             }
 
-            UpdateByWidth(true, false);
-            scaleDragCubes(false);
+            ScalePart(true, false);
+            ScaleDragCubes(false);
 
             UpdateWindow();
 
@@ -827,10 +807,10 @@ namespace TweakScale
 
             if (_firstUpdate)
             {
-                scaleDragCubes(true);
+                ScaleDragCubes(true);
                 _firstUpdate = false;
                 if (HighLogic.LoadedSceneIsEditor)
-                    UpdateByWidth(false, true);  // cloned parts seem to need this (otherwise the node positions revert)
+                    ScalePart(false, true);  // cloned parts seem to need this (otherwise the node positions revert)
             }
 
             if (HighLogic.LoadedSceneIsEditor)
@@ -860,7 +840,6 @@ namespace TweakScale
                     part.internalModel.transform.localScale = _savedIvaScale;
                     part.internalModel.transform.hasChanged = true;
                 }
-
             }
 
             if (_firstUpdateWithParent && part.HasParent())
