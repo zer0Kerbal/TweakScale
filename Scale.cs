@@ -73,11 +73,8 @@ namespace TweakScale
 // ReSharper disable once InconsistentNaming
         public Vector3 defaultTransformScale = new Vector3(0f, 0f, 0f);
 
-
-        //[KSPField(isPersistant = true)]
         private bool _firstUpdateWithParent = true;
         private bool _setupRun;
-        private bool _invalidCfg;
         private bool _firstUpdate = true;
 
         /// <summary>
@@ -85,22 +82,10 @@ namespace TweakScale
         /// </summary>
         private IRescalable[] _updaters = new IRescalable[0];
 
-        private enum Tristate
-        {
-            True,
-            False,
-            Unset
-        }
-
         public bool IsRescaled()
         {
             return (Math.Abs(currentScale/defaultScale -1f) > 1e-5f);
         }
-
-        /// <summary>
-        /// Whether this instance of TweakScale is the first. If not, log an error and make sure the TweakScale modules don't harmfully interact.
-        /// </summary>
-        private Tristate _duplicate = Tristate.Unset;
 
         /// <summary>
         /// The ScaleType for this part.
@@ -755,53 +740,46 @@ namespace TweakScale
         /// <returns>True if duplicates exist, false otherwise.</returns>
         private bool CheckForDuplicateTweakScale()
         {
-            if (_duplicate == Tristate.False)
-                return false;
-            if (_duplicate == Tristate.True)
-                return true;
-
             if (this != part.GetComponent<TweakScale>())
             {
                 Tools.LogWf("Duplicate TweakScale module on part [{0}] {1}", part.partInfo.name, part.partInfo.title);
                 Fields["tweakScale"].guiActiveEditor = false;
                 Fields["tweakName"].guiActiveEditor = false;
-                _duplicate = Tristate.True;
+                enabled = false; // disable TweakScale module
                 return true;
             }
-            _duplicate = Tristate.False;
             return false;
         }
 
         /// <summary>
-        /// Checks if the config for this TweakScale instance is valid. If not, logs it and returns false.
+        /// Checks if the config for this TweakScale instance is valid. If not, logs it and returns true.
         /// </summary>
         /// <returns>True if the config is invalid, false otherwise.</returns>
         private bool CheckForInvalidCfg()
         {
-            if (ScaleFactors.Length != 0) 
-                return false;
-            if (_invalidCfg) 
+            if (ScaleFactors.Length == 0)
+            {
+                enabled = false; // disable TweakScale module
+                Tools.LogWf("{0}({1}) has no valid scale factors. This is probably caused by an invalid TweakScale configuration for the part.", part.name, part.partInfo.title);
+                Debug.Log("[TweakScale]" + this.ToString());
+                Debug.Log("[TweakScale]" + ScaleType.ToString());
                 return true;
-
-            _invalidCfg = true;
-            Tools.LogWf("{0}({1}) has no valid scale factors. This is probably caused by an invalid TweakScale configuration for the part.", part.name, part.partInfo.title);
-            Debug.Log("[TweakScale]" + this.ToString());
-            Debug.Log("[TweakScale]" + ScaleType.ToString());
-            return true;
+            }
+            return false;
         }
 
         [UsedImplicitly]
         void Update()
         {
-            if (CheckForDuplicateTweakScale() || CheckForInvalidCfg())
-            {
-                return;
-            }
-
             if (_firstUpdate)
             {
-                ScaleDragCubes(true);
                 _firstUpdate = false;
+                if (CheckForDuplicateTweakScale() || CheckForInvalidCfg())
+                {
+                    return;
+                }
+
+                ScaleDragCubes(true);
                 if (HighLogic.LoadedSceneIsEditor)
                     ScalePart(false, true);  // cloned parts seem to need this (otherwise the node positions revert)
             }
@@ -877,7 +855,6 @@ namespace TweakScale
         public override string ToString()
         {
             var result = "TweakScale{\n";
-            result += "\n _invalidCfg = " + _invalidCfg;
             result += "\n _setupRun = " + _setupRun;
             result += "\n isFreeScale = " + isFreeScale;
             result += "\n " + ScaleFactors.Length  + " scaleFactors = ";
