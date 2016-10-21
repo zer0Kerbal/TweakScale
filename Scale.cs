@@ -320,9 +320,12 @@ namespace TweakScale
                 if (CheckIntegrity())
                     return;
 
-                ScaleDragCubes(true);
-                if (HighLogic.LoadedSceneIsEditor)
-                    ScalePart(false, true);  // cloned parts and loaded crafts seem to need this (otherwise the node positions revert)
+                if (IsRescaled)
+                {
+                    ScaleDragCubes(true);
+                    if (HighLogic.LoadedSceneIsEditor)
+                        ScalePart(false, true);  // cloned parts and loaded crafts seem to need this (otherwise the node positions revert)
+                }
             }
 
             if (HighLogic.LoadedSceneIsEditor)
