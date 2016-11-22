@@ -76,6 +76,7 @@ namespace TweakScale
         private bool _firstUpdateWithParent = true;
         private bool _setupRun;
         private bool _firstUpdate = true;
+        public bool ignoreResourcesForCost = false;
 
         /// <summary>
         /// Updaters for different PartModules.
@@ -167,8 +168,10 @@ namespace TweakScale
             }
             else
             {
-                AvailablePart ap = PartLoader.getPartInfoByName(part.name);
-                DryCost = (float)(ap.cost - part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
+                DryCost = (float)(part.partInfo.cost - _prefabPart.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
+                if (part.Modules.Contains("FSfuelSwitch"))
+                  ignoreResourcesForCost = true;
+
                 if (DryCost < 0)
                 {
                     Debug.LogError("TweakScale: part=" + part.name + ", DryCost=" + DryCost.ToString());
@@ -812,7 +815,10 @@ namespace TweakScale
         public float GetModuleCost(float defaultCost, ModifierStagingSituation situation)
         {
             if (_setupRun && IsRescaled)
-              return (float)(DryCost - part.partInfo.cost + part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
+                if (ignoreResourcesForCost)
+                  return (DryCost - part.partInfo.cost);
+                else
+                  return (float)(DryCost - part.partInfo.cost + part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
             else
               return 0;
         }
@@ -867,8 +873,8 @@ namespace TweakScale
         /*[KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
         public void debugOutput()
         {
-            Debug.Log("crewCapacity=" +part.CrewCapacity);
-
+            Debug.Log("ap: cost=" + part.partInfo.cost + ", dryCost=" + DryCost);
         }*/
+
     }
 }
