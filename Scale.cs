@@ -171,7 +171,7 @@ namespace TweakScale
                 DryCost = (float)(part.partInfo.cost - _prefabPart.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
                 if (part.Modules.Contains("FSfuelSwitch"))
                   ignoreResourcesForCost = true;
-
+                
                 if (DryCost < 0)
                 {
                     Debug.LogError("TweakScale: part=" + part.name + ", DryCost=" + DryCost.ToString());
@@ -873,7 +873,14 @@ namespace TweakScale
         /*[KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
         public void debugOutput()
         {
-            Debug.Log("ap: cost=" + part.partInfo.cost + ", dryCost=" + DryCost);
+            var ap = part.partInfo;
+            Debug.Log("prefabCost=" + ap.cost + ", dryCost=" + DryCost);
+            Debug.Log("ResourceCost=" + (part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost) ));
+            foreach (var m in part.Modules)
+            {
+                if (m is IPartCostModifier)
+                    Debug.Log(m.GetType().ToString() + ".cost=" + (m as IPartCostModifier).GetModuleCost(ap.cost, ModifierStagingSituation.CURRENT));
+            }
         }*/
 
     }
