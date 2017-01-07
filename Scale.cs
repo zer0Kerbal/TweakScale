@@ -870,18 +870,20 @@ namespace TweakScale
 
         }*/
 
-        /*[KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
+        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
         public void debugOutput()
         {
             var ap = part.partInfo;
-            Debug.Log("prefabCost=" + ap.cost + ", dryCost=" + DryCost);
-            Debug.Log("ResourceCost=" + (part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost) ));
+            Debug.Log("prefabCost=" + ap.cost + ", dryCost=" + DryCost +", prefabDryCost=" +(_prefabPart.Modules["TweakScale"] as TweakScale).DryCost);
+            //Debug.Log("ResourceCost=" + (part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost) ));
             foreach (var m in part.Modules)
             {
-                if (m is IPartCostModifier)
-                    Debug.Log(m.GetType().ToString() + ".cost=" + (m as IPartCostModifier).GetModuleCost(ap.cost, ModifierStagingSituation.CURRENT));
+                //if (m is IPartCostModifier)
+                //    Debug.Log(m.GetType().ToString() + ".cost=" + (m as IPartCostModifier).GetModuleCost(ap.cost, ModifierStagingSituation.CURRENT));
             }
-        }*/
+            //var PartNode = GameDatabase.Instance.GetConfigs("PART").FirstOrDefault(c => c.name.Replace('_', '.') == part.name).config;
+            //Debug.Log("partConfig=" +PartNode.ToString());
+        }
 
     }
 }
