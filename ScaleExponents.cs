@@ -394,6 +394,47 @@ namespace TweakScale
             }
         }
 
+        public static double getMassExponent( Dictionary<string, ScaleExponents> Exponents )
+        {
+            double exponent = 0d;
+            if (Exponents.ContainsKey("Part") &&
+                Exponents["Part"]._exponents.ContainsKey("mass"))
+            {
+                var exponentValue = Exponents["Part"]._exponents["mass"].Exponent;
+                if (exponentValue.Contains(','))
+                {
+                    Tools.LogWf("getMassExponent not yet implemented for this kind of config");
+                    return 0d;
+                }
+                if (!double.TryParse(exponentValue, out exponent))
+                {
+                    Tools.LogWf("parsing error for mass exponent");
+                    return 0d;
+                }
+            }
+            return exponent;
+        }
+        public static double getDryCostExponent(Dictionary<string, ScaleExponents> Exponents)
+        {
+            double exponent = 0d;
+            if (Exponents.ContainsKey("TweakScale") &&
+                Exponents["TweakScale"]._exponents.ContainsKey("DryCost"))
+            {
+                var exponentValue = Exponents["TweakScale"]._exponents["DryCost"].Exponent;
+                if (exponentValue.Contains(','))
+                {
+                    Tools.LogWf("getCostExponent not yet implemented for this kind of config");
+                    return 0d;
+                }
+                if (!double.TryParse(exponentValue, out exponent))
+                {
+                    Tools.LogWf("parsing error for cost exponent");
+                    return 0d;
+                }
+            }
+            return exponent;
+        }
+
         // if there is no dryCost exponent, use the mass exponent instead
         public static void treatMassAndCost( Dictionary<string, ScaleExponents> Exponents)
         {

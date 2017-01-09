@@ -841,6 +841,34 @@ namespace TweakScale
             return ModifierChangeWhen.FIXED;
         }
 
+
+        /// <summary>
+        /// This is meant for use with an unloaded part (so you only have the persistent data
+        /// but the part is not alive). In this case get currentScale/defaultScale and call
+        /// this method on the prefab part.
+        /// </summary>
+        public double getMassFactor(double scalingFactor)
+        {
+            var exponent = ScaleExponents.getMassExponent(ScaleType.Exponents);
+            return Math.Pow(scalingFactor, exponent);
+        }
+
+        /// <summary>
+        /// This is meant for use with an unloaded part (so you only have the persistent data
+        /// but the part is not alive). In this case get currentScale/defaultScale and call
+        /// this method on the prefab part.
+        /// </summary>
+        public double getDryCostFactor(double scalingFactor)
+        {
+            var exponent = ScaleExponents.getDryCostExponent(ScaleType.Exponents);
+            return Math.Pow(scalingFactor, exponent);
+        }
+        public double getVolumeFactor(double scalingFactor)
+        {
+            return Math.Pow(scalingFactor, 3);
+        }
+
+
         public override string ToString()
         {
             var result = "TweakScale{\n";
@@ -873,17 +901,14 @@ namespace TweakScale
         [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
         public void debugOutput()
         {
-            var ap = part.partInfo;
-            Debug.Log("prefabCost=" + ap.cost + ", dryCost=" + DryCost +", prefabDryCost=" +(_prefabPart.Modules["TweakScale"] as TweakScale).DryCost);
+            //var ap = part.partInfo;
+            //Debug.Log("prefabCost=" + ap.cost + ", dryCost=" + DryCost +", prefabDryCost=" +(_prefabPart.Modules["TweakScale"] as TweakScale).DryCost);
+            //Debug.Log("kisVolOvr=" +part.Modules["ModuleKISItem"].Fields["volumeOverride"].GetValue(part.Modules["ModuleKISItem"]));
             //Debug.Log("ResourceCost=" + (part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost) ));
-            foreach (var m in part.Modules)
-            {
-                //if (m is IPartCostModifier)
-                //    Debug.Log(m.GetType().ToString() + ".cost=" + (m as IPartCostModifier).GetModuleCost(ap.cost, ModifierStagingSituation.CURRENT));
-            }
-            //var PartNode = GameDatabase.Instance.GetConfigs("PART").FirstOrDefault(c => c.name.Replace('_', '.') == part.name).config;
-            //Debug.Log("partConfig=" +PartNode.ToString());
-        }
 
+            Debug.Log("massFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getMassFactor( (double)(currentScale / defaultScale)));
+            Debug.Log("costFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getDryCostFactor( (double)(currentScale / defaultScale)));
+            Debug.Log("volFactor =" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getVolumeFactor( (double)(currentScale / defaultScale)));
+        }
     }
 }
