@@ -892,7 +892,7 @@ namespace TweakScale
 
         }*/
 
-        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
+        /*[KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
         public void debugOutput()
         {
             //var ap = part.partInfo;
@@ -903,6 +903,6 @@ namespace TweakScale
             Debug.Log("massFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getMassFactor( (double)(currentScale / defaultScale)));
             Debug.Log("costFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getDryCostFactor( (double)(currentScale / defaultScale)));
             Debug.Log("volFactor =" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getVolumeFactor( (double)(currentScale / defaultScale)));
-        }
+        }*/
     }
 }
