@@ -843,29 +843,23 @@ namespace TweakScale
 
 
         /// <summary>
-        /// This is meant for use with an unloaded part (so you only have the persistent data
+        /// These are meant for use with an unloaded part (so you only have the persistent data
         /// but the part is not alive). In this case get currentScale/defaultScale and call
         /// this method on the prefab part.
         /// </summary>
-        public double getMassFactor(double scalingFactor)
+        public double getMassFactor(double rescaleFactor)
         {
             var exponent = ScaleExponents.getMassExponent(ScaleType.Exponents);
-            return Math.Pow(scalingFactor, exponent);
+            return Math.Pow(rescaleFactor, exponent);
         }
-
-        /// <summary>
-        /// This is meant for use with an unloaded part (so you only have the persistent data
-        /// but the part is not alive). In this case get currentScale/defaultScale and call
-        /// this method on the prefab part.
-        /// </summary>
-        public double getDryCostFactor(double scalingFactor)
+        public double getDryCostFactor(double rescaleFactor)
         {
             var exponent = ScaleExponents.getDryCostExponent(ScaleType.Exponents);
-            return Math.Pow(scalingFactor, exponent);
+            return Math.Pow(rescaleFactor, exponent);
         }
-        public double getVolumeFactor(double scalingFactor)
+        public double getVolumeFactor(double rescaleFactor)
         {
-            return Math.Pow(scalingFactor, 3);
+            return Math.Pow(rescaleFactor, 3);
         }
 
 
