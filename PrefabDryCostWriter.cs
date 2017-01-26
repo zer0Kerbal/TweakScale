@@ -21,6 +21,16 @@ namespace TweakScale
             foreach (var p in partsList)
             {
                 var prefab = p.partPrefab;
+                if (prefab == null)
+                {
+                    Tools.LogWf("partPrefab is null: " + p.name);
+                    continue;
+                }
+                if (prefab.Modules == null )
+                {
+                    Tools.LogWf("partPrefab.Modules is null: " +p.name);
+                    continue;
+                }
                 if (!prefab.Modules.Contains("TweakScale"))
                     continue;
 
