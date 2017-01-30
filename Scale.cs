@@ -131,6 +131,8 @@ namespace TweakScale
             ScaleType = new ScaleType(ModuleNode);
             SetupFromConfig(ScaleType);
             tweakScale = currentScale = defaultScale;
+
+            tfInterface = Type.GetType("TestFlightCore.TestFlightInterface, TestFlightCore", false);
         }
 
         /// <summary>
@@ -404,6 +406,9 @@ namespace TweakScale
             // MFT support
             UpdateMftModule();
 
+            // TF support
+            updateTestFlight();
+
             // send scaling part message
             var data = new BaseEventData(BaseEventData.Sender.USER);
             data.Set<float>("factorAbsolute", ScalingFactor.absolute.linear);
@@ -471,6 +476,19 @@ namespace TweakScale
             {
                 Tools.LogWf("Exception during MFT interaction" + e.ToString());
             }
+        }
+
+        public static Type tfInterface = null;
+        private void updateTestFlight()
+        {
+            if (null == tfInterface) return;
+            BindingFlags tBindingFlags = BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static;
+            string name = "scale";
+            string value = ScalingFactor.absolute.linear.ToString();
+            string owner = "TweakScale";
+
+            bool valueAdded = (bool)tfInterface.InvokeMember("AddInteropValue", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] { part, name, value, owner });
+            Debug.Log("[TweakScale] TF: valueAdded=" + valueAdded + ", value=" + value.ToString());
         }
 
         private void UpdateAntennaPowerDisplay()
