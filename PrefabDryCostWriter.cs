@@ -1,6 +1,7 @@
 ﻿using TweakScale.Annotations;
 using UnityEngine;
 using System.Linq;
+using System;
 
 namespace TweakScale
 {
@@ -26,23 +27,31 @@ namespace TweakScale
                     Tools.LogWf("partPrefab is null: " + p.name);
                     continue;
                 }
-                if (prefab.Modules == null )
+                try
                 {
-                    Tools.LogWf("partPrefab.Modules is null: " +p.name);
-                    continue;
+                    if (prefab.Modules == null)
+                    {
+                        Tools.LogWf("partPrefab.Modules is null: " + p.name);
+                        continue;
+                    }
+                    if (!prefab.Modules.Contains("TweakScale"))
+                        continue;
+
+                    var m = prefab.Modules["TweakScale"] as TweakScale;
+                    m.DryCost = (float)(p.cost - prefab.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
+                    if (prefab.Modules.Contains("FSfuelSwitch"))
+                        m.ignoreResourcesForCost = true;
+
+                    if (m.DryCost < 0)
+                    {
+                        Debug.LogError("TweakScale::PrefabDryCostWriter: negative dryCost: part=" + p.name + ", DryCost=" + m.DryCost.ToString());
+                        m.DryCost = 0;
+                    }
                 }
-                if (!prefab.Modules.Contains("TweakScale"))
-                    continue;
-
-                var m = prefab.Modules["TweakScale"] as TweakScale;
-                m.DryCost = (float)(p.cost - prefab.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
-                if (prefab.Modules.Contains("FSfuelSwitch"))
-                    m.ignoreResourcesForCost = true;
-
-                if (m.DryCost < 0)
+                catch (Exception e)
                 {
-                    Debug.LogError("TweakScale::PrefabDryCostWriter: negative dryCost: part=" + p.name + ", DryCost=" + m.DryCost.ToString());
-                    m.DryCost = 0;
+                    Debug.LogError("[TweakScale] Exception on writeDryCost: " +e.ToString());
+                    Debug.Log("[TweakScale] part="+p.name +" ("+p.title+")");
                 }
             }
         }
