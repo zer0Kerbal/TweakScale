@@ -77,6 +77,7 @@ namespace TweakScale
         private bool _setupRun;
         private bool _firstUpdate = true;
         public bool ignoreResourcesForCost = false;
+        public bool scaleMass = true;
 
         /// <summary>
         /// Updaters for different PartModules.
@@ -459,6 +460,7 @@ namespace TweakScale
             {
                 if (_prefabPart.Modules.Contains("ModuleFuelTanks"))
                 {
+                    scaleMass = false;
                     var m = _prefabPart.Modules["ModuleFuelTanks"];
                     FieldInfo fieldInfo = m.GetType().GetField("totalVolume", BindingFlags.Public | BindingFlags.Instance);
                     if (fieldInfo != null)
@@ -848,7 +850,7 @@ namespace TweakScale
 
         public float GetModuleMass(float defaultMass, ModifierStagingSituation situation)
         {
-            if (_setupRun && IsRescaled)
+            if (_setupRun && IsRescaled && scaleMass)
               return _prefabPart.mass * (MassScale - 1f);
             else
               return 0;
@@ -910,7 +912,7 @@ namespace TweakScale
 
         }*/
 
-        /*[KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
+        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
         public void debugOutput()
         {
             //var ap = part.partInfo;
@@ -918,9 +920,15 @@ namespace TweakScale
             //Debug.Log("kisVolOvr=" +part.Modules["ModuleKISItem"].Fields["volumeOverride"].GetValue(part.Modules["ModuleKISItem"]));
             //Debug.Log("ResourceCost=" + (part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost) ));
 
-            Debug.Log("massFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getMassFactor( (double)(currentScale / defaultScale)));
-            Debug.Log("costFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getDryCostFactor( (double)(currentScale / defaultScale)));
-            Debug.Log("volFactor =" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getVolumeFactor( (double)(currentScale / defaultScale)));
-        }*/
+            //Debug.Log("massFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getMassFactor( (double)(currentScale / defaultScale)));
+            //Debug.Log("costFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getDryCostFactor( (double)(currentScale / defaultScale)));
+            //Debug.Log("volFactor =" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getVolumeFactor( (double)(currentScale / defaultScale)));
+
+            var x = part.collider;
+            Debug.Log("C: " +x.name +", enabled="+x.enabled);
+            //Debug.Log();
+
+
+        }
     }
 }
