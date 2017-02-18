@@ -264,11 +264,11 @@ namespace TweakScale
             if ((object)obj == null)
                 return;
 
-            if (obj is PartModule && obj.GetType().Name != _id)
+            /*if (obj is PartModule && obj.GetType().Name != _id)
             {
                 Tools.LogWf("This ScaleExponent is intended for {0}, not {1}", _id, obj.GetType().Name);
                 return;
-            }
+            }*/
 
             if (ShouldIgnore(part))
                 return;
@@ -383,15 +383,56 @@ namespace TweakScale
             }
 
             var modulePairs = part.Modules.Zip(prefabObj.Modules, ModuleAndPrefab.Create);
+            //foreach (var m in modulePairs)
+            //{
+            //    Debug.Log("moduleAndPrefab: " + (m.Prefab as PartModule).moduleName + " " + m.Prefab.GetType().ToString());
+            //}
+
             var modulesAndExponents = modulePairs.Join(exponents,
                                         modules => ((PartModule)modules.Current).moduleName,
                                         exps => exps.Key,
                                         ModulesAndExponents.Create).ToArray();
 
+            // include derived classes
+            foreach (var e in exponents)
+            {
+                //Debug.Log("check type: " + e.Key +", "+e.Value._name +", "+e.Value._id);
+                Type type = GetType(e.Key);
+                if (type == null)
+                {
+                    continue;
+                }
+                foreach (var m in modulePairs)
+                {
+                    if (m.Current.GetType().IsSubclassOf(type) )
+                    {
+                        //Debug.Log("+modAndPrefab: " +((PartModule)m.Current).moduleName + " " + m.Prefab.GetType().ToString() +" "+e.Value._name +", "+e.Key);
+                        if (e.Key != ((PartModule)m.Current).moduleName)
+                        {
+                            e.Value.UpdateFields(m.Current, m.Prefab, factor, part);
+                        }
+                    }
+                }
+            }
+
             foreach (var modExp in modulesAndExponents)
             {
+                //Debug.Log("modExP: " +(modExp.Prefab as PartModule).moduleName +" "+ modExp.Prefab.GetType().ToString());
                 modExp.Exponents.UpdateFields(modExp.Current, modExp.Prefab, factor, part);
             }
+        }
+
+        public static Type GetType(string typeName)
+        {
+            var type = Type.GetType(typeName);
+            if (type != null) return type;
+            foreach (var a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                type = a.GetType(typeName);
+                if (type != null)
+                    return type;
+            }
+            return null;
         }
 
         public static double getMassExponent( Dictionary<string, ScaleExponents> Exponents )

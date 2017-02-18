@@ -924,11 +924,15 @@ namespace TweakScale
             //Debug.Log("costFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getDryCostFactor( (double)(currentScale / defaultScale)));
             //Debug.Log("volFactor =" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getVolumeFactor( (double)(currentScale / defaultScale)));
 
-            var x = part.collider;
-            Debug.Log("C: " +x.name +", enabled="+x.enabled);
-            //Debug.Log();
-
-
+            //var x = part.collider;
+            //Debug.Log("C: " +x.name +", enabled="+x.enabled);
+            if (part.Modules.Contains("ModuleRCSFX")) {
+                Debug.Log("RCS power=" +(part.Modules["ModuleRCSFX"] as ModuleRCSFX).thrusterPower);
+            }
+            if (part.Modules.Contains("ModuleEnginesFX"))
+            {
+                Debug.Log("Engine thrust=" +(part.Modules["ModuleEnginesFX"] as ModuleEnginesFX).maxThrust);
+            }
         }
     }
 }
