@@ -912,7 +912,7 @@ namespace TweakScale
 
         }*/
 
-        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
+        /*[KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Debug")]
         public void debugOutput()
         {
             //var ap = part.partInfo;
@@ -933,6 +933,6 @@ namespace TweakScale
             {
                 Debug.Log("Engine thrust=" +(part.Modules["ModuleEnginesFX"] as ModuleEnginesFX).maxThrust);
             }
-        }
+        }*/
     }
 }

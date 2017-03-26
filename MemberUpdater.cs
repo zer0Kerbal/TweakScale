@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TweakScale
@@ -189,6 +190,34 @@ namespace TweakScale
                     tmp.AddKey(k);
                 }
                 (Value as FloatCurve).Curve = tmp;
+            }
+            else if (MemberType == typeof(List<ResourceRatio>))
+            {
+                var l = (newValue as List<ResourceRatio>);
+                //List<ResourceRatio> l2 = new List<ResourceRatio>();
+                for (int i=0; i<l.Count; i++)
+                {
+                    var tmp = l[i];
+                    tmp.Ratio *= scale;
+                    (Value as List<ResourceRatio>)[i] = tmp;
+                }
+            }
+            else if (MemberType == typeof(ConversionRecipe))
+            {
+                var l = (newValue as ConversionRecipe);
+                ScaleResourceList(l.Inputs, scale);
+                ScaleResourceList(l.Outputs, scale);
+                ScaleResourceList(l.Requirements, scale);
+            }
+        }
+
+        public void ScaleResourceList(List<ResourceRatio> l, double scale)
+        {
+            for (int i = 0; i < l.Count; i++)
+            {
+                var tmp = l[i];
+                tmp.Ratio *= scale;
+                l[i] = tmp;
             }
         }
 
