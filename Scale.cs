@@ -411,7 +411,7 @@ namespace TweakScale
             updateTestFlight();
 
             // send scaling part message
-            var data = new BaseEventData(BaseEventData.Sender.USER);
+            var data = new BaseEventDetails(BaseEventDetails.Sender.USER);
             data.Set<float>("factorAbsolute", ScalingFactor.absolute.linear);
             data.Set<float>("factorRelative", ScalingFactor.relative.linear);
             part.SendEvent("OnPartScaleChanged", data, 0);
@@ -466,7 +466,7 @@ namespace TweakScale
                     if (fieldInfo != null)
                     {
                         double oldVol = (double)fieldInfo.GetValue(m) * 0.001d;
-                        var data = new BaseEventData(BaseEventData.Sender.USER);
+                        var data = new BaseEventDetails(BaseEventDetails.Sender.USER);
                         data.Set<string>("volName", "Tankage");
                         data.Set<double>("newTotalVolume", oldVol * ScalingFactor.absolute.cubic);
                         part.SendEvent("OnPartVolumeChanged", data, 0);
