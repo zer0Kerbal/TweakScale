@@ -44,7 +44,10 @@ namespace TweakScale
 
                     if (m.DryCost < 0)
                     {
-                        Debug.LogError("TweakScale::PrefabDryCostWriter: negative dryCost: part=" + p.name + ", DryCost=" + m.DryCost.ToString());
+                        if (m.DryCost < -0.5)
+                        {
+                            Debug.LogError("TweakScale::PrefabDryCostWriter: negative dryCost: part=" + p.name + ", DryCost=" + m.DryCost.ToString());
+                        }
                         m.DryCost = 0;
                     }
                 }
