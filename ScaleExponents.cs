@@ -211,7 +211,7 @@ namespace TweakScale
                     {
                         v[i] = values[factor.index];
                     }
-                    else if (!double.IsNaN(exponent))
+                    else if (!double.IsNaN(exponent) && (exponent != 0))
                     {
                         if (v[i] is float)
                         {
@@ -241,7 +241,7 @@ namespace TweakScale
                 }
                 
             }
-            else if (!double.IsNaN(exponent))
+            else if (!double.IsNaN(exponent) && (exponent != 0))
             {
                 current.Scale(multiplyBy, baseValue);
             }
