@@ -8,7 +8,7 @@ namespace TweakScale
         public static T Instance { get; protected set; }
 
         [UsedImplicitly]
-        private void Awake()
+        protected void Awake()
         {
             Instance = (T)this;
         }
