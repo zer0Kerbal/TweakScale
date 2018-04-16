@@ -97,7 +97,6 @@ namespace TweakScale
         public float MassScale = 1;
 
         private Hotkeyable _chainingEnabled;
-        private Hotkeyable _autoscaleEnabled;
 
         /// <summary>
         /// The ScaleType for this part.
@@ -271,8 +270,6 @@ namespace TweakScale
                     GameEvents.onEditorShipModified.Add(OnEditorShipModified);
                 }
 
-                _autoscaleEnabled = HotkeyManager.Instance.AddHotkey("Autoscale", new[] {KeyCode.LeftShift},
-                    new[] {KeyCode.LeftControl, KeyCode.L}, false);
                 _chainingEnabled = HotkeyManager.Instance.AddHotkey("Scale chaining", new[] {KeyCode.LeftShift},
                     new[] {KeyCode.LeftControl, KeyCode.K}, false);
             }
@@ -336,12 +333,6 @@ namespace TweakScale
 
             if (HighLogic.LoadedSceneIsEditor)
             {
-                if (_firstUpdateWithParent && part.HasParent())
-                {
-                    if ((_autoscaleEnabled != null) && _autoscaleEnabled.State)
-                        AutoScale(part.parent.GetComponent<TweakScale>(), this);
-                }
-
                 if (currentScale >= 0f)
                 {
                     var changed = currentScale != (isFreeScale ? tweakScale : ScaleFactors[tweakName]);
@@ -714,86 +705,6 @@ namespace TweakScale
                 }
             }
             ScaleAttachNode(node, baseNode);
-        }
-
-        /// <summary>
-        /// Find the Attachnode that fastens <paramref name="a"/> to <paramref name="b"/> and vice versa.
-        /// </summary>
-        /// <param name="a">The source part (often the parent)</param>
-        /// <param name="b">The target part (often the child)</param>
-        /// <returns>The AttachNodes between the two parts.</returns>
-        private static Tuple<AttachNode, AttachNode>? NodesBetween(Part a, Part b)
-        {
-            /*var nodeA = a.findAttachNodeByPart(b);
-            var nodeB = b.findAttachNodeByPart(a);
-
-            if (nodeA == null || nodeB == null)
-                return null;
-
-            return Tuple.Create(nodeA, nodeB);*/
-            return null;
-        }
-                
-        /// <summary>
-        /// Calculate the correct scale to use for scaling a part relative to another.
-        /// </summary>
-        /// <param name="a">Source part, from which we get the desired scale.</param>
-        /// <param name="b">Target part, which will potentially be scaled.</param>
-        /// <returns>The difference in scale between the (scaled) attachment nodes connecting <paramref name="a"/> and <paramref name="b"/>, or null if somethinng went wrong.</returns>
-        private static float? GetRelativeScaling(TweakScale a, TweakScale b)
-        {
-            if (a == null || b == null)
-                return null;
-
-            var nodes = NodesBetween(a.part, b.part);
-
-            if (!nodes.HasValue)
-                return null;
-            
-            var nodeA = nodes.Value.Item1;
-            var nodeB = nodes.Value.Item2;
-
-            var aIdx = a._prefabPart.attachNodes.FindIndex( t => t.id == nodeA.id);
-            var bIdx = b._prefabPart.attachNodes.FindIndex( t => t.id == nodeB.id);
-            if (aIdx < 0 || bIdx < 0
-                || aIdx >= a._prefabPart.attachNodes.Count
-                || aIdx >= a._prefabPart.attachNodes.Count)
-                return null;
-            
-            var sizeA = (float)a._prefabPart.attachNodes[aIdx].size;
-            var sizeB = (float)b._prefabPart.attachNodes[bIdx].size;
-            
-            if (sizeA == 0)
-                sizeA = 0.5f;
-            if (sizeB == 0)
-                sizeB = 0.5f;
-            
-            return (sizeA * a.tweakScale/a.defaultScale)/(sizeB * b.tweakScale/b.defaultScale);
-        }
-
-        /// <summary>
-        /// Automatically scale part to match other part, if applicable.
-        /// </summary>
-        /// <param name="a">Source part, from which we get the desired scale.</param>
-        /// <param name="b">Target part, which will potentially be scaled.</param>
-        private static void AutoScale(TweakScale a, TweakScale b)
-        {
-            if (a == null || b == null)
-                return;
-
-            if (a.ScaleType != b.ScaleType)
-                return;
-
-            var factor = GetRelativeScaling(a,b);
-            if (!factor.HasValue)
-                return;
-
-            b.tweakScale = b.tweakScale * factor.Value;
-            if (!b.isFreeScale && (b.ScaleFactors.Length > 0))
-            {
-                b.tweakName = Tools.ClosestIndex(b.tweakScale, b.ScaleFactors);
-            }
-            b.OnTweakScaleChanged();
         }
 
         /// <summary>
