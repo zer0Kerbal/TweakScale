@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1E379ED8-DB42-4FC1-B7F5-BF9A9A4F3B2E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Scale_TweakableEverything</RootNamespace>
+    <AssemblyName>Scale_TweakableEverything</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\..\LIB\managed\1.4.1\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="TweakableEVA">
+      <HintPath>..\..\..\..\..\LIB\plugins\TweakableEVA.dll</HintPath>
+    </Reference>
+    <Reference Include="TweakableReactionWheels">
+      <HintPath>..\..\..\..\..\LIB\plugins\TweakableReactionWheels.dll</HintPath>
+    </Reference>
+    <Reference Include="TweakableDockingNode">
+      <HintPath>..\..\..\..\..\LIB\plugins\TweakableDockingNode.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\..\LIB\managed\1.4.1\Assembly-CSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TEUpdaters.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Scale_Redist\Scale_Redist.csproj">
+      <Project>{2BE63D8B-350E-4EDD-959C-4B7397984364}</Project>
+      <Name>Scale_Redist</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
