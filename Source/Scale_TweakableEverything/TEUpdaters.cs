@@ -21,21 +21,6 @@ namespace TweakScale
         }
     }
 
-    public class ModuleTweakableDecoupleUpdater : IRescalable<ModuleTweakableDecouple>
-    {
-        private ModuleTweakableDecouple _module;
-
-        public ModuleTweakableDecoupleUpdater(ModuleTweakableDecouple pm)
-        {
-            _module = pm;
-        }
-
-        public void OnRescale(ScalingFactor factor)
-        {
-            TweakScaleTools.RescaleFloatRange(_module, "ejectionForce", factor.relative.quadratic);
-        }
-    }
-
     public class ModuleTweakableDockingNodeUpdater : IRescalable<ModuleTweakableDockingNode>
     {
         private ModuleTweakableDockingNode _module;
