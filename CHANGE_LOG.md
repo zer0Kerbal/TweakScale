@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-1216: 1.48 (Biotronic) for KSP 0.24
+	+ Added .90 support! (screw Curse for not having that option yet)(Admin Edit: Curse added it! File updated to reflect the proper version)
+	+ Cleaned up autoscale and chain scaling!
 * 2014-1117: 1.47 (Biotronic) for KSP 0.24
 	+ Removed [RealChute](http://forum.kerbalspaceprogram.com/threads/57988) support
 	+ Fixed a bug where TweakScale would try to set erroneous values for some fields and properties, which notably affected [Infernal Robotics](http://forum.kerbalspaceprogram.com/threads/37707)
