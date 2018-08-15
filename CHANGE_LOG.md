@@ -1,5 +1,7 @@
 # TweakScale :: Change Log
 
+* 2014-0723: 1.27 (Biotronic) for KSP 0.24
+	+ Fixed a bug on non-Windows platforms.
 * 2014-0723: 1.26 (Biotronic) for KSP 0.24
 	+ Version 1.26:
 		- Fixed typo in DefaultScales.cfg that caused som parts to baloon ridiculously.
