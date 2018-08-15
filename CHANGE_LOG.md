@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0601: 1.10 (Biotronic) for KSP 0.23.5
+	+ 1.10:
+		- Added support for nested fields.
 * 2014-0531: 1.9 (Biotronic) for KSP 0.23.5
 	+ Version 1.9
 		- Fixed bugs in 1.8 where duplication of parts caused incorrect scaling.
