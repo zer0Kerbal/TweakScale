@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0815: 1.41 (Biotronic) for KSP 0.24
+	+ Version 1.41:
+		- Fixed scaling of Part values in unnamed TWEAKSCALEEXPONENTS blocks.
 * 2014-0813: 1.40 (Biotronic) for KSP 0.24
 	+ Version 1.40:
 		- Removed [Karbonite](http://forum.kerbalspaceprogram.com/threads/89401) cfg, since that project does its own TweakScale config.
