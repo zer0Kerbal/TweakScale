@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0531: 1.9 (Biotronic) for KSP 0.23.5
+	+ Version 1.9
+		- Fixed bugs in 1.8 where duplication of parts caused incorrect scaling.
 * 2014-0530: 1.8 (Biotronic) for KSP 0.23.5
 	+ Version 1.8:
 		- Fixed a bug where rescaleFactor caused incorrect scaling.
