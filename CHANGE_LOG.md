@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0606: 1.18 (Biotronic) for KSP 0.23.5
+	+ Version 1.18
+		- Factored out Real Fuels and Modular Fuel Tanks support to separate dlls.
 * 2014-0603: 1.17 (Biotronic) for KSP 0.23.5
 	+ Version 1.17:
 		- Fixed bug where attachment nodes were incorrectly scaled after reloading. This time with more fix!
