@@ -1,5 +1,7 @@
 # TweakScale :: Change Log
 
+* 2014-1224: 1.50 (Biotronic) for KSP 0.24
+	+ Fixed erroneous placement of attach nodes when duplicating parts.
 * 2014-1218: 1.49 (Biotronic) for KSP 0.24
 	+ Now saving hotkey states correctly
 	+ 'Free' scaletype actually free
