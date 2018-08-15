@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-0725: 1.30 (Biotronic) for KSP 0.24
+	+ Updated KSPAPIExtensions with 24.1 support.
+	+ Re-enabled Real Fuels support.
+	+ Added support for IPartCostModifier.
 * 2014-0724: 1.29 (Biotronic) for KSP 0.24
 	+ Fixed Modular Fuel Tanks support.
 * 2014-0724: 1.28 (Biotronic) for KSP 0.24
