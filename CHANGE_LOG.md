@@ -1,5 +1,10 @@
 # TweakScale :: Change Log
 
+* 2014-1010: 1.44 (Biotronic) for KSP 0.24
+	+ Version 1.44:
+		- Updated for KSP 0.25
+		- Added ability to not update certain properties when a specific partmodule is on the part.
+	+ Thanks a lot to NathanKell, who did all the work on this release!
 * 2014-0824: 1.43 (Biotronic) for KSP 0.24
 	+ Version 1.43:
 		- Added licence file (sorry, mods!)
