@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-0602: 1.13 (Biotronic) for KSP 0.23.5
+	+ Version 1.13:
+		- Added support for [MechJeb](http://forum.kerbalspaceprogram.com/threads/12384), [Kerbal Aircraft eXpanion](http://forum.kerbalspaceprogram.com/threads/76668), [Spaceplane+](http://forum.kerbalspaceprogram.com/threads/80796), [Stack eXTensions](http://forum.kerbalspaceprogram.com/threads/79542), [Kerbal Attachment System](http://forum.kerbalspaceprogram.com/threads/53134), [Lack Luster Labs](http://forum.kerbalspaceprogram.com/threads/24906), [Firespitter](http://forum.kerbalspaceprogram.com/threads/24551), [Taverio's Pizza and Aerospace](http://forum.kerbalspaceprogram.com/threads/15348), [Better RoveMates](http://forum.kerbalspaceprogram.com/threads/75873), and [Sum Dum Heavy Industries Service Module System](http://forum.kerbalspaceprogram.com/threads/48357).
+		- Fixed a bug where Modular Fuel Tanks were not correctly updated.
 * 2014-0602: 1.12 (Biotronic) for KSP 0.23.5
 	+ Version 1.12:
 		- Added support for [КОСМОС](http://forum.kerbalspaceprogram.com/threads/24970).
