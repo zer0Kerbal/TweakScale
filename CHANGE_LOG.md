@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-0824: 1.43 (Biotronic) for KSP 0.24
+	+ Version 1.43:
+		- Added licence file (sorry, mods!)
+		- No longer chokes on null particle emitters.
 * 2014-0815: 1.41 (Biotronic) for KSP 0.24
 	+ Version 1.41:
 		- Fixed scaling of Part values in unnamed TWEAKSCALEEXPONENTS blocks.
