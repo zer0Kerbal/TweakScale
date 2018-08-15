@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-0802: 1.34 (Biotronic) for KSP 0.24
+	+ Version 1.34:
+		- Fixed a bug where repeated scaling led to inaccurate placing of child parts.
+		- Added [Karbonite](http://forum.kerbalspaceprogram.com/threads/87335) support.
 * 2014-0728: 1.33 (Biotronic) for KSP 0.24
 	+ Updated RealFuels support for 7.1
 * 2014-0725: 1.32 (Biotronic) for KSP 0.24
