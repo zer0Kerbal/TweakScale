@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-1117: 1.47 (Biotronic) for KSP 0.24
+	+ Removed [RealChute](http://forum.kerbalspaceprogram.com/threads/57988) support
+	+ Fixed a bug where TweakScale would try to set erroneous values for some fields and properties, which notably affected [Infernal Robotics](http://forum.kerbalspaceprogram.com/threads/37707)
+	+ Fixed a bug where cloned fuel tanks would have erroneous volumes.
 * 2014-1116: 1.46 (Biotronic) for KSP 0.24
 	+ Fixed an issue where features were incorrectly scaled upon loading a ship,
 	+ Scaling a part now scales its children if they have the same size.
