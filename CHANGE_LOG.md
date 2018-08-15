@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0721: 1.23 (Biotronic) for KSP 0.24
+	+ Version 1.23:
+		- Duplicate TweakScale dlls no longer interfere.
 * 2014-0720: 1.22 (Biotronic) for KSP 0.24
 	+ Version 1.22
 		- Fixed tanks that magically refill.
