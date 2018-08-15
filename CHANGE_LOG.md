@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-0603: 1.17 (Biotronic) for KSP 0.23.5
+	+ Version 1.17:
+		- Fixed bug where attachment nodes were incorrectly scaled after reloading. This time with more fix!
+		- Added support for [Near Future Technologies](http://forum.kerbalspaceprogram.com/threads/52042).
 * 2014-0603: 1.16 (Biotronic) for KSP 0.23.5
 	+ Version 1.16:
 		- Fixed bug where attachment nodes were incorrectly scaled after reloading.
