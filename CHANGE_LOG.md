@@ -1,5 +1,10 @@
 # TweakScale :: Change Log
 
+* 2014-0720: 1.22 (Biotronic) for KSP 0.24
+	+ Version 1.22
+		- Fixed tanks that magically refill.
+		- Fixed technology requirements are too slow.
+		- Updated KSPAPIExtensions to make TweakScale play nicely with other mods.
 * 2014-0718: 1.21 (Biotronic) for KSP 0.24
 	+ Version 1.21:
 		- Updated for 0.24
