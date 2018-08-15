@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-0613: 1.20 (Biotronic) for KSP 0.23.5
+	+ Version 1.20:
+		- New algorithm for rescaling attach nodes. Tell me what you think!
+		- Added [Deadly Reentry Continued](http://forum.kerbalspaceprogram.com/threads/54954) and [Large Structural/Station Components](http://forum.kerbalspaceprogram.com/threads/34664).
 * 2014-0606: 1.19 (Biotronic) for KSP 0.23.5
 	+ Version 1.19:
 		- Added support for tech requirements for non-freescale parts.
