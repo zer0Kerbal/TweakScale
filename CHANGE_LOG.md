@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0520: 1.5 (Biotronic) for KSP 0.23.5
+	+ Version 1.5
+		- Changed from hardcoded updaters to a system using cfg files.
 * 2014-0520: 1.4 (Biotronic) for KSP 0.23.5
 	+ Version 1.4
 		- Fixed incompatibilities with GoodspeedTweakScale
