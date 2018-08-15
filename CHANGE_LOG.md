@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-1116: 1.46 (Biotronic) for KSP 0.24
+	+ Fixed an issue where features were incorrectly scaled upon loading a ship,
+	+ Scaling a part now scales its children if they have the same size.
+	+ Parts now automatically guess which size they should be.
 * 2014-1115: 1.45 (Biotronic) for KSP 0.24
 	+ New Features:
 		- Now updating UI sliders for float values.
