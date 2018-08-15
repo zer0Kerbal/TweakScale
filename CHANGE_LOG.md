@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-0718: 1.21 (Biotronic) for KSP 0.24
+	+ Version 1.21:
+		- Updated for 0.24
+		- Now supports global, per-part, and per-scaletype scaling of features (like mass, buoyancy, thrust, etc)
 * 2014-0613: 1.20 (Biotronic) for KSP 0.23.5
 	+ Version 1.20:
 		- New algorithm for rescaling attach nodes. Tell me what you think!
