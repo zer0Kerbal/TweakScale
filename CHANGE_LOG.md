@@ -1,5 +1,10 @@
 # TweakScale :: Change Log
 
+* 2014-1218: 1.49 (Biotronic) for KSP 0.24
+	+ Now saving hotkey states correctly
+	+ 'Free' scaletype actually free
+	+ Fixed bug in OnStart
+	+ First attempt at scaling offsets
 * 2014-1216: 1.48 (Biotronic) for KSP 0.24
 	+ Added .90 support! (screw Curse for not having that option yet)(Admin Edit: Curse added it! File updated to reflect the proper version)
 	+ Cleaned up autoscale and chain scaling!
