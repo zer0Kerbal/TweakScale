@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0805: 1.37 (Biotronic) for KSP 0.24
+	+ Version 1.37:
+		- Updated cost calculation.
 * 2014-0804: 1.36 (Biotronic) for KSP 0.24
 	+ Version 1.36:
 		- Updated [Real Fuels](http://forum.kerbalspaceprogram.com/threads/64118) and [Modular Fuel Tanks](http://forum.kerbalspaceprogram.com/threads/64117) support.
