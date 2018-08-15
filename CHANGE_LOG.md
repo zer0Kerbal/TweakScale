@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0603: 1.15 (Biotronic) for KSP 0.23.5
+	+ Version 1.15:
+		- Finally squished the bug where crafts wouldn't load correctly. This bug is present in 1.13 and 1.14, and affects certain parts from Spaceplane+, MechJeb, and KAX.
 * 2014-0603: 1.14 (Biotronic) for KSP 0.23.5
 	+ Version 1.14:
 		- Fixed a bug where nodes with the same name were moved to the same location regardless of correct location. (Only observed with KW fairing bases, but there could be others)
