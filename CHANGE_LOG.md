@@ -1,5 +1,7 @@
 # TweakScale :: Change Log
 
+* 2014-0724: 1.29 (Biotronic) for KSP 0.24
+	+ Fixed Modular Fuel Tanks support.
 * 2014-0724: 1.28 (Biotronic) for KSP 0.24
 	+ Fixed more cross-platform bugs.
 	+ Added [Tantares Space Technologies](http://forum.kerbalspaceprogram.com/threads/80550).
