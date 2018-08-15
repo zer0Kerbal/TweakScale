@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0520: 1.4 (Biotronic) for KSP 0.23.5
+	+ Version 1.4
+		- Fixed incompatibilities with GoodspeedTweakScale
 * 2014-0519: 1.3 (Biotronic) for KSP 0.23.5
 	+ Version 1.3
 		- Fixed a bug where parts would get rescaled to stupid sizes after loading.
