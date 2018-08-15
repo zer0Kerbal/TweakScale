@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0725: 1.32 (Biotronic) for KSP 0.24
+	+ Version 1.32:
+		- Updated KSPAPIExtension for 0.24.2 support.
 * 2014-0725: 1.31 (Biotronic) for KSP 0.24
 	+ Fixed a bug where parts with defaultScale inaccessible due to tech requirements were incorrectly scaled.
 * 2014-0725: 1.30 (Biotronic) for KSP 0.24
