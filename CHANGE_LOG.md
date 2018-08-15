@@ -1,5 +1,11 @@
 # TweakScale :: Change Log
 
+* 2014-1115: 1.45 (Biotronic) for KSP 0.24
+	+ New Features:
+		- Now updating UI sliders for float values.
+		- Better support for [KSP Interstellar](http://forum.kerbalspaceprogram.com/threads/43839).
+		- Added support for [TweakableEverything](http://forum.kerbalspaceprogram.com/threads/64711).
+		- Added support for [FireSpitter](http://forum.kerbalspaceprogram.com/threads/24551)'s FSFuelSwitch.
 * 2014-1010: 1.44 (Biotronic) for KSP 0.24
 	+ Version 1.44:
 		- Updated for KSP 0.25
