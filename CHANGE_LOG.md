@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0724: 1.28 (Biotronic) for KSP 0.24
+	+ Fixed more cross-platform bugs.
+	+ Added [Tantares Space Technologies](http://forum.kerbalspaceprogram.com/threads/80550).
 * 2014-0723: 1.27 (Biotronic) for KSP 0.24
 	+ Fixed a bug on non-Windows platforms.
 * 2014-0723: 1.26 (Biotronic) for KSP 0.24
