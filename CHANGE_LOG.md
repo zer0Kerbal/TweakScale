@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-0519: 1.3 (Biotronic) for KSP 0.23.5
+	+ Version 1.3
+		- Fixed a bug where parts would get rescaled to stupid sizes after loading.
+		- Breaks compatibility with old version of the plugin (pre-1.0) and GoodspeedTweakScale. :(
 * 2014-0518: 1.2 (Biotronic) for KSP 0.23.5
 	+ Version 1.2 (2014-05-18, 22:00 UTC):
 		- Fixed default scale for freeScale parts.
