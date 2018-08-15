@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-0602: 1.12 (Biotronic) for KSP 0.23.5
+	+ Version 1.12:
+		- Added support for [КОСМОС](http://forum.kerbalspaceprogram.com/threads/24970).
+		- No longer scaling heatDissipation, which I was informed was a mistake.
 * 2014-0601: 1.11 (Biotronic) for KSP 0.23.5
 	+ 1.11:
 		- Removed silly requirement of 'name = *' for updating all elements of a list.
