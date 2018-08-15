@@ -1,5 +1,7 @@
 # TweakScale :: Change Log
 
+* 2014-0728: 1.33 (Biotronic) for KSP 0.24
+	+ Updated RealFuels support for 7.1
 * 2014-0725: 1.32 (Biotronic) for KSP 0.24
 	+ Version 1.32:
 		- Updated KSPAPIExtension for 0.24.2 support.
