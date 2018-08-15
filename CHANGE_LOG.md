@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-0601: 1.11 (Biotronic) for KSP 0.23.5
+	+ 1.11:
+		- Removed silly requirement of 'name = *' for updating all elements of a list.
+		- Added .cfg controlled scaling of Part fields.
 * 2014-0601: 1.10 (Biotronic) for KSP 0.23.5
 	+ 1.10:
 		- Added support for nested fields.
