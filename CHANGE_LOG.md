@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-0723: 1.26 (Biotronic) for KSP 0.24
+	+ Version 1.26:
+		- Fixed typo in DefaultScales.cfg that caused som parts to baloon ridiculously.
+		- Added support for updated NFT and KW Rocketry
 * 2014-0723: 1.25 (Biotronic) for KSP 0.24
 	+ Version 1.25:
 		- Modular Fuel Tanks](http://forum.kerbalspaceprogram.com/threads/64117) yet again supported! (Still waiting for Real Fuels)
