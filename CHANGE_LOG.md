@@ -1,5 +1,11 @@
 # TweakScale :: Change Log
 
+* 2014-0812: 1.38 (Biotronic) for KSP 0.24
+	+ Version 1.38:
+		- Added scaling of FX.
+		- Added support for [Banana for Scale](http://forum.kerbalspaceprogram.com/threads/89570).
+		- Updated [Karbonite](http://forum.kerbalspaceprogram.com/threads/87335) support.
+		- Fixed a bug where no scalingfactors available due to tech requirements would lead to unintended consequences.
 * 2014-0805: 1.37 (Biotronic) for KSP 0.24
 	+ Version 1.37:
 		- Updated cost calculation.
