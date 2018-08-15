@@ -1,5 +1,7 @@
 # TweakScale :: Change Log
 
+* 2014-0522: 1.7 (Biotronic) for KSP 0.23.5
+	+ No changelog provided
 * 2014-0522: 1.6 (Biotronic) for KSP 0.23.5
 	+ Version 1.6:
 		- Fixed a problem where parts were scaled back to their default scale after loading, duplicating and changing scenes.
