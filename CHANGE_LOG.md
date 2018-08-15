@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0803: 1.35 (Biotronic) for KSP 0.24
+	+ Corrected cost calculation.
+	+ Updated to [KSPAPIExtensions 1.7.0](http://forum.kerbalspaceprogram.com/threads/81496)
 * 2014-0802: 1.34 (Biotronic) for KSP 0.24
 	+ Version 1.34:
 		- Fixed a bug where repeated scaling led to inaccurate placing of child parts.
