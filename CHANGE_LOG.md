@@ -1,5 +1,10 @@
 # TweakScale :: Change Log
 
+* 2014-0723: 1.25 (Biotronic) for KSP 0.24
+	+ Version 1.25:
+		- Modular Fuel Tanks](http://forum.kerbalspaceprogram.com/threads/64117) yet again supported! (Still waiting for Real Fuels)
+		- Refactored IRescalable system to be easier for mod authors.
+		- Fixed a bug where one field could have multiple exponents, and thus be rescaled multiple times.
 * 2014-0721: 1.23 (Biotronic) for KSP 0.24
 	+ Version 1.23:
 		- Duplicate TweakScale dlls no longer interfere.
