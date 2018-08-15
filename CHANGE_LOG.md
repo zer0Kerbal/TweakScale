@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2014-0530: 1.8 (Biotronic) for KSP 0.23.5
+	+ Version 1.8:
+		- Fixed a bug where rescaleFactor caused incorrect scaling.
+		- Added (some) support for [Kethane](http://forum.kerbalspaceprogram.com/threads/23979-Kethane-Pack-0-8-5-Find-it-mine-it-burn-it!-0-23-5-\(ARM\)-compatibility-update) parts.
 * 2014-0522: 1.7 (Biotronic) for KSP 0.23.5
 	+ No changelog provided
 * 2014-0522: 1.6 (Biotronic) for KSP 0.23.5
