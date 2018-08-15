@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0606: 1.19 (Biotronic) for KSP 0.23.5
+	+ Version 1.19:
+		- Added support for tech requirements for non-freescale parts.
 * 2014-0606: 1.18 (Biotronic) for KSP 0.23.5
 	+ Version 1.18
 		- Factored out Real Fuels and Modular Fuel Tanks support to separate dlls.
