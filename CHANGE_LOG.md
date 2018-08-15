@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2014-0603: 1.16 (Biotronic) for KSP 0.23.5
+	+ Version 1.16:
+		- Fixed bug where attachment nodes were incorrectly scaled after reloading.
 * 2014-0603: 1.15 (Biotronic) for KSP 0.23.5
 	+ Version 1.15:
 		- Finally squished the bug where crafts wouldn't load correctly. This bug is present in 1.13 and 1.14, and affects certain parts from Spaceplane+, MechJeb, and KAX.
