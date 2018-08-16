@@ -1,5 +1,10 @@
 # TweakScale :: Change Log
 
+* 2016-0102: 2.2.6 (Pellinor) for KSP 1.0.5
+	+ Support for NF-Construction
+	+ update for NFT Octo-Girders
+	+ fix for infinite loop between TweakScale and MFT
+	+ fix for engineer's report mass display
 * 2015-1109: 2.2.5 (Pellinor) for KSP 0.90
 	+ recompile for KSP 1.0.5 (still using the old KspApiExtensions)
 	+ update MM
