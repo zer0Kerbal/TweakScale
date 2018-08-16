@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2017-0123: 2.3.4 (Pellinor) for KSP 1.2.2
+	+ fix exponent for stock ModuleGenerator
+	+ found a way to write dryCost of the prefab early enough (fixes a cost issue with KIS)
+	+ functions to ask the prefab about stats of scaled parts (meant for KIS)
 * 2016-1217: 2.3.3 (Pellinor) for KSP 1.2.2
 	+ recompile for KSP 1.2.2
 	+ fix cost bug with fsfuelswitch
