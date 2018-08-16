@@ -50,6 +50,9 @@
     <Compile Include="Tuple.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="HotkeyAble.cs" />
+    <Compile Include="..\Version.cs">
+      <DependentUpon>Version.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -78,6 +81,13 @@
       <Project>{1E379ED8-DB42-4FC1-B7F5-BF9A9A4F3B2E}</Project>
       <Name>Scale_TweakableEverything</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Version.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <Link>Properties\Version.tt</Link>
+      <LastGenOutput>Version.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
