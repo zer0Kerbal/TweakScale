@@ -1,5 +1,16 @@
 # TweakScale :: Change Log
 
+* 2015-0626: 2.2.1 (Pellinor) for KSP 0.90
+	+ update for KSP 1.0.4
+	+ KSP 1.0 support: scaling of dragCubes
+	+ exponent -0.5 for heatProduction
+	+ support for HX parts from B9-Aerospace
+	+ support for firespitter modules: FSEngine, FSPropellerTweak, FSAlternator
+	+ remove support for KAS connector port so it stays stackable in KIS
+	+ a few missing part patches
+	+ update NF-Solar patches (some parts were renamed)
+	+ catch exceptions on rescale
+	+ survive duplicate part config
 * 2015-0502: 2.1 (Pellinor) for KSP 0.90
 	+ recompile for KSP 1.0.2
 	+ new stock part
