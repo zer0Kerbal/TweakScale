@@ -1,5 +1,12 @@
 # TweakScale :: Change Log
 
+* 2016-0423: 2.2.7.1 (Pellinor) for KSP 1.1
+	+ update for 1.1
+	+ Workaround for the camera breaking (root part scaling is still broken)
+	+ support for new stock parts
+	+ shrinking science and probe cores makes them more expensive
+	+ (only changed for stock so far)
+	+ update for the OPT v1.8 test release
 * 2016-0102: 2.2.6 (Pellinor) for KSP 1.0.5
 	+ Support for NF-Construction
 	+ update for NFT Octo-Girders
