@@ -1,5 +1,7 @@
 # TweakScale :: Change Log
 
+* 2016-0424: 2.2.7.2 (Pellinor) for KSP 1.1
+	+ fix scaling of the root part
 * 2016-0423: 2.2.7.1 (Pellinor) for KSP 1.1
 	+ update for 1.1
 	+ Workaround for the camera breaking (root part scaling is still broken)
