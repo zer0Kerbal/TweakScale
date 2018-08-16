@@ -1,5 +1,10 @@
 # TweakScale :: Change Log
 
+* 2016-1021: 2.3.1 (Pellinor) for KSP 1.2
+	+ exponent for groundHeightOffset (fixes landing gears clipping the runway at launch)
+	+ fix for node positions reverting when cloning a part
+	+ antennas: refresh range display
+	+ antennas: tweak exponent (so that downscaled antennas are a bit less overpowered)
 * 2016-1015: 2.3 (Pellinor) for KSP 1.2
 	+ fix for wheel colliders
 	+ fix wheelMotor torque and ec consumption
