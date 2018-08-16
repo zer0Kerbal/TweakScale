@@ -12,11 +12,11 @@
 	+ fix interaction with stock ModulePartVariants
 * 2018-0307: 2.3.8 (Pellinor) for KSP 1.3.1
 	+ [TweakScale-v2.3.8.zip](https://github.com/pellinor0/TweakScale/files/1790799/TweakScale-v2.3.8.zip)
-			- recompile for KSP 1.4
-			- a few patches for new parts
+		- recompile for KSP 1.4
+		- a few patches for new parts
 	+ Known issues:
-			- the new stock texture switch messes up attachment nodes on scaled parts
-			- (first switching and then scaling seems to work)
+		- the new stock texture switch messes up attachment nodes on scaled parts
+		- (first switching and then scaling seems to work)
 * 2017-1013: 2.3.7 (Pellinor) for KSP 1.3.1
 	+ recompile for KSP 1.3.1
 	+ only complain about negative dry mass if the number is significant
@@ -189,21 +189,21 @@
 * 2015-0225: 1.51 (Pellinor) for KSP 0.90
 	+ added KSP-AVC support
 	+ added stock mk3 configs
-		- autoscaling ==
-	+ auto- and chain scaling off by default
-	+ auto- and chain scaling restricted to parts of the same scaletype
-	+ rewrote GetRelativeScaling based on the nodes of the prefab part
-		- scaletypes ==
-	+ freescale slider Increments are now part of the scaletype config
-	+ Change the 'stack' scaletype to free scaling
-	+ Move stock adapters to stack scaletype
-	+ Change surface scaletype to free scaling
-	+ added an example discrete scaletype for documentation, because there is none left in the default configs
-	+ if min/maxScale are missing in a free scaletype take min/max of the scaleFactors list
-		- fixes ==
-	+ fixed error spam with scalable parts from KAS containers
-	+ removed duplicate MM patch for IntakeRadialLong
-	+ hopefully restricted the camera bug to scaled root parts
+	+ autoscaling
+		- auto- and chain scaling off by default
+		- auto- and chain scaling restricted to parts of the same scaletype
+		- rewrote GetRelativeScaling based on the nodes of the prefab part
+	+ scaletypes
+		- freescale slider Increments are now part of the scaletype config
+		- Change the 'stack' scaletype to free scaling
+		- Move stock adapters to stack scaletype
+		- Change surface scaletype to free scaling
+		- added an example discrete scaletype for documentation, because there is none left in the default configs
+		- if min/maxScale are missing in a free scaletype take min/max of the scaleFactors list
+	+ fixes
+		- fixed error spam with scalable parts from KAS containers
+		- removed duplicate MM patch for IntakeRadialLong
+		- hopefully restricted the camera bug to scaled root parts
 * 2014-1224: 1.50 (Biotronic) for KSP 0.24
 	+ Fixed erroneous placement of attach nodes when duplicating parts.
 * 2014-1218: 1.49 (Biotronic) for KSP 0.24
