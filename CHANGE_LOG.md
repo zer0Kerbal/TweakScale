@@ -1,5 +1,14 @@
 # TweakScale :: Change Log
 
+* 2016-0512: 2.2.11 (Pellinor) for KSP 1.1.2
+	+ remove obsolete IFS exponents
+	+ fix bug in partMessage for MFT
+	+ expose API via the part message system
+	+ fix for mirrored parts
+	+ workaround for tweakable bug: extra scaleFactor 500% for the free scaletypes
+	+ (so the range from 200-400% is usable again)
+	+ don't interfere if other mods illegaly write part.mass. Print a warning in this case
+	+ fix thrust for moduleRCS (new maxFuelFlow exponent like for moduleEngines)
 * 2016-0505: 2.2.10 (Pellinor) for KSP 1.1.2
 	+ basic wheel scaling: scaled wheels work but still behave strange. They roll, are pretty close to touching the ground, and are able to bounce.
 	+ make sure the exponents are applied before notifying other mods through the API (needed for interaction with FAR)
