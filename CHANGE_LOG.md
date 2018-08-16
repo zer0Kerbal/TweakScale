@@ -1,5 +1,12 @@
 # TweakScale :: Change Log
 
+* 2016-1102: 2.3.2 (Pellinor) for KSP 1.2
+	+ recompile for KSP1.2.1
+	+ update patches for RLA-Stockalike, OPT
+	+ exponents for ModuleRCSFX
+	+ remove an obsolete exponent
+	+ remove patches for relay antennas since scaling of their main function does not work
+	+ (which is relaying signals when the antenna is part of an unloaded vessel)
 * 2016-1021: 2.3.1 (Pellinor) for KSP 1.2
 	+ exponent for groundHeightOffset (fixes landing gears clipping the runway at launch)
 	+ fix for node positions reverting when cloning a part
