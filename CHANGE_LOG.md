@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2017-1013: 2.3.7 (Pellinor) for KSP 1.3.1
+	+ recompile for KSP 1.3.1
+	+ only complain about negative dry mass if the number is significant
 * 2017-0527: 2.3.6 (Pellinor) for KSP 1.3.0
 	+ recompile for KSP 1.3
 	+ lots of player-submitted patches (thanks eberkain, mikeloeven, OliverPA77)
