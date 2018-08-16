@@ -1,5 +1,10 @@
 # TweakScale :: Change Log
 
+* 2016-1217: 2.3.3 (Pellinor) for KSP 1.2.2
+	+ recompile for KSP 1.2.2
+	+ fix cost bug with fsfuelswitch
+	+ (ignore resource cost because FSfuelSwitch takes it into account)
+	+ added a bit of documentation
 * 2016-1102: 2.3.2 (Pellinor) for KSP 1.2
 	+ recompile for KSP1.2.1
 	+ update patches for RLA-Stockalike, OPT
