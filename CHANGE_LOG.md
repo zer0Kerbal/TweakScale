@@ -1,5 +1,7 @@
 # TweakScale :: Change Log
 
+* 2018-0309: 2.3.9 (Pellinor) for KSP 1.3.1
+	+ fix interaction with stock ModulePartVariants
 * 2018-0307: 2.3.8 (Pellinor) for KSP 1.3.1
 	+ [TweakScale-v2.3.8.zip](https://github.com/pellinor0/TweakScale/files/1790799/TweakScale-v2.3.8.zip)
 			- recompile for KSP 1.4
