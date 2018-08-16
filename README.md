@@ -28,7 +28,7 @@ See [here](./LICENSE).
 ## Dependencies
 
 * [ModuleManager](https://github.com/net-lisias-kspu/ModuleManager)
-* [Swamp-Ig's KSPAPIExtensions](https://github.com/net-lisias-kspu/KSPAPIExtensions)
+* [KSP API Extensions/L](https://github.com/net-lisias-ksp/KSPAPIExtensions)
 
 
 ## UPSTREAM
