@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2015-0501: 2.0.1 (Pellinor) for KSP 0.90
+	+ restored maxThrust exponent to fix the editor CoT display
+	+ added patch for new KIS container
+	+ survive mistyped scaleTypes
 * 2015-0430: 2.0 (Pellinor) for KSP 0.90
 	+ recompile for KSP 1.0
 	+ new TWEAKSCALEBEHAVIOR nodes (engines, decouplers, boosters)
