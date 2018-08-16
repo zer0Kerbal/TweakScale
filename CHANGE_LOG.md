@@ -1,5 +1,14 @@
 # TweakScale :: Change Log
 
+* 2016-1015: 2.3 (Pellinor) for KSP 1.2
+	+ fix for wheel colliders
+	+ fix wheelMotor torque and ec consumption
+	+ CrewCapacity: has a configurable exponent now
+	+ CrewCapacity: additional seats are not shown in the editor (stock limitation)
+	+ scaling support for FloatCurve (for wheel torque)
+	+ scaling support for and int values (for CrewCapacity)
+	+ fix scaling of input/outputResources (new stock "resHandler", e.g. consumption of reaction wheels)
+	+ move workaround for stock UI_ScaleEdit bug into the plugin
 * 2016-0624: 2.2.13 (Pellinor) for KSP 1.1.3
 	+ recompile for KSP 1.1.3
 	+ fix for solar panels
