@@ -1,5 +1,14 @@
 # TweakScale :: Change Log
 
+* 2017-0527: 2.3.6 (Pellinor) for KSP 1.3.0
+	+ recompile for KSP 1.3
+	+ lots of player-submitted patches (thanks eberkain, mikeloeven, OliverPA77)
+	+ set SRB thrust exponent to 3 (so both TWR and burntime are preserved now)
+	+ added a few null checks
+	+ scaling support for resource lists (for drills and converters)
+	+ Fix: don't scale mass if the part has a MFT module
+	+ TWEAKSCALEEXPONENTS should now affect not only the mentioned module but also derived modules
+	+ (e.g. the exponent for ModuleRCS also applies for ModuleRCSFX)
 * 2017-0123: 2.3.4 (Pellinor) for KSP 1.2.2
 	+ fix exponent for stock ModuleGenerator
 	+ found a way to write dryCost of the prefab early enough (fixes a cost issue with KIS)
