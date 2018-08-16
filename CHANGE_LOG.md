@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2016-0624: 2.2.13 (Pellinor) for KSP 1.1.3
+	+ recompile for KSP 1.1.3
+	+ fix for solar panels
+	+ rewrite of chainScaling: propagate relative scaling factor to child parts
 * 2016-0519: 2.2.12 (Pellinor) for KSP 1.1.2
 	+ scaling of crew capacity (hardcoded to use the mass exponent for now)
 	+ Fix patches scale crewed parts with an exponent of 2 for crew and mass
