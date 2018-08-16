@@ -1,5 +1,11 @@
 # TweakScale :: Change Log
 
+* 2015-0308: 1.52 (Pellinor) for KSP 0.90
+	+ New Tweakable with more flexible intervals.
+	+ All scaletypes use scaleFactors now, max/minScale is obsolete.
+	+ Better handling of incomplete or inconsistent scaletype configs.
+	+ Vessels now survive a change of defaultScale.
+	+ less persistent data
 * 2015-0226: 1.51.1 (Pellinor) for KSP 0.90
 	+ added KSP-AVC support
 	+ freescale slider Increments are now part of the scaletype config
