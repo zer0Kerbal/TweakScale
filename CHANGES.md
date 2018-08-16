@@ -1,4 +1,7 @@
 # TweakScale :: Changes
 
-* 2014-1224: 1.50 (Biotronic) for KSP 0.24
-	+ Fixed erroneous placement of attach nodes when duplicating parts.
+* 2018-0416: 2.3.12 (Pellinor) for KSP 1.4.2
+	+ configs for new parts
+	+ fix for exceptions
+	+ fix for solar panels
+	+ recompile for KSP 1.4.2

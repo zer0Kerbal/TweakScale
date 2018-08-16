@@ -1,5 +1,209 @@
 # TweakScale :: Change Log
 
+* 2018-0416: 2.3.12 (Pellinor) for KSP 1.4.2
+	+ configs for new parts
+	+ fix for exceptions
+	+ fix for solar panels
+	+ recompile for KSP 1.4.2
+* 2018-0314: 2.3.10 (Pellinor) for KSP 1.4.1
+	+ don't overwrite stuff if the exponent is zero
+	+ recompile against KSP 1.4.1
+* 2018-0309: 2.3.9 (Pellinor) for KSP 1.3.1
+	+ fix interaction with stock ModulePartVariants
+* 2018-0307: 2.3.8 (Pellinor) for KSP 1.3.1
+	+ [TweakScale-v2.3.8.zip](https://github.com/pellinor0/TweakScale/files/1790799/TweakScale-v2.3.8.zip)
+		- recompile for KSP 1.4
+		- a few patches for new parts
+	+ Known issues:
+		- the new stock texture switch messes up attachment nodes on scaled parts
+		- (first switching and then scaling seems to work)
+* 2017-1013: 2.3.7 (Pellinor) for KSP 1.3.1
+	+ recompile for KSP 1.3.1
+	+ only complain about negative dry mass if the number is significant
+* 2017-0527: 2.3.6 (Pellinor) for KSP 1.3.0
+	+ recompile for KSP 1.3
+	+ lots of player-submitted patches (thanks eberkain, mikeloeven, OliverPA77)
+	+ set SRB thrust exponent to 3 (so both TWR and burntime are preserved now)
+	+ added a few null checks
+	+ scaling support for resource lists (for drills and converters)
+	+ Fix: don't scale mass if the part has a MFT module
+	+ TWEAKSCALEEXPONENTS should now affect not only the mentioned module but also derived modules
+	+ (e.g. the exponent for ModuleRCS also applies for ModuleRCSFX)
+* 2017-0123: 2.3.4 (Pellinor) for KSP 1.2.2
+	+ fix exponent for stock ModuleGenerator
+	+ found a way to write dryCost of the prefab early enough (fixes a cost issue with KIS)
+	+ functions to ask the prefab about stats of scaled parts (meant for KIS)
+* 2016-1217: 2.3.3 (Pellinor) for KSP 1.2.2
+	+ recompile for KSP 1.2.2
+	+ fix cost bug with fsfuelswitch
+	+ (ignore resource cost because FSfuelSwitch takes it into account)
+	+ added a bit of documentation
+* 2016-1102: 2.3.2 (Pellinor) for KSP 1.2
+	+ recompile for KSP1.2.1
+	+ update patches for RLA-Stockalike, OPT
+	+ exponents for ModuleRCSFX
+	+ remove an obsolete exponent
+	+ remove patches for relay antennas since scaling of their main function does not work
+	+ (which is relaying signals when the antenna is part of an unloaded vessel)
+* 2016-1021: 2.3.1 (Pellinor) for KSP 1.2
+	+ exponent for groundHeightOffset (fixes landing gears clipping the runway at launch)
+	+ fix for node positions reverting when cloning a part
+	+ antennas: refresh range display
+	+ antennas: tweak exponent (so that downscaled antennas are a bit less overpowered)
+* 2016-1015: 2.3 (Pellinor) for KSP 1.2
+	+ fix for wheel colliders
+	+ fix wheelMotor torque and ec consumption
+	+ CrewCapacity: has a configurable exponent now
+	+ CrewCapacity: additional seats are not shown in the editor (stock limitation)
+	+ scaling support for FloatCurve (for wheel torque)
+	+ scaling support for and int values (for CrewCapacity)
+	+ fix scaling of input/outputResources (new stock "resHandler", e.g. consumption of reaction wheels)
+	+ move workaround for stock UI_ScaleEdit bug into the plugin
+* 2016-0624: 2.2.13 (Pellinor) for KSP 1.1.3
+	+ recompile for KSP 1.1.3
+	+ fix for solar panels
+	+ rewrite of chainScaling: propagate relative scaling factor to child parts
+* 2016-0519: 2.2.12 (Pellinor) for KSP 1.1.2
+	+ scaling of crew capacity (hardcoded to use the mass exponent for now)
+	+ Fix patches scale crewed parts with an exponent of 2 for crew and mass
+	+ (not realistic but fits better to stock balance than 3). In any case mass/kerbal is hardcoded to be preserved.
+	+ scaling of the IVA overlay
+	+ support for new firespitter biplane
+	+ support for HLAirships module (thanks SpannerMonkey)
+	+ some missing patches for B9 (thanks BlowFish)
+	+ (did some reordering but still need to sort through the content)
+	+ fixed a few patches
+	+ reorganize some patches into their own folder
+	+ (B9, Squad including nasa and spacePlanePlus)
+	+ small optimisation: disable partModule in flight if not scaled
+* 2016-0512: 2.2.11 (Pellinor) for KSP 1.1.2
+	+ remove obsolete IFS exponents
+	+ fix bug in partMessage for MFT
+	+ expose API via the part message system
+	+ fix for mirrored parts
+	+ workaround for tweakable bug: extra scaleFactor 500% for the free scaletypes
+	+ (so the range from 200-400% is usable again)
+	+ don't interfere if other mods illegaly write part.mass. Print a warning in this case
+	+ fix thrust for moduleRCS (new maxFuelFlow exponent like for moduleEngines)
+* 2016-0505: 2.2.10 (Pellinor) for KSP 1.1.2
+	+ basic wheel scaling: scaled wheels work but still behave strange. They roll, are pretty close to touching the ground, and are able to bounce.
+	+ make sure the exponents are applied before notifying other mods through the API (needed for interaction with FAR)
+	+ MFT support changed to TweakScale using their API (instead of the other way round)
+	+ tweaked downscaled science parts to be a little more expensive
+* 2016-0430: 2.2.9 (Pellinor) for KSP 1.1.2
+	+ fix for drag cube scaling
+	+ update right click menu after rescale
+	+ recompile for 1.1.2
+	+ cleanup for mass scaling
+* 2016-0424: 2.2.7.2 (Pellinor) for KSP 1.1
+	+ fix scaling of the root part
+* 2016-0423: 2.2.7.1 (Pellinor) for KSP 1.1
+	+ update for 1.1
+	+ Workaround for the camera breaking (root part scaling is still broken)
+	+ support for new stock parts
+	+ shrinking science and probe cores makes them more expensive
+	+ (only changed for stock so far)
+	+ update for the OPT v1.8 test release
+* 2016-0102: 2.2.6 (Pellinor) for KSP 1.0.5
+	+ Support for NF-Construction
+	+ update for NFT Octo-Girders
+	+ fix for infinite loop between TweakScale and MFT
+	+ fix for engineer's report mass display
+* 2015-1109: 2.2.5 (Pellinor) for KSP 0.90
+	+ recompile for KSP 1.0.5 (still using the old KspApiExtensions)
+	+ update MM
+	+ patches for the new parts
+* 2015-1030: 2.2.4 (Pellinor) for KSP 0.90
+	+ Fix for scaling of lists. This should fix the trouble with cost of FSFuelSwitch parts.
+	+ Partial fix for editor mass display not updating
+	+ new file Examples.cfg with frequently used custom patches
+	+ Removed MM switch for scaleable crew pods
+	+ update of NFT patches
+	+ Fix scaling of resource lists
+	+ support for a few missing stock parts
+	+ partial support for a few other mods
+	+ stock radiator support
+	+ Scale ImpactRange for stock drill modules (this is what determines if the drill has ground contact or not)
+	+ scale captureRange for claw (this should fix 3.75m claws not grappling)
+	+ removed brakingTorque exponent (not needed and breaks stock tweakable)
+* 2015-0626: 2.2.1 (Pellinor) for KSP 0.90
+	+ update for KSP 1.0.4
+	+ KSP 1.0 support: scaling of dragCubes
+	+ exponent -0.5 for heatProduction
+	+ support for HX parts from B9-Aerospace
+	+ support for firespitter modules: FSEngine, FSPropellerTweak, FSAlternator
+	+ remove support for KAS connector port so it stays stackable in KIS
+	+ a few missing part patches
+	+ update NF-Solar patches (some parts were renamed)
+	+ catch exceptions on rescale
+	+ survive duplicate part config
+* 2015-0502: 2.1 (Pellinor) for KSP 0.90
+	+ recompile for KSP 1.0.2
+	+ new stock part
+* 2015-0501: 2.0.1 (Pellinor) for KSP 0.90
+	+ restored maxThrust exponent to fix the editor CoT display
+	+ added patch for new KIS container
+	+ survive mistyped scaleTypes
+* 2015-0430: 2.0 (Pellinor) for KSP 0.90
+	+ recompile for KSP 1.0
+	+ new TWEAKSCALEBEHAVIOR nodes (engines, decouplers, boosters)
+	+ scale DryCost with the mass exponent if there is no DryCost exponent defined
+	+ fuel fraction of tanks is now preserved [breaking]
+	+ move part patches into their own directory
+	+ KIS support
+	+ proper MM switches for mod exponents
+	+ removed KSPI support (will be distributed with KSPI)
+	+ scaleExponents for NF-electrical capacitors
+	+ cleanup of stock scaleExponents
+	+ support for the new stock modules
+	+ support for the changed engine modules
+* 2015-0420: 1.53 (Pellinor) for KSP 0.90
+	+ download address for version file
+	+ added missing RLA configs
+	+ only touch part cost of the part is rescaled
+	+ fix for repairing incomplete scaletypes
+	+ support for stock decoupling modules
+	+ OPT support
+	+ remove RF scale exponents (RF does its own support)
+* 2015-0310: 1.52.1 (Pellinor) for KSP 0.90
+	+ No changelog provided
+* 2015-0308: 1.52 (Pellinor) for KSP 0.90
+	+ New Tweakable with more flexible intervals.
+	+ All scaletypes use scaleFactors now, max/minScale is obsolete.
+	+ Better handling of incomplete or inconsistent scaletype configs.
+	+ Vessels now survive a change of defaultScale.
+	+ less persistent data
+* 2015-0226: 1.51.1 (Pellinor) for KSP 0.90
+	+ added KSP-AVC support
+	+ freescale slider Increments are now part of the scaletype config
+	+ added stock mk3 configs
+	+ auto- and chain scaling off by default (the hotkeys are leftCtrl-L and leftCtrl-K)
+	+ auto- and chain scaling restricted to parts of the same scaletype
+	+ Changed the 'stack' scaletype to free scaling
+	+ Moved stock adapters to stack scaletype
+	+ Changed surface scaletype to free scaling
+	+ added an example discrete scaletype for documentation, because there is none left
+	+ fixed error spam with regolith & KAS
+	+ removed duplicate MM patch for IntakeRadialLong
+	+ hopefully restricted the camera bug to scaled root parts
+* 2015-0225: 1.51 (Pellinor) for KSP 0.90
+	+ added KSP-AVC support
+	+ added stock mk3 configs
+	+ autoscaling
+		- auto- and chain scaling off by default
+		- auto- and chain scaling restricted to parts of the same scaletype
+		- rewrote GetRelativeScaling based on the nodes of the prefab part
+	+ scaletypes
+		- freescale slider Increments are now part of the scaletype config
+		- Change the 'stack' scaletype to free scaling
+		- Move stock adapters to stack scaletype
+		- Change surface scaletype to free scaling
+		- added an example discrete scaletype for documentation, because there is none left in the default configs
+		- if min/maxScale are missing in a free scaletype take min/max of the scaleFactors list
+	+ fixes
+		- fixed error spam with scalable parts from KAS containers
+		- removed duplicate MM patch for IntakeRadialLong
+		- hopefully restricted the camera bug to scaled root parts
 * 2014-1224: 1.50 (Biotronic) for KSP 0.24
 	+ Fixed erroneous placement of attach nodes when duplicating parts.
 * 2014-1218: 1.49 (Biotronic) for KSP 0.24
