@@ -1,5 +1,18 @@
 # TweakScale :: Change Log
 
+* 2015-0226: 1.51.1 (Pellinor) for KSP 0.90
+	+ added KSP-AVC support
+	+ freescale slider Increments are now part of the scaletype config
+	+ added stock mk3 configs
+	+ auto- and chain scaling off by default (the hotkeys are leftCtrl-L and leftCtrl-K)
+	+ auto- and chain scaling restricted to parts of the same scaletype
+	+ Changed the 'stack' scaletype to free scaling
+	+ Moved stock adapters to stack scaletype
+	+ Changed surface scaletype to free scaling
+	+ added an example discrete scaletype for documentation, because there is none left
+	+ fixed error spam with regolith & KAS
+	+ removed duplicate MM patch for IntakeRadialLong
+	+ hopefully restricted the camera bug to scaled root parts
 * 2015-0225: 1.51 (Pellinor) for KSP 0.90
 	+ added KSP-AVC support
 	+ added stock mk3 configs
