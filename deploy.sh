@@ -41,7 +41,11 @@ cp CHANGE_LOG.md "./GameData/$TARGETDIR"
 cp README.md  "./GameData/$TARGETDIR"
 cp LICENSE "./GameData/$TARGETDIR"
 
-for dll in Scale Scale_Redist Scale_TweakableEverything ; do
+for dll in Scale Scale_Redist; do
 #    deploy_dev $dll
     deploy $dll
 done
+
+# HACK! See how to do it properly later.
+TARGETBINDIR="TweakableEverything/Plugins_TweakScale" check
+TARGETBINDIR="TweakableEverything/Plugins_TweakScale" deploy Scale_TweakableEverything
