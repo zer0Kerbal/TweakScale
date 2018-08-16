@@ -1,5 +1,18 @@
 # TweakScale :: Change Log
 
+* 2015-1030: 2.2.4 (Pellinor) for KSP 0.90
+	+ Fix for scaling of lists. This should fix the trouble with cost of FSFuelSwitch parts.
+	+ Partial fix for editor mass display not updating
+	+ new file Examples.cfg with frequently used custom patches
+	+ Removed MM switch for scaleable crew pods
+	+ update of NFT patches
+	+ Fix scaling of resource lists
+	+ support for a few missing stock parts
+	+ partial support for a few other mods
+	+ stock radiator support
+	+ Scale ImpactRange for stock drill modules (this is what determines if the drill has ground contact or not)
+	+ scale captureRange for claw (this should fix 3.75m claws not grappling)
+	+ removed brakingTorque exponent (not needed and breaks stock tweakable)
 * 2015-0626: 2.2.1 (Pellinor) for KSP 0.90
 	+ update for KSP 1.0.4
 	+ KSP 1.0 support: scaling of dragCubes
