@@ -1,5 +1,18 @@
 # TweakScale :: Change Log
 
+* 2016-0519: 2.2.12 (Pellinor) for KSP 1.1.2
+	+ scaling of crew capacity (hardcoded to use the mass exponent for now)
+	+ Fix patches scale crewed parts with an exponent of 2 for crew and mass
+	+ (not realistic but fits better to stock balance than 3). In any case mass/kerbal is hardcoded to be preserved.
+	+ scaling of the IVA overlay
+	+ support for new firespitter biplane
+	+ support for HLAirships module (thanks SpannerMonkey)
+	+ some missing patches for B9 (thanks BlowFish)
+	+ (did some reordering but still need to sort through the content)
+	+ fixed a few patches
+	+ reorganize some patches into their own folder
+	+ (B9, Squad including nasa and spacePlanePlus)
+	+ small optimisation: disable partModule in flight if not scaled
 * 2016-0512: 2.2.11 (Pellinor) for KSP 1.1.2
 	+ remove obsolete IFS exponents
 	+ fix bug in partMessage for MFT
