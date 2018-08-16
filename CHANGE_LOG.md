@@ -1,5 +1,7 @@
 # TweakScale :: Change Log
 
+* 2015-0310: 1.52.1 (Pellinor) for KSP 0.90
+	+ No changelog provided
 * 2015-0308: 1.52 (Pellinor) for KSP 0.90
 	+ New Tweakable with more flexible intervals.
 	+ All scaletypes use scaleFactors now, max/minScale is obsolete.
