@@ -1,5 +1,9 @@
 # TweakScale :: Change Log
 
+* 2015-1109: 2.2.5 (Pellinor) for KSP 0.90
+	+ recompile for KSP 1.0.5 (still using the old KspApiExtensions)
+	+ update MM
+	+ patches for the new parts
 * 2015-1030: 2.2.4 (Pellinor) for KSP 0.90
 	+ Fix for scaling of lists. This should fix the trouble with cost of FSFuelSwitch parts.
 	+ Partial fix for editor mass display not updating
