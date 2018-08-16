@@ -1,5 +1,10 @@
 # TweakScale :: Change Log
 
+* 2016-0505: 2.2.10 (Pellinor) for KSP 1.1.2
+	+ basic wheel scaling: scaled wheels work but still behave strange. They roll, are pretty close to touching the ground, and are able to bounce.
+	+ make sure the exponents are applied before notifying other mods through the API (needed for interaction with FAR)
+	+ MFT support changed to TweakScale using their API (instead of the other way round)
+	+ tweaked downscaled science parts to be a little more expensive
 * 2016-0430: 2.2.9 (Pellinor) for KSP 1.1.2
 	+ fix for drag cube scaling
 	+ update right click menu after rescale
