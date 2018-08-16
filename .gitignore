@@ -2,3 +2,9 @@
 **/obj
 /*.user
 .vs
+Source/Version.cs
+GameData/TweakScale/Plugins/*.dll
+GameData/*/*.version
+GameData/*/README.md
+GameData/*/CHANGE_LOG.md
+GameData/*/LICENSE
