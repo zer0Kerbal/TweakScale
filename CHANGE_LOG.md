@@ -1,5 +1,8 @@
 # TweakScale :: Change Log
 
+* 2018-0314: 2.3.10 (Pellinor) for KSP 1.4.1
+	+ don't overwrite stuff if the exponent is zero
+	+ recompile against KSP 1.4.1
 * 2018-0309: 2.3.9 (Pellinor) for KSP 1.3.1
 	+ fix interaction with stock ModulePartVariants
 * 2018-0307: 2.3.8 (Pellinor) for KSP 1.3.1
