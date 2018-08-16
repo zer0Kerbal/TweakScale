@@ -1,5 +1,13 @@
 # TweakScale :: Change Log
 
+* 2015-0420: 1.53 (Pellinor) for KSP 0.90
+	+ download address for version file
+	+ added missing RLA configs
+	+ only touch part cost of the part is rescaled
+	+ fix for repairing incomplete scaletypes
+	+ support for stock decoupling modules
+	+ OPT support
+	+ remove RF scale exponents (RF does its own support)
 * 2015-0310: 1.52.1 (Pellinor) for KSP 0.90
 	+ No changelog provided
 * 2015-0308: 1.52 (Pellinor) for KSP 0.90
