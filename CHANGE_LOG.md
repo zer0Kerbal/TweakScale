@@ -1,5 +1,18 @@
 # TweakScale :: Change Log
 
+* 2015-0430: 2.0 (Pellinor) for KSP 0.90
+	+ recompile for KSP 1.0
+	+ new TWEAKSCALEBEHAVIOR nodes (engines, decouplers, boosters)
+	+ scale DryCost with the mass exponent if there is no DryCost exponent defined
+	+ fuel fraction of tanks is now preserved [breaking]
+	+ move part patches into their own directory
+	+ KIS support
+	+ proper MM switches for mod exponents
+	+ removed KSPI support (will be distributed with KSPI)
+	+ scaleExponents for NF-electrical capacitors
+	+ cleanup of stock scaleExponents
+	+ support for the new stock modules
+	+ support for the changed engine modules
 * 2015-0420: 1.53 (Pellinor) for KSP 0.90
 	+ download address for version file
 	+ added missing RLA configs
