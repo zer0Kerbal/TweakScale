@@ -1,5 +1,10 @@
 # TweakScale :: Change Log
 
+* 2018-0416: 2.3.12 (Pellinor) for KSP 1.4.2
+	+ configs for new parts
+	+ fix for exceptions
+	+ fix for solar panels
+	+ recompile for KSP 1.4.2
 * 2018-0314: 2.3.10 (Pellinor) for KSP 1.4.1
 	+ don't overwrite stuff if the exponent is zero
 	+ recompile against KSP 1.4.1
