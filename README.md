@@ -5,8 +5,6 @@ TweakScale lets you change the size of a part. Unofficial fork by Lisias.
 
 ## In a Hurry
 
-Forked from Gaius Goodspeed's Goodspeed Aerospace Part & TweakScale plugin
-
 * [Latest Release](https://github.com/net-lisias-kspu/TweakScale/releases)
 * [Source](https://github.com/net-lisias-kspu/TweakScale)
 * [Binaries](https://github.com/net-lisias-kspu/TweakScale/tree/Archive)
@@ -310,3 +308,4 @@ See [here](./LICENSE).
 	+ [Forum](https://forum.kerbalspaceprogram.com/index.php?/topic/72554-090-tweakscale-rescale-everything-v150-2014-12-24-1040-utc/&)
 	+ [CurseForge](https://kerbal.curseforge.com/projects/tweakscale)
 	+ [GitHub](https://github.com/Biotronic/TweakScale)
+* Originaly Forked from [Gaius Goodspeed](https://forum.kerbalspaceprogram.com/index.php?/profile/66495-gaius/)'s [Goodspeed Aerospace Part & TweakScale](https://forum.kerbalspaceprogram.com/index.php?/topic/65819-0235-goodspeed-aerospace-parts-v201441b/) plugin
