@@ -1,5 +1,12 @@
 # TweakScale :: Change Log
 
+* 2018-0307: 2.3.8 (Pellinor) for KSP 1.3.1
+	+ [TweakScale-v2.3.8.zip](https://github.com/pellinor0/TweakScale/files/1790799/TweakScale-v2.3.8.zip)
+			- recompile for KSP 1.4
+			- a few patches for new parts
+	+ Known issues:
+			- the new stock texture switch messes up attachment nodes on scaled parts
+			- (first switching and then scaling seems to work)
 * 2017-1013: 2.3.7 (Pellinor) for KSP 1.3.1
 	+ recompile for KSP 1.3.1
 	+ only complain about negative dry mass if the number is significant
