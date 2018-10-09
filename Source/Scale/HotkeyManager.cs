@@ -27,7 +27,7 @@ namespace TweakScale
         [UsedImplicitly]
         private void Update()
         {
-            foreach (var key in _hotkeys.Values)
+            foreach (Hotkeyable key in _hotkeys.Values)
             {
                 key.Update();
             }

@@ -24,14 +24,14 @@ namespace TweakScale
             if (HighLogic.CurrentGame.Mode != Game.Modes.CAREER && HighLogic.CurrentGame.Mode != Game.Modes.SCIENCE_SANDBOX)
                 return;
 
-            var persistentfile = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/persistent.sfs";
-            var config = ConfigNode.Load(persistentfile);
-            var gameconf = config.GetNode("GAME");
-            var scenarios = gameconf.GetNodes("SCENARIO");
-            var thisScenario = scenarios.FirstOrDefault(a => a.GetValue("name") == "ResearchAndDevelopment");
+			string persistentfile = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/persistent.sfs";
+			ConfigNode config = ConfigNode.Load(persistentfile);
+			ConfigNode gameconf = config.GetNode("GAME");
+			ConfigNode[] scenarios = gameconf.GetNodes("SCENARIO");
+			ConfigNode thisScenario = scenarios.FirstOrDefault(a => a.GetValue("name") == "ResearchAndDevelopment");
             if (thisScenario == null)
                 return;
-            var techs = thisScenario.GetNodes("Tech");
+			ConfigNode[] techs = thisScenario.GetNodes("Tech");
 
             _unlockedTechs = techs.Select(a => a.GetValue("id")).ToHashSet();
             _unlockedTechs.Add("");
@@ -89,7 +89,7 @@ namespace TweakScale
 
             public NodeInfo(string s) : this()
             {
-                var parts = s.Split(':');
+				string[] parts = s.Split(':');
                 if (parts.Length == 1)
                 {
                     if (!float.TryParse(parts[0], out Scale))
@@ -163,7 +163,7 @@ namespace TweakScale
             {
                 if (TechRequired.Length == 0)
                     return _scaleFactors;
-                var result = _scaleFactors.ZipFilter(TechRequired, Tech.IsUnlocked).ToArray();
+				float[] result = _scaleFactors.ZipFilter(TechRequired, Tech.IsUnlocked).ToArray();
                 return result;
             }
         }
@@ -175,7 +175,7 @@ namespace TweakScale
                 if (TechRequired.Length == 0)
                     return _scaleNames;
 
-                var result = _scaleNames.ZipFilter(TechRequired, Tech.IsUnlocked).ToArray();
+				string[] result = _scaleNames.ZipFilter(TechRequired, Tech.IsUnlocked).ToArray();
                 return result;
             }
         }
@@ -200,7 +200,7 @@ namespace TweakScale
 
                 if (Name != null)
                 {
-                    var tmp = GameDatabase.Instance.GetConfigs("SCALETYPE").FirstOrDefault(a => a.name == Name);
+					UrlDir.UrlConfig tmp = GameDatabase.Instance.GetConfigs("SCALETYPE").FirstOrDefault(a => a.name == Name);
                     if (tmp != null) scaleConfig = tmp.config;
                     if (scaleConfig != null)
                     {
@@ -286,15 +286,15 @@ namespace TweakScale
             if (IncrementSlide.Length == 0)
             {
                 IncrementSlide = new float[_scaleFactors.Length-1];
-                for (var i=0; i<_scaleFactors.Length-1; i++)
+                for (int i = 0; i<_scaleFactors.Length-1; i++)
                     IncrementSlide[i] = (_scaleFactors[i+1]-_scaleFactors[i])/50f;
             }
 
             if (IsFreeScale)
             {
-                // workaround for stock bug in tweakable UI_ScaleEdit:
-                // add a tiny dummy interval to the range because the highest one is bugged
-                var tmp = _scaleFactors;
+				// workaround for stock bug in tweakable UI_ScaleEdit:
+				// add a tiny dummy interval to the range because the highest one is bugged
+				float[] tmp = _scaleFactors;
                 _scaleFactors = new float[tmp.Length + 1];
                 for (int i = 0; i < tmp.Length; i++)
                     _scaleFactors[i] = tmp[i];
@@ -302,13 +302,13 @@ namespace TweakScale
                 _scaleFactors[tmp.Length] = _scaleFactors[tmp.Length - 1] + 0.1f * IncrementSlide.Max();
             }
 
-            var numTechs = TechRequired.Length;
-            if ((numTechs > 0) && (numTechs != _scaleFactors.Length))
-            {
-                //Tools.LogWf("Wrong number of techRequired compared to scaleFactors in scaleType \"{0}\": {1} scaleFactors vs {2} techRequired", Name, _scaleFactors.Length, TechRequired.Length);
-                if (numTechs < _scaleFactors.Length)
-                {
-                    var lastTech = TechRequired[TechRequired.Length - 1];
+			int numTechs = TechRequired.Length;
+			if ((numTechs > 0) && (numTechs != _scaleFactors.Length))
+			{
+				//Tools.LogWf("Wrong number of techRequired compared to scaleFactors in scaleType \"{0}\": {1} scaleFactors vs {2} techRequired", Name, _scaleFactors.Length, TechRequired.Length);
+				if (numTechs < _scaleFactors.Length)
+				{
+					string lastTech = TechRequired[TechRequired.Length - 1];
                     TechRequired = TechRequired.Concat(lastTech.Repeat()).Take(_scaleFactors.Length).ToArray();
                 }
             }
@@ -365,11 +365,11 @@ namespace TweakScale
 
         private Dictionary<string, NodeInfo> GetNodeFactors(ConfigNode node, Dictionary<string, NodeInfo> source)
         {
-            var result = source.Clone();
+			Dictionary<string, NodeInfo> result = source.Clone();
 
             if (node != null)
             {
-                foreach (var v in node.values.Cast<ConfigNode.Value>())
+                foreach (ConfigNode.Value v in node.values.Cast<ConfigNode.Value>())
                 {
                     result[v.name] = new NodeInfo(v.value);
                 }
@@ -385,20 +385,20 @@ namespace TweakScale
 
         public override string ToString()
         {
-            var result = "ScaleType {";
+			string result = "ScaleType {";
             result += "\n name = " + Name;
             result += "\n isFreeScale = " + IsFreeScale;
             result += "\n " + _scaleFactors.Length  + " scaleFactors = ";
-            foreach (var s in _scaleFactors)
+            foreach (float s in _scaleFactors)
                 result += s + "  ";
             result += "\n " + _scaleNames.Length  + " scaleNames = ";
-            foreach (var s in _scaleNames)
+            foreach (string s in _scaleNames)
                 result += s + "  ";
             result += "\n " + IncrementSlide.Length + " incrementSlide = ";
-            foreach (var s in IncrementSlide)
+            foreach (float s in IncrementSlide)
                 result += s + "  ";
             result += "\n " + TechRequired.Length + " TechRequired = ";
-            foreach (var s in TechRequired)
+            foreach (string s in TechRequired)
                 result += s + "  ";
             result += "\n defaultScale = " + DefaultScale;
             //result += " scaleNodes = " + ScaleNodes + "\n";

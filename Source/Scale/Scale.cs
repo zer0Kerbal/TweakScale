@@ -125,8 +125,8 @@ namespace TweakScale
 
         protected virtual void SetupPrefab()
         {
-            var PartNode = GameDatabase.Instance.GetConfigs("PART").FirstOrDefault(c => c.name.Replace('_', '.') == part.name).config;
-            var ModuleNode = PartNode.GetNodes("MODULE").FirstOrDefault(n => n.GetValue("name") == moduleName);
+			ConfigNode PartNode = GameDatabase.Instance.GetConfigs("PART").FirstOrDefault(c => c.name.Replace('_', '.') == part.name).config;
+			ConfigNode ModuleNode = PartNode.GetNodes("MODULE").FirstOrDefault(n => n.GetValue("name") == moduleName);
 
             ScaleType = new ScaleType(ModuleNode);
             SetupFromConfig(ScaleType);
@@ -215,7 +215,7 @@ namespace TweakScale
             if (isFreeScale)
             {
                 Fields["tweakScale"].guiActiveEditor = true;
-                var range = (UI_ScaleEdit)Fields["tweakScale"].uiControlEditor;
+				UI_ScaleEdit range = (UI_ScaleEdit)Fields["tweakScale"].uiControlEditor;
                 range.intervals = scaleType.ScaleFactors;
                 range.incrementSlide = scaleType.IncrementSlide;
                 range.unit = scaleType.Suffix;
@@ -225,7 +225,7 @@ namespace TweakScale
             else
             {
                 Fields["tweakName"].guiActiveEditor = scaleType.ScaleFactors.Length > 1;
-                var options = (UI_ChooseOption)Fields["tweakName"].uiControlEditor;
+				UI_ChooseOption options = (UI_ChooseOption)Fields["tweakName"].uiControlEditor;
                 ScaleNodes = scaleType.ScaleNodes;
                 options.options = scaleType.ScaleNames;
             }
@@ -335,7 +335,7 @@ namespace TweakScale
             {
                 if (currentScale >= 0f)
                 {
-                    var changed = currentScale != (isFreeScale ? tweakScale : ScaleFactors[tweakName]);
+					bool changed = currentScale != (isFreeScale ? tweakScale : ScaleFactors[tweakName]);
                     if (changed) // user has changed the scale tweakable
                     {
                         // If the user has changed the scale of the part before attaching it, we want to keep that scale.
@@ -373,8 +373,8 @@ namespace TweakScale
             int len = _updaters.Length;
             for (int i = 0; i < len; i++)
             {
-                // first apply the exponents
-                var updater = _updaters[i];
+				// first apply the exponents
+				IRescalable updater = _updaters[i];
                 if (updater is TSGenericUpdater)
                 {
                     try
@@ -401,8 +401,8 @@ namespace TweakScale
             // TF support
             updateTestFlight();
 
-            // send scaling part message
-            var data = new BaseEventDetails(BaseEventDetails.Sender.USER);
+			// send scaling part message
+			BaseEventDetails data = new BaseEventDetails(BaseEventDetails.Sender.USER);
             data.Set<float>("factorAbsolute", ScalingFactor.absolute.linear);
             data.Set<float>("factorRelative", ScalingFactor.relative.linear);
             part.SendEvent("OnPartScaleChanged", data, 0);
@@ -410,7 +410,7 @@ namespace TweakScale
             len = _updaters.Length;
             for (int i = 0; i < len; i++)
             {
-                var updater = _updaters[i];
+				IRescalable updater = _updaters[i];
                 // then call other updaters (emitters, other mods)
                 if (updater is TSGenericUpdater)
                     continue;
@@ -452,12 +452,12 @@ namespace TweakScale
                 if (_prefabPart.Modules.Contains("ModuleFuelTanks"))
                 {
                     scaleMass = false;
-                    var m = _prefabPart.Modules["ModuleFuelTanks"];
+					PartModule m = _prefabPart.Modules["ModuleFuelTanks"];
                     FieldInfo fieldInfo = m.GetType().GetField("totalVolume", BindingFlags.Public | BindingFlags.Instance);
                     if (fieldInfo != null)
                     {
                         double oldVol = (double)fieldInfo.GetValue(m) * 0.001d;
-                        var data = new BaseEventDetails(BaseEventDetails.Sender.USER);
+						BaseEventDetails data = new BaseEventDetails(BaseEventDetails.Sender.USER);
                         data.Set<string>("volName", "Tankage");
                         data.Set<double>("newTotalVolume", oldVol * ScalingFactor.absolute.cubic);
                         part.SendEvent("OnPartVolumeChanged", data, 0);
@@ -486,7 +486,7 @@ namespace TweakScale
 
         private void UpdateAntennaPowerDisplay()
         {
-            var m = part.Modules["ModuleDataTransmitter"] as ModuleDataTransmitter;
+			ModuleDataTransmitter m = part.Modules["ModuleDataTransmitter"] as ModuleDataTransmitter;
             double p = m.antennaPower / 1000;
             Char suffix = 'k';
             if (p >= 1000)
@@ -517,17 +517,17 @@ namespace TweakScale
             int len = part.attachNodes.Count;
             for (int i=0; i< len; i++)
             {
-                var node = part.attachNodes[i];
-                var nodesWithSameId = part.attachNodes
+				AttachNode node = part.attachNodes[i];
+				AttachNode[] nodesWithSameId = part.attachNodes
                     .Where(a => a.id == node.id)
                     .ToArray();
-                var idIdx = Array.FindIndex(nodesWithSameId, a => a == node);
-                var baseNodesWithSameId = _prefabPart.attachNodes
+				int idIdx = Array.FindIndex(nodesWithSameId, a => a == node);
+				AttachNode[] baseNodesWithSameId = _prefabPart.attachNodes
                     .Where(a => a.id == node.id)
                     .ToArray();
                 if (idIdx < baseNodesWithSameId.Length)
                 {
-                    var baseNode = baseNodesWithSameId[idIdx];
+					AttachNode baseNode = baseNodesWithSameId[idIdx];
 
                     MoveNode(node, baseNode, moveParts, absolute);
                 }
@@ -542,14 +542,14 @@ namespace TweakScale
                 // support for ModulePartVariants (the stock texture switch module)
                 if (_prefabPart.Modules.Contains("ModulePartVariants"))
                 {
-                    var pm = _prefabPart.Modules["ModulePartVariants"] as ModulePartVariants;
-                    var m = part.Modules["ModulePartVariants"] as ModulePartVariants;
+					ModulePartVariants pm = _prefabPart.Modules["ModulePartVariants"] as ModulePartVariants;
+					ModulePartVariants m = part.Modules["ModulePartVariants"] as ModulePartVariants;
 
-                    var n = pm.variantList.Count;
+					int n = pm.variantList.Count;
                     for (int i = 0; i < n; i++)
                     {
-                        var v = m.variantList[i];
-                        var pv = pm.variantList[i];
+						PartVariant v = m.variantList[i];
+						PartVariant pv = pm.variantList[i];
                         for (int j = 0; j < v.AttachNodes.Count; j++)
                         {
                             // the module contains attachNodes, so we need to scale those
@@ -573,12 +573,12 @@ namespace TweakScale
                 int numChilds = part.children.Count;
                 for (int i=0; i<numChilds; i++)
                 {
-                    var child = part.children[i];
+					Part child = part.children[i];
                     if (child.srfAttachNode == null || child.srfAttachNode.attachedPart != part)
                         continue;
 
-                    var attachedPosition = child.transform.localPosition + child.transform.localRotation * child.srfAttachNode.position;
-                    var targetPosition = attachedPosition * ScalingFactor.relative.linear;
+					Vector3 attachedPosition = child.transform.localPosition + child.transform.localRotation * child.srfAttachNode.position;
+					Vector3 targetPosition = attachedPosition * ScalingFactor.relative.linear;
                     child.transform.Translate(targetPosition - attachedPosition, part.transform);
                 }
             }
@@ -588,7 +588,7 @@ namespace TweakScale
         {
             part.rescaleFactor = _prefabPart.rescaleFactor * ScalingFactor.absolute.linear;
 
-            var trafo = part.partTransform.FindChild("model");
+			Transform trafo = part.partTransform.FindChild("model");
             if (trafo != null)
             {
                 if (defaultTransformScale.x == 0.0f)
@@ -682,14 +682,14 @@ namespace TweakScale
                 absolute = false;
             }
 
-            var oldPosition = node.position;
+			Vector3 oldPosition = node.position;
 
             if (absolute)
                 node.position = baseNode.position * ScalingFactor.absolute.linear;
             else
                 node.position = node.position * ScalingFactor.relative.linear;
 
-            var deltaPos = node.position - oldPosition;
+			Vector3 deltaPos = node.position - oldPosition;
 
             if (movePart && node.attachedPart != null)
             {
@@ -699,7 +699,7 @@ namespace TweakScale
                 }
                 else
                 {
-                    var offset = node.attachedPart.attPos * (ScalingFactor.relative.linear - 1);
+					Vector3 offset = node.attachedPart.attPos * (ScalingFactor.relative.linear - 1);
                     node.attachedPart.transform.Translate(deltaPos + offset, part.transform);
                     node.attachedPart.attPos *= ScalingFactor.relative.linear;
                 }
@@ -715,8 +715,8 @@ namespace TweakScale
             int len = part.children.Count;
             for (int i=0; i< len; i++)
             {
-                var child = part.children[i];
-                var b = child.GetComponent<TweakScale>();
+				Part child = part.children[i];
+				TweakScale b = child.GetComponent<TweakScale>();
                 if (b == null)
                     continue;
 
@@ -763,7 +763,7 @@ namespace TweakScale
         /// </summary>
         private void MarkWindowDirty() // redraw the right-click window with the updated stats
         {
-            foreach (var win in FindObjectsOfType<UIPartActionWindow>().Where(win => win.part == part))
+            foreach (UIPartActionWindow win in FindObjectsOfType<UIPartActionWindow>().Where(win => win.part == part))
             {
                 // This causes the slider to be non-responsive - i.e. after you click once, you must click again, not drag the slider.
                 win.displayDirty = true;
@@ -807,12 +807,12 @@ namespace TweakScale
         /// </summary>
         public double getMassFactor(double rescaleFactor)
         {
-            var exponent = ScaleExponents.getMassExponent(ScaleType.Exponents);
+			double exponent = ScaleExponents.getMassExponent(ScaleType.Exponents);
             return Math.Pow(rescaleFactor, exponent);
         }
         public double getDryCostFactor(double rescaleFactor)
         {
-            var exponent = ScaleExponents.getDryCostExponent(ScaleType.Exponents);
+			double exponent = ScaleExponents.getDryCostExponent(ScaleType.Exponents);
             return Math.Pow(rescaleFactor, exponent);
         }
         public double getVolumeFactor(double rescaleFactor)
@@ -823,11 +823,11 @@ namespace TweakScale
 
         public override string ToString()
         {
-            var result = "TweakScale{\n";
+			string result = "TweakScale{\n";
             result += "\n _setupRun = " + _setupRun;
             result += "\n isFreeScale = " + isFreeScale;
             result += "\n " + ScaleFactors.Length  + " scaleFactors = ";
-            foreach (var s in ScaleFactors)
+            foreach (float s in ScaleFactors)
                 result += s + "  ";
             result += "\n tweakScale = "   + tweakScale;
             result += "\n currentScale = " + currentScale;

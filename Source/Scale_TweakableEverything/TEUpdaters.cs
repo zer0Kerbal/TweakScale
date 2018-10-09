@@ -11,9 +11,9 @@ namespace TweakScale
     {
         static public void RescaleFloatRange(PartModule pm, string name, float factor)
         {
-            var field = pm.GetType().GetField(name);
-            var oldValue = (float)field.GetValue(pm);
-            var fr = (UI_FloatRange)pm.Fields[name].uiControlEditor;
+			System.Reflection.FieldInfo field = pm.GetType().GetField(name);
+			float oldValue = (float)field.GetValue(pm);
+			UI_FloatRange fr = (UI_FloatRange)pm.Fields[name].uiControlEditor;
             fr.maxValue *= factor;
             fr.minValue *= factor;
             fr.stepIncrement *= factor;

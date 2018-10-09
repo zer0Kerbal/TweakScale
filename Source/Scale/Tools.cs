@@ -34,11 +34,11 @@ namespace TweakScale
         /// <returns>The exponentValue in <paramref name="values"/> that's closest to <paramref name="x"/>.</returns>
         public static float Closest(float x, IEnumerable<float> values)
         {
-            var minDistance = float.PositiveInfinity;
-            var result = float.NaN;
-            foreach (var value in values)
+			float minDistance = float.PositiveInfinity;
+			float result = float.NaN;
+            foreach (float value in values)
             {
-                var tmpDistance = Math.Abs(value - x);
+				float tmpDistance = Math.Abs(value - x);
                 if (tmpDistance < minDistance)
                 {
                     result = value;
@@ -56,12 +56,12 @@ namespace TweakScale
         /// <returns>The index of the exponentValue in <paramref name="values"/> that's closest to <paramref name="x"/>.</returns>
         public static int ClosestIndex(float x, IEnumerable<float> values)
         {
-            var minDistance = float.PositiveInfinity;
+			float minDistance = float.PositiveInfinity;
             int result = 0;
             int idx = 0;
-            foreach (var value in values)
+            foreach (float value in values)
             {
-                var tmpDistance = Math.Abs(value - x);
+				float tmpDistance = Math.Abs(value - x);
                 if (tmpDistance < minDistance)
                 {
                     result = idx;
@@ -109,7 +109,7 @@ namespace TweakScale
             {
                 if (obj.GetType().GetMethod("ToString", new Type[] { }).IsOverride())
                 {
-                    var e = obj as IEnumerable;
+					IEnumerable e = obj as IEnumerable;
                     return string.Format("[{0}]", string.Join(", ", e.Cast<object>().Select(a => a.PreFormat().ToString()).ToArray()));
                 }
             }
@@ -133,7 +133,7 @@ namespace TweakScale
             string cfgValue = config.GetValue(name);
             try
             {
-                var result = ConvertEx.ChangeType<T>(cfgValue);
+				T result = ConvertEx.ChangeType<T>(cfgValue);
                 return result;
             }
             catch (Exception ex)
@@ -192,7 +192,7 @@ namespace TweakScale
         /// </summary>
         public static IEnumerable<Type> GetAllTypes()
         {
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 Type[] types;
                 try
@@ -204,7 +204,7 @@ namespace TweakScale
                     types = Type.EmptyTypes;
                 }
 
-                foreach (var type in types)
+                foreach (Type type in types)
                 {
                     yield return type;
                 }
@@ -221,17 +221,17 @@ namespace TweakScale
             if (obj == null)
                 return "(null)";
 
-            var result = new StringBuilder("(");
-            var tt = obj.GetType();
+			StringBuilder result = new StringBuilder("(");
+			Type tt = obj.GetType();
 
             Func<object, string> fmt = a => a == null ? "(null)" :  depth == 0 ? a.ToString() : a.ToString_rec();
 
-            foreach (var field in tt.GetFields(BindingFlags.Public | BindingFlags.Instance))
+            foreach (FieldInfo field in tt.GetFields(BindingFlags.Public | BindingFlags.Instance))
             {
                 result.AppendFormat("{0}: {1}, ", field.Name, fmt(field.GetValue(obj)));
             }
 
-            foreach (var field in tt.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (PropertyInfo field in tt.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 try
                 {

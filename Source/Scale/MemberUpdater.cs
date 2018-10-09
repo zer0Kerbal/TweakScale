@@ -32,20 +32,20 @@ namespace TweakScale
             {
                 return null;
             }
-            var objectType = obj.GetType();
-            var field = objectType.GetField(name, LookupFlags);
-            var property = objectType.GetProperty(name, LookupFlags);
+			Type objectType = obj.GetType();
+			FieldInfo field = objectType.GetField(name, LookupFlags);
+			PropertyInfo property = objectType.GetProperty(name, LookupFlags);
             UI_FloatRange floatRange = null;
             BaseFieldList fields;
             if (obj is PartModule)
             {
                 fields = (obj as PartModule).Fields;
                 try
-                {                    
-                    var fieldData = fields[name];
+				{
+					BaseField fieldData = fields[name];
                     if ((object)fieldData != null)
-                    {
-                        var ctrl = fieldData.uiControlEditor;
+					{
+						UI_Control ctrl = fieldData.uiControlEditor;
                         if (ctrl is UI_FloatRange)
                         {
                             floatRange = ctrl as UI_FloatRange;
@@ -158,53 +158,53 @@ namespace TweakScale
                 return;
             }
 
-            var newValue = source.Value;
-            if (MemberType == typeof(float))
-            {
-                RescaleFloatRange((float)scale);
-                Set((float)newValue * (float)scale);
-            }
-            else if (MemberType == typeof(double))
-            {
-                RescaleFloatRange((float)scale);
-                Set((double)newValue * scale);
-            }
-            else if (MemberType == typeof(int))
-            {
-                Set((int)Math.Round((int)(newValue) * scale));
-            }
-            else if (MemberType == typeof(Vector3))
-            {
-                Set((Vector3)newValue * (float)scale);
-            }
-            else if (MemberType == typeof(FloatCurve))
-            {
-                var curve = (newValue as FloatCurve).Curve;
-                var tmp = new AnimationCurve();
-                for (int i = 0; i < curve.length; i++)
-                {
-                    var k = curve.keys[i];
-                    k.value *= (float)scale;
-                    k.inTangent *= (float)scale;
-                    k.outTangent *= (float)scale;
-                    tmp.AddKey(k);
-                }
-                (Value as FloatCurve).Curve = tmp;
-            }
-            else if (MemberType == typeof(List<ResourceRatio>))
-            {
-                var l = (newValue as List<ResourceRatio>);
-                //List<ResourceRatio> l2 = new List<ResourceRatio>();
-                for (int i=0; i<l.Count; i++)
-                {
-                    var tmp = l[i];
-                    tmp.Ratio *= scale;
-                    (Value as List<ResourceRatio>)[i] = tmp;
-                }
-            }
-            else if (MemberType == typeof(ConversionRecipe))
-            {
-                var l = (newValue as ConversionRecipe);
+			object newValue = source.Value;
+			if (MemberType == typeof(float))
+			{
+				RescaleFloatRange((float)scale);
+				Set((float)newValue * (float)scale);
+			}
+			else if (MemberType == typeof(double))
+			{
+				RescaleFloatRange((float)scale);
+				Set((double)newValue * scale);
+			}
+			else if (MemberType == typeof(int))
+			{
+				Set((int)Math.Round((int)(newValue) * scale));
+			}
+			else if (MemberType == typeof(Vector3))
+			{
+				Set((Vector3)newValue * (float)scale);
+			}
+			else if (MemberType == typeof(FloatCurve))
+			{
+				AnimationCurve curve = (newValue as FloatCurve).Curve;
+				AnimationCurve tmp = new AnimationCurve();
+				for (int i = 0; i < curve.length; i++)
+				{
+					Keyframe k = curve.keys[i];
+					k.value *= (float)scale;
+					k.inTangent *= (float)scale;
+					k.outTangent *= (float)scale;
+					tmp.AddKey(k);
+				}
+				(Value as FloatCurve).Curve = tmp;
+			}
+			else if (MemberType == typeof(List<ResourceRatio>))
+			{
+				List<ResourceRatio> l = (newValue as List<ResourceRatio>);
+				//List<ResourceRatio> l2 = new List<ResourceRatio>();
+				for (int i = 0; i < l.Count; i++)
+				{
+					ResourceRatio tmp = l[i];
+					tmp.Ratio *= scale;
+					(Value as List<ResourceRatio>)[i] = tmp;
+				}
+			}
+			else if (MemberType == typeof(ConversionRecipe))
+			{
+				ConversionRecipe l = (newValue as ConversionRecipe);
                 ScaleResourceList(l.Inputs, scale);
                 ScaleResourceList(l.Outputs, scale);
                 ScaleResourceList(l.Requirements, scale);
@@ -214,8 +214,8 @@ namespace TweakScale
         public void ScaleResourceList(List<ResourceRatio> l, double scale)
         {
             for (int i = 0; i < l.Count; i++)
-            {
-                var tmp = l[i];
+			{
+				ResourceRatio tmp = l[i];
                 tmp.Ratio *= scale;
                 l[i] = tmp;
             }

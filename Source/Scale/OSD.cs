@@ -19,7 +19,7 @@ namespace TweakScale
 
         private static GUIStyle CreateStyle(Color color)
         {
-            var style = new GUIStyle
+			GUIStyle style = new GUIStyle
             {
                 stretchWidth = true,
                 alignment = TextAnchor.MiddleCenter,
@@ -32,7 +32,7 @@ namespace TweakScale
 
         private float CalcHeight()
         {
-            var style = CreateStyle(Color.white);
+			GUIStyle style = CreateStyle(Color.white);
             return _msgs.Aggregate(.0f, (a, m) => a + style.CalcSize(new GUIContent(m.Text)).y);
         }
 
@@ -40,7 +40,7 @@ namespace TweakScale
         {
             if (_msgs.Count == 0) return;
             _msgs.RemoveAll(m => Time.time >= m.HideAt);
-            var h = CalcHeight();
+			float h = CalcHeight();
             GUILayout.BeginArea(new Rect(0, Screen.height * 0.1f, Screen.width, h), CreateStyle(Color.white));
             _msgs.ForEach(m => GUILayout.Label(m.Text, CreateStyle(m.Color)));
             GUILayout.EndArea();
@@ -68,7 +68,7 @@ namespace TweakScale
 
         public void AddMessage(String text, Color color, float shownFor = 3)
         {
-            var msg = new Message { Text = text, Color = color, HideAt = Time.time + shownFor };
+			Message msg = new Message { Text = text, Color = color, HideAt = Time.time + shownFor };
             _msgs.Add(msg);
         }
     }

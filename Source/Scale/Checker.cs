@@ -194,11 +194,11 @@ namespace TweakScale
 
         private static IEnumerable<Type> GetAllTypes()
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+			Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             int numAsm = assemblies.Length;
             for (int i=0; i<numAsm; i++)
             {
-                var assembly = assemblies[i];
+				Assembly assembly = assemblies[i];
                 Type[] types;
                 try
                 {

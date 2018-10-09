@@ -28,10 +28,10 @@ namespace TweakScale
     {
         public static IEnumerable<T> SkipLast<T>(this IEnumerable<T> list)
         {
-            var enumerator = list.GetEnumerator();
-            if (!enumerator.MoveNext())
-                yield break;
-            var curr = enumerator.Current;
+			IEnumerator<T> enumerator = list.GetEnumerator();
+			if (!enumerator.MoveNext())
+				yield break;
+			T curr = enumerator.Current;
             while (enumerator.MoveNext())
             {
                 yield return curr;
@@ -41,9 +41,9 @@ namespace TweakScale
 
         public static IEnumerable<T> SkipLast<T>(this IEnumerable<T> list, int n)
         {
-            var enumerator = list.GetEnumerator();
-            var buffer = new T[n];
-            var idx = 0;
+			IEnumerator<T> enumerator = list.GetEnumerator();
+			T[] buffer = new T[n];
+			int idx = 0;
             while (enumerator.MoveNext() && idx < n)
             {
                 buffer[idx] = enumerator.Current;

@@ -39,7 +39,7 @@ namespace TweakScale
         public void Load()
         {
             _config.load();
-            var rawNames = _config.GetValue(_name, "");
+			string rawNames = _config.GetValue(_name, "");
             if (!string.IsNullOrEmpty(rawNames))
             {
                 ParseString(rawNames);
@@ -50,8 +50,8 @@ namespace TweakScale
         private void ParseString(string s)
         {
 
-            var names = s.Split('+');
-            var keys = names.Select(Enums.Parse<KeyCode>).ToList();
+			string[] names = s.Split('+');
+			List<KeyCode> keys = names.Select(Enums.Parse<KeyCode>).ToList();
             _trigger = keys.Last();
 
             SetModifiers(keys.SkipLast().ToList());
@@ -59,8 +59,8 @@ namespace TweakScale
 
         private void Save()
         {
-            var result = "";
-            foreach (var kv in _modifiers)
+			string result = "";
+            foreach (KeyValuePair<KeyCode, bool> kv in _modifiers)
                 if (kv.Value)
                     result += kv.Key + "+";
 

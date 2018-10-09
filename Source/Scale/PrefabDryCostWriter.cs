@@ -17,11 +17,11 @@ namespace TweakScale
 
         private void WriteDryCost()
         {
-            var partsList = PartLoader.LoadedPartsList;
+			System.Collections.Generic.List<AvailablePart> partsList = PartLoader.LoadedPartsList;
 
-            foreach (var p in partsList)
+            foreach (AvailablePart p in partsList)
             {
-                var prefab = p.partPrefab;
+				Part prefab = p.partPrefab;
                 if (prefab == null)
                 {
                     Tools.LogWf("partPrefab is null: " + p.name);
@@ -37,7 +37,7 @@ namespace TweakScale
                     if (!prefab.Modules.Contains("TweakScale"))
                         continue;
 
-                    var m = prefab.Modules["TweakScale"] as TweakScale;
+					TweakScale m = prefab.Modules["TweakScale"] as TweakScale;
                     m.DryCost = (float)(p.cost - prefab.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
                     if (prefab.Modules.Contains("FSfuelSwitch"))
                         m.ignoreResourcesForCost = true;

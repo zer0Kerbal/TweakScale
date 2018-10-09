@@ -35,13 +35,13 @@ namespace TweakScale
     {
         override public void OnStart()
         {
-            var genericRescalable = Tools.GetAllTypes()
+			Type[] genericRescalable = Tools.GetAllTypes()
                 .Where(IsGenericRescalable)
                 .ToArray();
 
-            foreach (var gen in genericRescalable)
+            foreach (Type gen in genericRescalable)
             {
-                var t = gen.GetInterfaces()
+				Type t = gen.GetInterfaces()
                     .First(a => a.IsGenericType &&
                     a.GetGenericTypeDefinition() == typeof(IRescalable<>));
 
@@ -51,7 +51,7 @@ namespace TweakScale
 
         private static void RegisterGenericRescalable(Type resc, Type arg)
         {
-            var c = resc.GetConstructor(new[] { arg });
+			ConstructorInfo c = resc.GetConstructor(new[] { arg });
             if (c == null)
                 return;
             Func<PartModule, IRescalable> creator = pm => (IRescalable)c.Invoke(new object[] { pm });
@@ -85,11 +85,11 @@ namespace TweakScale
         // Creates an updater for each modules attached to destination part.
         public static IEnumerable<IRescalable> CreateUpdaters(Part part)
         {
-            var myUpdaters = part
+			IEnumerable<IRescalable> myUpdaters = part
                 .Modules.Cast<PartModule>()
                 .Select(CreateUpdater)
                 .Where(updater => updater != null);
-            foreach (var updater in myUpdaters)
+            foreach (IRescalable updater in myUpdaters)
             {
                 yield return updater;
             }
@@ -99,8 +99,8 @@ namespace TweakScale
 
         private static IRescalable CreateUpdater(PartModule module)
         {
-// ReSharper disable once SuspiciousTypeConversion.Global
-            var updater = module as IRescalable;
+			// ReSharper disable once SuspiciousTypeConversion.Global
+			IRescalable updater = module as IRescalable;
             if (updater != null)
             {
                 return updater;
@@ -182,13 +182,13 @@ namespace TweakScale
             {
                 return;
             }
-            var factor = _ts.ScalingFactor;
+			ScalingFactor factor = _ts.ScalingFactor;
 
             if (!_scales.ContainsKey(pe))
             {
                 _scales[pe] = new EmitterData(pe);
             }
-            var ed = _scales[pe];
+			EmitterData ed = _scales[pe];
 
             pe.minSize = ed.MinSize * factor.absolute.linear;
             pe.maxSize = ed.MaxSize * factor.absolute.linear;
@@ -215,16 +215,16 @@ namespace TweakScale
                 return;
             GetFieldInfos();
 
-            var fxn = _part.GetComponents<EffectBehaviour>();
+			EffectBehaviour[] fxn = _part.GetComponents<EffectBehaviour>();
             _rescale = fxn.Length != 0;
-            foreach (var fx in fxn)
+            foreach (EffectBehaviour fx in fxn)
             {
                 if (fx is ModelMultiParticleFX)
                 {
-                    var p = _mmpFxField.GetValue(fx) as List<KSPParticleEmitter>;
+					List<KSPParticleEmitter> p = _mmpFxField.GetValue(fx) as List<KSPParticleEmitter>;
                     if (p == null)
                         continue;
-                    foreach (var pe in p)
+                    foreach (KSPParticleEmitter pe in p)
                     {
                         UpdateParticleEmitter(pe);
                     }
@@ -232,7 +232,7 @@ namespace TweakScale
                 }
                 else if (fx is ModelParticleFX)
                 {
-                    var pe = _mpFxField.GetValue(fx) as KSPParticleEmitter;
+					KSPParticleEmitter pe = _mpFxField.GetValue(fx) as KSPParticleEmitter;
                     UpdateParticleEmitter(pe);
                     _rescale = false;
                 }

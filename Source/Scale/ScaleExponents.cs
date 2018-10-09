@@ -45,7 +45,7 @@ namespace TweakScale
             if (_globalListLoaded)
                 return;
 
-            var tmp = GameDatabase.Instance.GetConfigs(ExponentConfigName)
+			IEnumerable<ScaleExponents> tmp = GameDatabase.Instance.GetConfigs(ExponentConfigName)
                 .Select(a => new ScaleExponents(a.config));
 
             _globalList = tmp
@@ -97,7 +97,7 @@ namespace TweakScale
             _children = new Dictionary<string, ScaleExponents>();
             _ignores = new List<string>();
 
-            foreach (var value in node.values.OfType<ConfigNode.Value>().Where(a=>a.name != "name"))
+            foreach (ConfigNode.Value value in node.values.OfType<ConfigNode.Value>().Where(a=>a.name != "name"))
             {
                 if (value.name.StartsWith("!"))
                 {
@@ -113,7 +113,7 @@ namespace TweakScale
                 }
             }
 
-            foreach (var childNode in node.nodes.OfType<ConfigNode>())
+            foreach (ConfigNode childNode in node.nodes.OfType<ConfigNode>())
             {
                 _children[childNode.name] = new ScaleExponents(childNode);
             }
@@ -136,15 +136,15 @@ namespace TweakScale
             {
                 Tools.LogWf("Wrong merge target! A name {0}, B name {1}", destination._id, source._id);
             }
-            foreach (var value in source._exponents.Where(value => !destination._exponents.ContainsKey(value.Key)))
+            foreach (KeyValuePair<string, ScalingMode> value in source._exponents.Where(value => !destination._exponents.ContainsKey(value.Key)))
             {
                 destination._exponents[value.Key] = value.Value;
             }
-            foreach (var value in source._ignores.Where(value => !destination._ignores.Contains(value)))
+            foreach (string value in source._ignores.Where(value => !destination._ignores.Contains(value)))
             {
                 destination._ignores.Add(value);
             }
-            foreach (var child in source._children)
+            foreach (KeyValuePair<string, ScaleExponents> child in source._children)
             {
                 if (destination._children.ContainsKey(child.Key))
                 {
@@ -169,8 +169,8 @@ namespace TweakScale
         /// <returns>The rescaled exponentValue.</returns>
         static private void Rescale(MemberUpdater current, MemberUpdater baseValue, string name, ScalingMode scalingMode, ScalingFactor factor)
         {
-            var exponentValue = scalingMode.Exponent;
-            var exponent = double.NaN;
+			string exponentValue = scalingMode.Exponent;
+			double exponent = double.NaN;
             double[] values = null;
             if (exponentValue.Contains(','))
             {
@@ -197,15 +197,15 @@ namespace TweakScale
 
             if (current.MemberType.GetInterface("IList") != null)
             {
-                var v = (IList)current.Value;
-                var v2 = (IList)baseValue.Value;
+				IList v = (IList)current.Value;
+				IList v2 = (IList)baseValue.Value;
                 if(v == null)
                 {
                     Tools.LogWf("current.Value == null!");
                     return;
                 }
 
-                for (var i = 0; i < v.Count && i < v2.Count; ++i)
+                for (int i = 0; i < v.Count && i < v2.Count; ++i)
                 {
                     if (values != null)
                     {
@@ -273,32 +273,32 @@ namespace TweakScale
             if (ShouldIgnore(part))
                 return;
 
-            var enumerable = obj as IEnumerable;
+			IEnumerable enumerable = obj as IEnumerable;
             if (enumerable != null)
             {
                 UpdateEnumerable(enumerable, (IEnumerable)baseObj, factor, part);
                 return;
             }
 
-            foreach (var nameExponentKV in _exponents)
+            foreach (KeyValuePair<string, ScalingMode> nameExponentKV in _exponents)
             {
-                var value = MemberUpdater.Create(obj, nameExponentKV.Key);
+				MemberUpdater value = MemberUpdater.Create(obj, nameExponentKV.Key);
                 if (value == null)
                 {
                     continue;
                 }
 
-                var baseValue = nameExponentKV.Value.UseRelativeScaling ? null : MemberUpdater.Create(baseObj, nameExponentKV.Key);
+				MemberUpdater baseValue = nameExponentKV.Value.UseRelativeScaling ? null : MemberUpdater.Create(baseObj, nameExponentKV.Key);
                 Rescale(value, baseValue ?? value, nameExponentKV.Key, nameExponentKV.Value, factor);
             }
 
-            foreach (var child in _children)
+            foreach (KeyValuePair<string, ScaleExponents> child in _children)
             {
-                var childName = child.Key;
-                var childObjField = MemberUpdater.Create(obj, childName);
+				string childName = child.Key;
+				MemberUpdater childObjField = MemberUpdater.Create(obj, childName);
                 if (childObjField == null || child.Value == null)
                     continue;
-                var baseChildObjField = MemberUpdater.Create(baseObj, childName);
+				MemberUpdater baseChildObjField = MemberUpdater.Create(baseObj, childName);
                 child.Value.UpdateFields(childObjField.Value, (baseChildObjField ?? childObjField).Value, factor, part);
             }
         }
@@ -312,19 +312,19 @@ namespace TweakScale
         /// <param name="part">The part the object is on.</param>
         private void UpdateEnumerable(IEnumerable obj, IEnumerable prefabObj, ScalingFactor factor, Part part = null)
         {
-            var prefabObjects = prefabObj as object[] ?? prefabObj.Cast<object>().ToArray();
-            var urrentObjects = obj as object[] ?? obj.Cast<object>().ToArray();
+			object[] prefabObjects = prefabObj as object[] ?? prefabObj.Cast<object>().ToArray();
+			object[] urrentObjects = obj as object[] ?? obj.Cast<object>().ToArray();
             
             if (prefabObj == null || urrentObjects.Length != prefabObjects.Length)
             {
                 prefabObjects = ((object)null).Repeat().Take(urrentObjects.Length).ToArray();
             }
 
-            foreach (var item in urrentObjects.Zip(prefabObjects, ModuleAndPrefab.Create))
-            {
-                if (!string.IsNullOrEmpty(_name) && _name != "*") // Operate on specific elements, not all.
-                {
-                    var childName = item.Current.GetType().GetField("name");
+            foreach (ModuleAndPrefab item in urrentObjects.Zip(prefabObjects, ModuleAndPrefab.Create))
+			{
+				if (!string.IsNullOrEmpty(_name) && _name != "*") // Operate on specific elements, not all.
+				{
+					System.Reflection.FieldInfo childName = item.Current.GetType().GetField("name");
                     if (childName != null)
                     {
                         if (childName.FieldType != typeof(string) || (string)childName.GetValue(item.Current) != _name)
@@ -382,19 +382,19 @@ namespace TweakScale
                 exponents["Part"].UpdateFields(part, prefabObj, factor, part);
             }
 
-            var modulePairs = part.Modules.Zip(prefabObj.Modules, ModuleAndPrefab.Create);
-            //foreach (var m in modulePairs)
-            //{
-            //    Debug.Log("moduleAndPrefab: " + (m.Prefab as PartModule).moduleName + " " + m.Prefab.GetType().ToString());
-            //}
+			IEnumerable<ModuleAndPrefab> modulePairs = part.Modules.Zip(prefabObj.Modules, ModuleAndPrefab.Create);
+			//foreach (var m in modulePairs)
+			//{
+			//    Debug.Log("moduleAndPrefab: " + (m.Prefab as PartModule).moduleName + " " + m.Prefab.GetType().ToString());
+			//}
 
-            var modulesAndExponents = modulePairs.Join(exponents,
+			ModulesAndExponents[] modulesAndExponents = modulePairs.Join(exponents,
                                         modules => ((PartModule)modules.Current).moduleName,
                                         exps => exps.Key,
                                         ModulesAndExponents.Create).ToArray();
 
             // include derived classes
-            foreach (var e in exponents)
+            foreach (KeyValuePair<string, ScaleExponents> e in exponents)
             {
                 //Debug.Log("check type: " + e.Key +", "+e.Value._name +", "+e.Value._id);
                 Type type = GetType(e.Key);
@@ -402,7 +402,7 @@ namespace TweakScale
                 {
                     continue;
                 }
-                foreach (var m in modulePairs)
+                foreach (ModuleAndPrefab m in modulePairs)
                 {
                     if (m.Current.GetType().IsSubclassOf(type) )
                     {
@@ -415,7 +415,7 @@ namespace TweakScale
                 }
             }
 
-            foreach (var modExp in modulesAndExponents)
+            foreach (ModulesAndExponents modExp in modulesAndExponents)
             {
                 //Debug.Log("modExP: " +(modExp.Prefab as PartModule).moduleName +" "+ modExp.Prefab.GetType().ToString());
                 modExp.Exponents.UpdateFields(modExp.Current, modExp.Prefab, factor, part);
@@ -424,9 +424,9 @@ namespace TweakScale
 
         public static Type GetType(string typeName)
         {
-            var type = Type.GetType(typeName);
+			Type type = Type.GetType(typeName);
             if (type != null) return type;
-            foreach (var a in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (System.Reflection.Assembly a in AppDomain.CurrentDomain.GetAssemblies())
             {
                 type = a.GetType(typeName);
                 if (type != null)
@@ -441,7 +441,7 @@ namespace TweakScale
             if (Exponents.ContainsKey("Part") &&
                 Exponents["Part"]._exponents.ContainsKey("mass"))
             {
-                var exponentValue = Exponents["Part"]._exponents["mass"].Exponent;
+				string exponentValue = Exponents["Part"]._exponents["mass"].Exponent;
                 if (exponentValue.Contains(','))
                 {
                     Tools.LogWf("getMassExponent not yet implemented for this kind of config");
@@ -461,7 +461,7 @@ namespace TweakScale
             if (Exponents.ContainsKey("TweakScale") &&
                 Exponents["TweakScale"]._exponents.ContainsKey("DryCost"))
             {
-                var exponentValue = Exponents["TweakScale"]._exponents["DryCost"].Exponent;
+				string exponentValue = Exponents["TweakScale"]._exponents["DryCost"].Exponent;
                 if (exponentValue.Contains(','))
                 {
                     Tools.LogWf("getCostExponent not yet implemented for this kind of config");
@@ -520,15 +520,15 @@ namespace TweakScale
 
         public static Dictionary<string, ScaleExponents> CreateExponentsForModule(ConfigNode node, Dictionary<string, ScaleExponents> parent)
         {
-            //Debug.Log("CreateExponentsForModule: node=" + node.ToString());
+			//Debug.Log("CreateExponentsForModule: node=" + node.ToString());
 
-            var local = node.nodes
+			Dictionary<string, ScaleExponents> local = node.nodes
                 .OfType<ConfigNode>()
                 .Where(IsExponentBlock)
                 .Select(a => new ScaleExponents(a))
                 .ToDictionary(a => a._id);
 
-            foreach (var pExp in parent.Values)
+            foreach (ScaleExponents pExp in parent.Values)
             {
                 if (local.ContainsKey(pExp._id))
                 {
@@ -540,7 +540,7 @@ namespace TweakScale
                 }
             }
 
-            foreach (var gExp in _globalList.Values)
+            foreach (ScaleExponents gExp in _globalList.Values)
             {
                 if (local.ContainsKey(gExp._id))
                 {

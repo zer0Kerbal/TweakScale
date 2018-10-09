@@ -33,8 +33,8 @@ namespace TweakScale
         /// <returns></returns>
         public static IEnumerable<TResult> Zip<T1, T2, TResult>(this IEnumerable<T1> a, IEnumerable<T2> b, Func<T1, T2, TResult> fn)
         {
-            var v1 = a.GetEnumerator();
-            var v2 = b.GetEnumerator();
+			IEnumerator<T1> v1 = a.GetEnumerator();
+			IEnumerator<T2> v2 = b.GetEnumerator();
 
             while (v1.MoveNext() && v2.MoveNext())
             {
@@ -63,8 +63,8 @@ namespace TweakScale
         /// <returns></returns>
         public static IEnumerable<TResult> Zip<TResult>(this IEnumerable a, IEnumerable b, Func<object, object, TResult> fn)
         {
-            var v1 = a.GetEnumerator();
-            var v2 = b.GetEnumerator();
+			IEnumerator v1 = a.GetEnumerator();
+			IEnumerator v2 = b.GetEnumerator();
 
             while (v1.MoveNext() && v2.MoveNext())
             {
@@ -90,7 +90,7 @@ namespace TweakScale
         /// <returns>The first field of the given type, or null.</returns>
         public static FieldInfo GetNonPublicFieldByType<T>(this Type t)
         {
-            var f = t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+			FieldInfo[] f = t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
             return f.FirstOrDefault(e => e.FieldType == typeof (T));
         }
         
@@ -153,7 +153,7 @@ namespace TweakScale
         /// <returns>True if <paramref name="source"/> contains duplicates, otherwise false.</returns>
         public static bool ContainsDuplicates<T>(this IEnumerable<T> source)
         {
-            var tmp = new HashSet<T>();
+			HashSet<T> tmp = new HashSet<T>();
             return source.Any(item => !tmp.Add(item));
         }
 
@@ -179,8 +179,8 @@ namespace TweakScale
         /// <returns>A HashSet contaiting all the items in <paramref name="source"/>.</returns>
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source)
         {
-            var result = new HashSet<T>();
-            foreach (var item in source)
+			HashSet<T> result = new HashSet<T>();
+            foreach (T item in source)
             {
                 result.Add(item);
             }

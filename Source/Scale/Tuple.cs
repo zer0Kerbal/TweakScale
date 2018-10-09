@@ -49,7 +49,7 @@ namespace TweakScale
             {
                 return false;
             }
-            var other = (Tuple<T1, T2>)obj;
+			Tuple<T1, T2> other = (Tuple<T1, T2>)obj;
             return cmp.Equals(Item1, other.Item1) && cmp.Equals(Item2, other.Item2);
         }
 
@@ -74,8 +74,8 @@ namespace TweakScale
             {
                 return 1;
             }
-            var other = (Tuple<T1, T2>)obj;
-            var result = cmp.Compare(Item1, other.Item1);
+			Tuple<T1, T2> other = (Tuple<T1, T2>)obj;
+			int result = cmp.Compare(Item1, other.Item1);
             if (result != 0)
             {
                 return result;
