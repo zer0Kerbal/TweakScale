@@ -6,6 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2BE63D8B-350E-4EDD-959C-4B7397984364}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <BaseIntermediateOutputPath>..\..\obj\Scale_Redist</BaseIntermediateOutputPath>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Scale_Redist</RootNamespace>
     <AssemblyName>Scale_Redist</AssemblyName>

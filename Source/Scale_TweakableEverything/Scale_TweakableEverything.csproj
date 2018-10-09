@@ -5,6 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1E379ED8-DB42-4FC1-B7F5-BF9A9A4F3B2E}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <BaseIntermediateOutputPath>..\..\obj\Scale_TweakableEverything</BaseIntermediateOutputPath>
     <RootNamespace>Scale_TweakableEverything</RootNamespace>
     <AssemblyName>Scale_TweakableEverything</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
