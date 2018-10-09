@@ -293,8 +293,10 @@ See [here](./LICENSE).
 
 ## Dependencies
 
-* [ModuleManager](https://github.com/net-lisias-kspu/ModuleManager)
-* [KSP API Extensions/L](https://github.com/net-lisias-ksp/KSPAPIExtensions)
+* Hard Dependencies
+	* [KSP API Extensions/L](https://github.com/net-lisias-ksp/KSPAPIExtensions)
+* Soft Dependencies
+	* [ModuleManager](https://github.com/net-lisias-kspu/ModuleManager)
 
 
 ## UPSTREAM
