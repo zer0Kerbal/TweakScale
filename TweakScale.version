@@ -4,11 +4,6 @@
 	"DOWNLOAD"	: "https://github.com/net-lisias-kspu/TweakScale/releases",
 	"CHANGE_LOG"	: "https://raw.githubusercontent.com/net-lisias-kspu/TweakScale/CHANGE_LOG.md",
 	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/net-lisias-kspu/TweakScale/CHANGES.md",
-	"GITHUB":{
-		"USERNAME"		: "net-lisias-kspu",
-		"REPOSITORY"		: "TweakScale",
-		"ALLOW_PRE_RELEASE"	: false
-		},
 	"VERSION":{
 		"MAJOR":2,
 		"MINOR":3,
