@@ -6,8 +6,8 @@ TweakScale lets you change the size of a part. Unofficial fork by Lisias.
 ## In a Hurry
 
 * [Latest Release](https://github.com/net-lisias-kspu/TweakScale/releases)
+	+ [Binaries](https://github.com/net-lisias-kspu/TweakScale/tree/Archive)
 * [Source](https://github.com/net-lisias-kspu/TweakScale)
-* [Binaries](https://github.com/net-lisias-kspu/TweakScale/tree/Archive)
 * [Change Log](./CHANGE_LOG.md)
 
 
