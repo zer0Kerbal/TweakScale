@@ -1,14 +1,27 @@
-# TweakScale Unofficial
+# TweakScale : Under New Management
 
-TweakScale lets you change the size of a part. Unofficial fork by Lisias.
+TweakScale lets you change the size of a part. Now officially under Lisias' management.
 
 
 ## In a Hurry
 
-* [Latest Release](https://github.com/net-lisias-kspu/TweakScale/releases)
-	+ [Binaries](https://github.com/net-lisias-kspu/TweakScale/tree/Archive)
-* [Source](https://github.com/net-lisias-kspu/TweakScale)
-* [Change Log](./CHANGE_LOG.md)
+* [Source](https://github.com/net-lisias-ksp/TweakScale)
+	+ [Issue Tracker](https://github.com/net-lisias-ksp/TweakScale/issues)
+	+ [Heterodox Branch](https://github.com/net-lisias-kspu/TweakScale/tree/dev/heterodox)
+		- For the *livin' la vida loca*.
+* Documentation
+	+ [Forum](https://forum.kerbalspaceprogram.com/index.php?/topic/179030-141-tweakscale-under-new-management/&)
+	+ [Homepage](http://ksp.lisias.net/add-ons/TweakScale) on L Aerospace KSP Division
+	+ [Project's README](https://github.com/net-lisias-ksp/TweakScale/blob/master/README.md)
+	+ [Change Log](./CHANGE_LOG.md)
+	+ [TODO](./TODO.md) list
+* Official Distribution Sites:
+	+ [CurseForge](https://kerbal.curseforge.com/projects/tweakscale)
+	+ [SpaceDock](https://spacedock.info/mod/127/TweakScale)
+	+ [Homepage](http://ksp.lisias.net/add-ons/TweakScale) on L Aerospace
+	+ [Source and Binaries](https://github.com/net-lisias-ksp/TweakScale) on GitHub.
+	+ [Latest Release](https://github.com/net-lisias-ksp/TweakScale/releases)
+		- [Binaries](https://github.com/net-lisias-ksp/TweakScale/Archive)
 
 
 ## Description
@@ -286,22 +299,23 @@ In case someone's confused:
 
 ### License
 
-[CC BY-NC-SA 2.0](https://creativecommons.org/licenses/by-nc/2.0/) and/or [WTFPL](http://www.wtfpl.net) (this fork maintainer is not sure, as the original author didn't explicitly relicensed it).
+[WTFPL](http://www.wtfpl.net), see [here](./LICENSE).
 
-See [here](./LICENSE).
++ You are free to:
+	- Do whatever you want!
++ Under the following terms:
+	- You follow your heart's desire. :)
 
 
 ## Dependencies
 
-* Hard Dependencies
-	* [KSP API Extensions/L](https://github.com/net-lisias-ksp/KSPAPIExtensions)
 * Soft Dependencies
-	* [ModuleManager](https://github.com/net-lisias-kspu/ModuleManager)
+	* ModuleManager (included)
 
 
-## UPSTREAM
+## References
 
-* [pellinor](https://forum.kerbalspaceprogram.com/index.php?/profile/85299-pellinor/): CURRENT MAINTAINER
+* [pellinor](https://forum.kerbalspaceprogram.com/index.php?/profile/85299-pellinor/): PARENT / Previous Maintainer
 	+ [Forum](https://forum.kerbalspaceprogram.com/index.php?/topic/101540-14x-tweakscale-v2312apr-16/)
 	+ [SpaceDock](http://spacedock.info/mod/127/TweakScale)
 	+ [CurseForge](https://kerbal.curseforge.com/projects/tweakscale)
