@@ -21,6 +21,9 @@ deploy_assets() {
 	cd $cur_path
 }
 
+echo "We don't publish Experimental artifacts!"
+exit 0
+
 scp -i $SSH_ID ./GameData/$PACKAGE/$VERSIONFILE $SITE:/$TARGET_CONTENT_PATH
 deploy_assets ./PR_material ./PR_material/$PACKAGE
 deploy_md README.md $PACKAGE.md
