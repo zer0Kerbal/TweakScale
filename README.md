@@ -30,7 +30,7 @@
 
 TweakScale lets you change the size of a part. Not just that, but it will figure out how much fuel is in the resized part. And if it's an engine, it will become more powerful by scaling it bigger, or weaker by scaling it smaller.
 
-![uzqeB84.gif](./Docs/img/uzqeB84.gif)
+![uzqeB84.gif](./PR_material/TweakScale/img/uzqeB84.gif)
 
 TweakScale uses Swamp-Ig's KSPAPIExtensions and Module Manager.
 
@@ -74,16 +74,16 @@ Fission reactors, antimatter reactors and antimatter-initiated reactors are not 
 
 ### How to Use
 First add a part that's the wrong size:
-![NxMyyTK.png](./Docs/img/NxMyyTK.png)
+![NxMyyTK.png](./PR_material/TweakScale/img/NxMyyTK.png)
 
 Right click:
-![BBw1x4M.png](./Docs/img/BBw1x4M.png)
+![BBw1x4M.png](./PR_material/TweakScale/img/BBw1x4M.png)
 
 See how it says 3.75m? Well, the command capsule is 2.5m, so let's change it. You do this by pressing the << >> buttons or dragging the slider.
-![LCEiPHP.png](./Docs/img/LCEiPHP.png)
+![LCEiPHP.png](./PR_material/TweakScale/img/LCEiPHP.png)
 
 See how well it fits?
-![fAF2xsT.png](./Docs/img/fAF2xsT.png)
+![fAF2xsT.png](./PR_material/TweakScale/img/fAF2xsT.png)
 
 
 ### Examples
