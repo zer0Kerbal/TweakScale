@@ -36,16 +36,10 @@
     <Compile Include="ScalingFactor.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="..\Version.cs">
-      <DependentUpon>Version.tt</DependentUpon>
+      <Link>Properties\Version.cs</Link>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Version.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <Link>Properties\Version.tt</Link>
-      <LastGenOutput>Version.cs</LastGenOutput>
-    </None>
-  </ItemGroup>  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
