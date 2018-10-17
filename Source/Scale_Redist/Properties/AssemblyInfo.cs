@@ -32,5 +32,11 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion(TweakScale.Version.Number)]
+
+// this is the API definition of TweakScale.
+// Other mods can include this in their distribution and compile against it without depending on a TweakScale version.
+// It does not depend on KSP and has not been touched since biotronic wrote it.
+// So its version should stay at 1.0, to make clear that other mods do not need to compile against a new version
+// (pellinor)
+[assembly: AssemblyVersion("1.0")]
 [assembly: AssemblyFileVersion(TweakScale.Version.Number)]
