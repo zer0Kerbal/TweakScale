@@ -1,6 +1,8 @@
-# TweakScale : Under New Management
+# TweakScale /L : Under New Management
 
-TweakScale lets you change the size of a part. Now officially under Lisias' management.
+**TweakScale** lets you change the size of a part.
+
+**TweakScale /L** is TweakScale under Lisias' management.
 
 
 ## In a Hurry
@@ -8,7 +10,7 @@ TweakScale lets you change the size of a part. Now officially under Lisias' mana
 * [Source](https://github.com/net-lisias-ksp/TweakScale)
 	+ [Issue Tracker](https://github.com/net-lisias-ksp/TweakScale/issues)
 	+ [Heterodox Branch](https://github.com/net-lisias-kspu/TweakScale/tree/dev/heterodox)
-		- For the *livin' la vida loca*.
+		- " *Lasciate ogne speranza, voi ch'intrate* "
 * Documentation
 	+ [Forum](https://forum.kerbalspaceprogram.com/index.php?/topic/179030-141-tweakscale-under-new-management/&)
 	+ [Homepage](http://ksp.lisias.net/add-ons/TweakScale) on L Aerospace KSP Division
@@ -297,6 +299,25 @@ In case someone's confused:
 * `MODULE { name = TweakScale ... }` goes in the PART you want scalable. (or a ModuleManager .cfg, of course)
 * `TWEAKSCALEEXPONENTS` and `SCALETYPE` go top-level in some .cfg. It doesn't matter which, it doesn't matter where. As long as it's called .cfg and is somewhere in gamedata, it'll be correctly registered. The suggested location is `Gamedata/MyMod/MyMod_TweakScale.cfg`
 
+## Installation
+
+If you have previously installed TweakScale, delete your `GameData\TweakScale` folder contents.
+
+Unzip the contents into your KSP directory. Overwrite existent files.
+
+If you **DO NOT** have installed TweakableEverything, delete `GameData\TweakableEverything` from your GameData.
+
+**Warning**: By reinstalling (or later installing) TweakableEverything, you will need to update TweakScale again!
+
+If you use any other fork of ModuleManager, or already have a newer one, delete `GameData\ModuleManager.3.0.7.dll` from your KSP installment.
+
+**Warning**: You **must** be sure that there is **only one** ModuleManager dll in your entire installment!
+
+### Dependencies
+
+* Soft Dependencies
+	* ModuleManager (included)
+
 ### License
 
 [WTFPL](http://www.wtfpl.net), see [here](./LICENSE).
@@ -306,11 +327,7 @@ In case someone's confused:
 + Under the following terms:
 	- You follow your heart's desire. :)
 
-
-## Dependencies
-
-* Soft Dependencies
-	* ModuleManager (included)
+See [NOTICE](./NOTICE) for further copyright and trademarks notices.
 
 
 ## References
