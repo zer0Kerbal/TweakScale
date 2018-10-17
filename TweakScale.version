@@ -6,9 +6,9 @@
 	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/net-lisias-ksp/TweakScale/CHANGES.md",
 	"VERSION":{
 		"MAJOR":2,
-		"MINOR":3,
-		"PATCH":12,
-		"BUILD":2
+		"MINOR":4,
+		"PATCH":0,
+		"BUILD":1
 		},
 	"KSP_VERSION":{
 		"MAJOR":1,
