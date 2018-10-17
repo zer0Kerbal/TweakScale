@@ -33,14 +33,20 @@ deploy() {
 	fi
 }
 
+deploy_md() {
+	local MD=$1
+	#![NxMyyTK.png](./PR_material/img/NxMyyTK.png)
+	sed $MD -e "s/!\\[.\+\\]\\(.\+\\)//g" > "./GameData/$TARGETDIR"/$MD
+}
+
 VERSIONFILE=$PACKAGE.version
 
 check
 cp $VERSIONFILE "./GameData/$TARGETDIR"
 cp CHANGE_LOG.md "./GameData/$TARGETDIR"
-cp README.md  "./GameData/$TARGETDIR"
 cp *LICENSE "./GameData/$TARGETDIR"
 cp NOTICE "./GameData/$TARGETDIR"
+deploy_md README.md
 
 for dll in Scale Scale_Redist; do
 #    deploy_dev $dll
