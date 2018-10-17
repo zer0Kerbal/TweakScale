@@ -34,3 +34,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion(TweakScale.Version.Number)]
 [assembly: AssemblyFileVersion(TweakScale.Version.Number)]
 [assembly: KSPAssembly("Scale", TweakScale.Version.major, TweakScale.Version.minor)]
+
+[assembly: KSPAssemblyDependency("KSPe", 2, 0)]

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
-using KSP.IO;
-using TweakScale.Annotations;
+using System.IO;
 using UnityEngine;
+using KSPe.IO;
+using KSPe.IO.Data;
+using TweakScale.Annotations;
 
 namespace TweakScale
 {
@@ -10,14 +12,7 @@ namespace TweakScale
     {
         private readonly OSD _osd = new OSD();
         private readonly Dictionary<string, Hotkeyable> _hotkeys = new Dictionary<string, Hotkeyable>();
-        private /*readonly*/ PluginConfiguration _config;
-
-		private void Awake()
-		{
-            base.Awake();
-
-            _config = PluginConfiguration.CreateForType<TweakScale>();
-		}
+        private readonly PluginConfiguration _config = PluginConfiguration.CreateForType<TweakScale>();
 
         public PluginConfiguration Config {
             get { return _config; }
@@ -32,7 +27,7 @@ namespace TweakScale
         [UsedImplicitly]
         private void Update()
         {
-            foreach (var key in _hotkeys.Values)
+            foreach (Hotkeyable key in _hotkeys.Values)
             {
                 key.Update();
             }
