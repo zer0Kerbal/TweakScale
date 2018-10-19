@@ -56,6 +56,5 @@ done
 deploy_dev Scale_Redist
 
 # HACK! See how to do it properly later.
-#TARGETBINDIR="TweakableEverything/Plugins_TweakScale" check
-#TARGETBINDIR="TweakableEverything/Plugins_TweakScale" deploy Scale_TweakableEverything
-# Note: Avoiding redistributing the TweakableEverything until further notice from its Maintainers
+TARGETBINDIR="TweakableEverything/Plugins_TweakScale" check
+TARGETBINDIR="TweakableEverything/Plugins_TweakScale" deploy Scale_TweakableEverything
