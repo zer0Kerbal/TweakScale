@@ -1,13 +1,15 @@
 # TweakScale :: Change Log
 
-* 2018-1016: 2.4.0.2 (Lisias) for KSP 1.4
-	+ Reverting KSPe dependency (for while, at least).
+* 2018-1019: 2.4.0.3 (Lisias) for KSP 1.4
+	+ **Properly** Reverting KSPe dependency (for while, at least).
 		- Unholy user settings files are back to the Sacred Land of GameData. Repent, Sinner!!
 	+ Reverting some misunderstood versioning.
 	+ Moving the repository to the Official Headquarters
 	+ Some performance (and type safety) enhancements
 	+ Fixes on the MX-3L Hermes (NFT) as proposed by NachtRaveVL
 	+ Bumping Release to assume official maintenance and mark the URL change.
+* 2018-1016: 2.4.0.2 (Lisias) for KSP 1.4
+	+ DITCHED
 * 2018-1016: 2.4.0.1 (Lisias) for KSP 1.4
 	+ DITCHED
 * 2018-0816: 2.3.12.1 (Lisias) for KSP 1.4.x
