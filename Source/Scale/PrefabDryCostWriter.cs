@@ -11,15 +11,13 @@ namespace TweakScale
         [UsedImplicitly]
         private void Start()
         {
-            Debug.Log("TweakScale::PrefabDryCostWriter: Start");
             WriteDryCost();
         }
 
         private void WriteDryCost()
         {
-			System.Collections.Generic.List<AvailablePart> partsList = PartLoader.LoadedPartsList;
-
-            foreach (AvailablePart p in partsList)
+            Debug.Log("TweakScale::WriteDryCost: Started");
+            foreach (AvailablePart p in PartLoader.LoadedPartsList)
             {
 				Part prefab = p.partPrefab;
                 if (prefab == null)
@@ -44,19 +42,20 @@ namespace TweakScale
 
                     if (m.DryCost < 0)
                     {
-                        if (m.DryCost < -0.5)
-                        {
-                            Debug.LogError("TweakScale::PrefabDryCostWriter: negative dryCost: part=" + p.name + ", DryCost=" + m.DryCost.ToString());
-                        }
+                        Debug.LogErrorFormat("TweakScale::PrefabDryCostWriter: negative dryCost: part={0}, DryCost={1}", p.name, m.DryCost);
                         m.DryCost = 0;
                     }
-                }
+
+#if DEBUG
+					Debug.LogFormat("Part {0} has drycost {1} with ignoreResourcesForCost {2}", p.name, m.DryCost, m.ignoreResourcesForCost);
+#endif
+				}
                 catch (Exception e)
                 {
-                    Debug.LogError("[TweakScale] Exception on writeDryCost: " +e.ToString());
-                    Debug.Log("[TweakScale] part="+p.name +" ("+p.title+")");
+                    Debug.LogErrorFormat("[TweakScale] part={0} ({1}) Exception on writeDryCost: {2}", p.name, p.title, e);
                 }
             }
+            Debug.Log("TweakScale::WriteDryCost: Concluded");
         }
     }
 }

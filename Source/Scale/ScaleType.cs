@@ -258,7 +258,7 @@ namespace TweakScale
 
                 if (error)
                 {
-                    Tools.LogWf("scaleFactors must be in ascending order! \n{0}", this.ToString());
+                    Tools.LogWf("scaleFactors must be in ascending order on {0}! \n{1}", Name, this);
                     _scaleFactors = new float[0];
                 }
             }
@@ -401,9 +401,7 @@ namespace TweakScale
             foreach (string s in TechRequired)
                 result += s + "  ";
             result += "\n defaultScale = " + DefaultScale;
-            //result += " scaleNodes = " + ScaleNodes + "\n";
-            //result += "	minValue = " + MinValue + "\n";
-            //result += "	maxValue = " + MaxValue + "\n";
+            result += " scaleNodes = " + ScaleNodes + "\n";
             return result + "\n}";
         }
 
