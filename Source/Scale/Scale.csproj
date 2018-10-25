@@ -54,6 +54,7 @@
     <Compile Include="..\Version.cs">
       <DependentUpon>Version.tt</DependentUpon>
     </Compile>
+    <Compile Include="Log.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

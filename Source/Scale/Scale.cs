@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using TweakScale.Annotations;
@@ -165,7 +165,7 @@ namespace TweakScale
                 }
                 catch (Exception exception)
                 {
-                    Tools.LogWf("Exception on Rescale: {0}", exception);
+                    Log.warn("Exception on Rescale: {0}", exception);
                 }
             }
             else
@@ -176,7 +176,7 @@ namespace TweakScale
                 
                 if (DryCost < 0)
                 {
-                    Debug.LogError("TweakScale: part=" + part.name + ", DryCost=" + DryCost.ToString());
+                    Log.error("part={0}, DryCost={1}", part.name, DryCost);
                     DryCost = 0;
                 }
             }
@@ -189,7 +189,7 @@ namespace TweakScale
         /// <param name="scaleType">The settings to use.</param>
         private void SetupFromConfig(ScaleType scaleType)
         {
-            if (ScaleType == null) Debug.LogError("TweakScale: Scaletype==null! part=" + part.name);
+            if (ScaleType == null) Log.error("TweakScale: Scaletype==null! part=", part.name);
 
             isFreeScale = scaleType.IsFreeScale;
             if (defaultScale == -1)
@@ -199,7 +199,7 @@ namespace TweakScale
                 currentScale = defaultScale;
             else if (defaultScale != scaleType.DefaultScale)
             {
-                Tools.Logf("defaultScale has changed for part {0}: keeping relative scale.", part.name);
+                Log.info("defaultScale has changed for part {0}: keeping relative scale.", part.name);
                 currentScale *= scaleType.DefaultScale / defaultScale;
                 defaultScale = scaleType.DefaultScale;
             }
@@ -385,7 +385,7 @@ namespace TweakScale
                     }
                     catch (Exception e)
                     {
-                        Debug.LogWarning("Exception on rescale: " + e.ToString());
+                        Log.warn("Exception on rescale: ", e);
                     }
                 }
             }
@@ -462,12 +462,12 @@ namespace TweakScale
                         data.Set<double>("newTotalVolume", oldVol * ScalingFactor.absolute.cubic);
                         part.SendEvent("OnPartVolumeChanged", data, 0);
                     }
-                    else Tools.LogWf("MFT interaction failed (fieldinfo=null)");
+                    else Log.warn("MFT interaction failed (fieldinfo=null)");
                 }
             }
             catch (Exception e)
             {
-                Tools.LogWf("Exception during MFT interaction" + e.ToString());
+                Log.warn("Exception during MFT interaction {0}", e);
             }
         }
 
@@ -481,7 +481,7 @@ namespace TweakScale
             string owner = "TweakScale";
 
             bool valueAdded = (bool)tfInterface.InvokeMember("AddInteropValue", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] { part, name, value, owner });
-            Debug.Log("[TweakScale] TF: valueAdded=" + valueAdded + ", value=" + value.ToString());
+            Log.info("valueAdded={0}, value={1}", valueAdded, value);
         }
 
         private void UpdateAntennaPowerDisplay()
@@ -533,7 +533,7 @@ namespace TweakScale
                 }
                 else
                 {
-                    Tools.LogWf("Error scaling part. Node {0} does not have counterpart in base part.", node.id);
+                    Log.warn("Error scaling part. Node {0} does not have counterpart in base part.", node.id);
                 }
             }
 
@@ -560,7 +560,7 @@ namespace TweakScale
             }
             catch (Exception e)
             {
-                Tools.LogWf("Exception during ModulePartVariants interaction" + e.ToString());
+                Log.warn("Exception during ModulePartVariants interaction {0}", e);
             }
 
 
@@ -742,15 +742,15 @@ namespace TweakScale
             if (ScaleFactors.Length == 0)
             {
                 enabled = false; // disable TweakScale module
-                Tools.LogWf("{0}({1}) has no valid scale factors. This is probably caused by an invalid TweakScale configuration for the part.", part.name, part.partInfo.title);
-                Debug.Log("[TweakScale]" + this.ToString());
-                Debug.Log("[TweakScale]" + ScaleType.ToString());
+                Log.warn("{0}({1}) has no valid scale factors. This is probably caused by an invalid TweakScale configuration for the part.", part.name, part.partInfo.title);
+                Log.warn("{0}", this);
+                Log.warn("{0}", ScaleType);
                 return true;
             }
             if (this != part.GetComponent<TweakScale>())
             {
                 enabled = false; // disable TweakScale module
-                Tools.LogWf("Duplicate TweakScale module on part [{0}] {1}", part.partInfo.name, part.partInfo.title);
+                Log.warn("Duplicate TweakScale module on part [{0}] {1}", part.partInfo.name, part.partInfo.title);
                 Fields["tweakScale"].guiActiveEditor = false;
                 Fields["tweakName"].guiActiveEditor = false;
                 return true;
@@ -843,7 +843,7 @@ namespace TweakScale
         {
             float factorAbsolute = data.Get<float>("factorAbsolute");
             float factorRelative = data.Get<float>("factorRelative");
-            Debug.Log("PartMessage: OnPartScaleChanged:"
+            Log.dbgg("PartMessage: OnPartScaleChanged:"
                 + "\npart=" + part.name
                 + "\nfactorRelative=" + factorRelative.ToString()
                 + "\nfactorAbsolute=" + factorAbsolute.ToString());
@@ -854,22 +854,22 @@ namespace TweakScale
         public void debugOutput()
         {
             //var ap = part.partInfo;
-            //Debug.Log("prefabCost=" + ap.cost + ", dryCost=" + DryCost +", prefabDryCost=" +(_prefabPart.Modules["TweakScale"] as TweakScale).DryCost);
-            //Debug.Log("kisVolOvr=" +part.Modules["ModuleKISItem"].Fields["volumeOverride"].GetValue(part.Modules["ModuleKISItem"]));
-            //Debug.Log("ResourceCost=" + (part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost) ));
+            //Log.dbgg("prefabCost=" + ap.cost + ", dryCost=" + DryCost +", prefabDryCost=" +(_prefabPart.Modules["TweakScale"] as TweakScale).DryCost);
+            //Log.dbgg("kisVolOvr=" +part.Modules["ModuleKISItem"].Fields["volumeOverride"].GetValue(part.Modules["ModuleKISItem"]));
+            //Log.dbgg("ResourceCost=" + (part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost) ));
 
-            //Debug.Log("massFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getMassFactor( (double)(currentScale / defaultScale)));
-            //Debug.Log("costFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getDryCostFactor( (double)(currentScale / defaultScale)));
-            //Debug.Log("volFactor =" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getVolumeFactor( (double)(currentScale / defaultScale)));
+            //Log.dbgg("massFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getMassFactor( (double)(currentScale / defaultScale)));
+            //Log.dbgg("costFactor=" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getDryCostFactor( (double)(currentScale / defaultScale)));
+            //Log.dbgg("volFactor =" + (part.partInfo.partPrefab.Modules["TweakScale"] as TweakScale).getVolumeFactor( (double)(currentScale / defaultScale)));
 
             //var x = part.collider;
-            //Debug.Log("C: " +x.name +", enabled="+x.enabled);
+            //Log.dbg("C: {0}, enabled={1}", x.name, x.enabled);
             if (part.Modules.Contains("ModuleRCSFX")) {
-                Debug.Log("RCS power=" +(part.Modules["ModuleRCSFX"] as ModuleRCSFX).thrusterPower);
+                Log.dbg("RCS power=" +(part.Modules["ModuleRCSFX"] as ModuleRCSFX).thrusterPower);
             }
             if (part.Modules.Contains("ModuleEnginesFX"))
             {
-                Debug.Log("Engine thrust=" +(part.Modules["ModuleEnginesFX"] as ModuleEnginesFX).maxThrust);
+                Log.dbgg("Engine thrust=" +(part.Modules["ModuleEnginesFX"] as ModuleEnginesFX).maxThrust);
             }
         }*/
     }

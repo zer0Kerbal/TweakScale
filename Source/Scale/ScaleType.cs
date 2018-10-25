@@ -62,7 +62,7 @@ namespace TweakScale
             var config = GameDatabase.Instance.GetConfigs("SCALETYPE").FirstOrDefault(a => a.name == name);
             if (config == null)
             {
-                Tools.LogWf("No SCALETYPE with name {0}", name);
+                Log.warn("No SCALETYPE with name {0}", name);
             }
             return config; // == null ? DefaultScaleType : new ScaleType(config.config);
         }*/
@@ -83,7 +83,7 @@ namespace TweakScale
                 Scale = scale;
                 if (Mathf.Abs(Scale) < 0.01)
                 {
-                    Tools.LogWf("Invalid scale for family {0}: {1}", family, scale);
+                    Log.warn("Invalid scale for family {0}: {1}", family, scale);
                 }
             }
 
@@ -93,7 +93,7 @@ namespace TweakScale
                 if (parts.Length == 1)
                 {
                     if (!float.TryParse(parts[0], out Scale))
-                        Tools.LogWf("Invalid attachment node string \"{0}\"", s);
+                        Log.warn("Invalid attachment node string \"{0}\"", s);
                     return;
                 }
                 if (parts.Length == 0)
@@ -102,13 +102,13 @@ namespace TweakScale
                 }
                 if (!float.TryParse(parts[1], out Scale))
                 {
-                    Tools.LogWf("Invalid attachment node string \"{0}\"", s);
+                    Log.warn("Invalid attachment node string \"{0}\"", s);
                     return;
                 }
                 Family = parts[0];
                 if (Mathf.Abs(Scale) < 0.01)
                 {
-                    Tools.LogWf("Invalid scale for family {0}: {1}", Family, Scale);
+                    Log.warn("Invalid scale for family {0}: {1}", Family, Scale);
                 }
             }
 
@@ -217,9 +217,9 @@ namespace TweakScale
                         IncrementSlide = Tools.ConfigValue(scaleConfig, "incrementSlide", IncrementSlide); // deprecated!
 
                         Exponents = ScaleExponents.CreateExponentsForModule(scaleConfig, Exponents);
-                        //Debug.Log("[TweakScale] scaleConfig:" + scaleConfig.ToString());
-                        //Debug.Log("[TweakScale] scaleConfig:" + this.ToString());
-                        //Debug.Log("[TweakScale]" + Exponents.ToString());
+                        Log.dbg("scaleConfig:{0}", scaleConfig);
+                        Log.dbg("scaleConfig:{0}", this);
+                        Log.dbg("{0}", Exponents);
                     }
                 }
                 else
@@ -240,13 +240,17 @@ namespace TweakScale
                 Exponents = ScaleExponents.CreateExponentsForModule(partConfig, Exponents);
                 ScaleExponents.treatMassAndCost(Exponents);
 
-//                string log = "finished ScaleExponents: ";
-//                foreach(var e in Exponents) { log += e.ToString() + ", \n"; }
-//                Debug.Log(log);
+#if DEBUG
+				{
+					string log = "finished ScaleExponents: ";
+					foreach (KeyValuePair<string, ScaleExponents> e in Exponents) { log += e.ToString() + ", \n"; }
+					Log.info(log);
+				}
+#endif
 
-                //Debug.Log("[TweakScale] partConfig:" + partConfig.ToString());
-                //Debug.Log("[TweakScale] partConfig:" + this.ToString());
-                //Debug.Log("[TweakScale]" + Exponents.ToString());
+                Log.dbg("partConfig:{0}", partConfig);
+                Log.dbg("partConfig:{0}", this);
+                Log.dbg("{0}", Exponents);
             }
 
             if (IsFreeScale && (_scaleFactors.Length > 1))
@@ -258,7 +262,7 @@ namespace TweakScale
 
                 if (error)
                 {
-                    Tools.LogWf("scaleFactors must be in ascending order on {0}! \n{1}", Name, this);
+                    Log.warn("scaleFactors must be in ascending order on {0}! \n{1}", Name, this);
                     _scaleFactors = new float[0];
                 }
             }
@@ -270,7 +274,7 @@ namespace TweakScale
             if (!IsFreeScale && (_scaleFactors.Length != _scaleNames.Length))
             {
                 if(_scaleNames.Length != 0)
-                    Tools.LogWf("Wrong number of scaleFactors compared to scaleNames in scaleType \"{0}\": {1} scaleFactors vs {2} scaleNames\n{3}", Name, _scaleFactors.Length, _scaleNames.Length, this.ToString());
+                    Log.warn("Wrong number of scaleFactors compared to scaleNames in scaleType \"{0}\": {1} scaleFactors vs {2} scaleNames\n{3}", Name, _scaleFactors.Length, _scaleNames.Length, this);
 
                 _scaleNames = new string[_scaleFactors.Length];
                 for (int i=0; i<_scaleFactors.Length; i++)
@@ -305,7 +309,7 @@ namespace TweakScale
 			int numTechs = TechRequired.Length;
 			if ((numTechs > 0) && (numTechs != _scaleFactors.Length))
 			{
-				//Tools.LogWf("Wrong number of techRequired compared to scaleFactors in scaleType \"{0}\": {1} scaleFactors vs {2} techRequired", Name, _scaleFactors.Length, TechRequired.Length);
+				Log.dbg("Wrong number of techRequired compared to scaleFactors in scaleType \"{0}\": {1} scaleFactors vs {2} techRequired", Name, _scaleFactors.Length, TechRequired.Length);
 				if (numTechs < _scaleFactors.Length)
 				{
 					string lastTech = TechRequired[TechRequired.Length - 1];
@@ -313,8 +317,8 @@ namespace TweakScale
                 }
             }
 
-            //Debug.Log("[TweakScale] finished config:" + this.ToString());
-            //Debug.Log("[TweakScale]" + Exponents.ToString());
+            Log.dbg("finished config:{0}", this);
+            Log.dbg("{0}", Exponents);
         }
 
         private void RepairScaletype(ConfigNode scaleConfig, ConfigNode partConfig)

@@ -41,9 +41,9 @@ namespace TweakScale
 
         private void Load()
         {
-            Debug.Log("Getting value. Currently: " + _state);
+            Log.info("Getting value. Currently: ", _state);
             _state = _config.GetValue(_name, _state);
-            Debug.Log("New value: " + _state);
+            Log.info("New value: ", _state);
 
             _config.SetValue(_name, _state);
             _config.save();

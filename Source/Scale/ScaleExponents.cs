@@ -134,7 +134,7 @@ namespace TweakScale
         {
             if (destination._id != source._id)
             {
-                Tools.LogWf("Wrong merge target! A name {0}, B name {1}", destination._id, source._id);
+                Log.warn("Wrong merge target! A name {0}, B name {1}", destination._id, source._id);
             }
             foreach (KeyValuePair<string, ScalingMode> value in source._exponents.Where(value => !destination._exponents.ContainsKey(value.Key)))
             {
@@ -176,19 +176,19 @@ namespace TweakScale
             {
                 if (factor.index == -1)
                 {
-                    Tools.LogWf("Value list used for freescale part exponent field {0}: {1}", name, exponentValue);
+                    Log.warn("Value list used for freescale part exponent field {0}: {1}", name, exponentValue);
                     return;
                 }
                 values = Tools.ConvertString(exponentValue, new double[] { });
                 if (values.Length <= factor.index)
                 {
-                    Tools.LogWf("Too few values given for {0}. Expected at least {1}, got {2}: {3}", name, factor.index + 1, values.Length, exponentValue);
+                    Log.warn("Too few values given for {0}. Expected at least {1}, got {2}: {3}", name, factor.index + 1, values.Length, exponentValue);
                     return;
                 }
             }
             else if (!double.TryParse(exponentValue, out exponent))
             {
-                Tools.LogWf("Invalid exponent {0} for field {1}", exponentValue, name);
+                Log.warn("Invalid exponent {0} for field {1}", exponentValue, name);
             }
 
             double multiplyBy = 1;
@@ -201,7 +201,7 @@ namespace TweakScale
 				IList v2 = (IList)baseValue.Value;
                 if(v == null)
                 {
-                    Tools.LogWf("current.Value == null!");
+                    Log.warn("current.Value == null!");
                     return;
                 }
 
@@ -266,7 +266,7 @@ namespace TweakScale
 
             /*if (obj is PartModule && obj.GetType().Name != _id)
             {
-                Tools.LogWf("This ScaleExponent is intended for {0}, not {1}", _id, obj.GetType().Name);
+                Log.warn("This ScaleExponent is intended for {0}, not {1}", _id, obj.GetType().Name);
                 return;
             }*/
 
@@ -383,11 +383,12 @@ namespace TweakScale
             }
 
 			IEnumerable<ModuleAndPrefab> modulePairs = part.Modules.Zip(prefabObj.Modules, ModuleAndPrefab.Create);
-			//foreach (var m in modulePairs)
-			//{
-			//    Debug.Log("moduleAndPrefab: " + (m.Prefab as PartModule).moduleName + " " + m.Prefab.GetType().ToString());
-			//}
-
+#if DEBUG
+			foreach (ModuleAndPrefab m in modulePairs)
+			{
+			    Log.dbg("moduleAndPrefab: " + (m.Prefab as PartModule).moduleName + " " + m.Prefab.GetType().ToString());
+			}
+#endif
 			ModulesAndExponents[] modulesAndExponents = modulePairs.Join(exponents,
                                         modules => ((PartModule)modules.Current).moduleName,
                                         exps => exps.Key,
@@ -396,7 +397,7 @@ namespace TweakScale
             // include derived classes
             foreach (KeyValuePair<string, ScaleExponents> e in exponents)
             {
-                //Debug.Log("check type: " + e.Key +", "+e.Value._name +", "+e.Value._id);
+                Log.dbg("check type: {0}, {1}, {2}", e.Key, e.Value._name, e.Value._id);
                 Type type = GetType(e.Key);
                 if (type == null)
                 {
@@ -406,7 +407,7 @@ namespace TweakScale
                 {
                     if (m.Current.GetType().IsSubclassOf(type) )
                     {
-                        //Debug.Log("+modAndPrefab: " +((PartModule)m.Current).moduleName + " " + m.Prefab.GetType().ToString() +" "+e.Value._name +", "+e.Key);
+                        Log.dbg("+modAndPrefab: {0} {1} {2}, {3}", ((PartModule)m.Current).moduleName, m.Prefab.GetType(), e.Value._name, e.Key);
                         if (e.Key != ((PartModule)m.Current).moduleName)
                         {
                             e.Value.UpdateFields(m.Current, m.Prefab, factor, part);
@@ -417,7 +418,7 @@ namespace TweakScale
 
             foreach (ModulesAndExponents modExp in modulesAndExponents)
             {
-                //Debug.Log("modExP: " +(modExp.Prefab as PartModule).moduleName +" "+ modExp.Prefab.GetType().ToString());
+                Log.detail("modExP: {0} {1}", (modExp.Prefab as PartModule).moduleName, modExp.Prefab.GetType());
                 modExp.Exponents.UpdateFields(modExp.Current, modExp.Prefab, factor, part);
             }
         }
@@ -444,12 +445,12 @@ namespace TweakScale
 				string exponentValue = Exponents["Part"]._exponents["mass"].Exponent;
                 if (exponentValue.Contains(','))
                 {
-                    Tools.LogWf("getMassExponent not yet implemented for this kind of config");
+                    Log.warn("getMassExponent not yet implemented for this kind of config");
                     return 0d;
                 }
                 if (!double.TryParse(exponentValue, out exponent))
                 {
-                    Tools.LogWf("parsing error for mass exponent");
+                    Log.warn("parsing error for mass exponent");
                     return 0d;
                 }
             }
@@ -464,12 +465,12 @@ namespace TweakScale
 				string exponentValue = Exponents["TweakScale"]._exponents["DryCost"].Exponent;
                 if (exponentValue.Contains(','))
                 {
-                    Tools.LogWf("getCostExponent not yet implemented for this kind of config");
+                    Log.warn("getCostExponent not yet implemented for this kind of config");
                     return 0d;
                 }
                 if (!double.TryParse(exponentValue, out exponent))
                 {
-                    Tools.LogWf("parsing error for cost exponent");
+                    Log.warn("parsing error for cost exponent");
                     return 0d;
                 }
             }
@@ -511,7 +512,7 @@ namespace TweakScale
 
                 // move mass exponent into TweakScale module
                 if (Exponents["TweakScale"]._exponents.ContainsKey("MassScale"))
-                  Tools.LogWf("treatMassAndCost: TweakScale/MassScale exponent already exists!");
+                  Log.warn("treatMassAndCost: TweakScale/MassScale exponent already exists!");
                 else
                   Exponents["TweakScale"]._exponents.Add("MassScale", new ScalingMode(massExponent, false));
             }
@@ -520,7 +521,7 @@ namespace TweakScale
 
         public static Dictionary<string, ScaleExponents> CreateExponentsForModule(ConfigNode node, Dictionary<string, ScaleExponents> parent)
         {
-			//Debug.Log("CreateExponentsForModule: node=" + node.ToString());
+			Log.detail("CreateExponentsForModule: node={0}", node);
 
 			Dictionary<string, ScaleExponents> local = node.nodes
                 .OfType<ConfigNode>()
