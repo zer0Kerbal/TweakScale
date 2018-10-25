@@ -17,7 +17,7 @@ deploy_dev() {
 	fi
 }
 
-deploy() {
+deploy_bin() {
 	local DLL=$1
 
 	if [ -f "./bin/Release/$DLL.dll" ] ; then
@@ -49,9 +49,11 @@ cp NOTICE "./GameData/$TARGETDIR"
 deploy_md README.md
 
 for dll in Scale Scale_Redist; do
-#    deploy_dev $dll
-    deploy $dll
+    deploy_dev $dll
+    deploy_bin $dll
 done
+
+deploy_dev Scale_Redist
 
 # HACK! See how to do it properly later.
 #TARGETBINDIR="TweakableEverything/Plugins_TweakScale" check
