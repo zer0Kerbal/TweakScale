@@ -48,7 +48,7 @@ This usually happens due Third Parties Add'On or DLC getting into the way, botch
                 30, 1, 1,
                 win, text
             );
-            Debug.Log("[TWEAKSCALE] \"TweakScale Warning\" about check failures was displayed");
+            Log.detail("\"TweakScale Warning\" about check failures was displayed");
         }
     }
 }

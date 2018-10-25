@@ -48,7 +48,7 @@ TweakScale is working to support that parts.";
                 30, 1, 0,
                 win, text
             );
-            Debug.Log("[TWEAKSCALE] \"TweakScale Warning\" about sanity checks was displayed");
+            Log.detail("\"TweakScale Warning\" about sanity checks was displayed");
         }
     }
 }

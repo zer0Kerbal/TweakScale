@@ -53,7 +53,7 @@ Backup everything *NOW* if you choose to ignore this message and proceed.";
                 () => { Application.OpenURL("https://forum.kerbalspaceprogram.com/index.php?/topic/179030-*"); },
                 win, text
             );
-            Debug.Log("[TWEAKSCALE] \"Houston, we have a Problem!a\" was displayed");
+            Log.detail("\"Houston, we have a Problem!\" was displayed");
         }
     }
 }

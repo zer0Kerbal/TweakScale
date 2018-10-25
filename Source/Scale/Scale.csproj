@@ -58,6 +58,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="GUI\OverrulledAdviseBox.cs" />
     <Compile Include="GUI\CheckFailureAlertBox.cs" />
+    <Compile Include="Log.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -97,7 +98,7 @@
     <Folder Include="GUI\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

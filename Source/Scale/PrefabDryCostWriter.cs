@@ -24,13 +24,13 @@ namespace TweakScale
         private IEnumerator WriteDryCost()
         {
             PrefabDryCostWriter.isConcluded = false;
-            Debug.Log("TweakScale::WriteDryCost: Started");
+            Log.info("WriteDryCost: Started");
 
             {  // Toe Stomping Fest prevention
                 for (int i = WAIT_ROUNDS; i >= 0 && null == PartLoader.LoadedPartsList; --i)
                 {
                     yield return null;
-                    if (0 == i) Debug.LogError("TweakScale::Timeout waiting for PartLoader.LoadedPartsList!!");
+                    if (0 == i) Log.warn("Timeout waiting for PartLoader.LoadedPartsList!!");
                 }
     
     			 // I Don't know if this is needed, but since I don't know that this is not needed,
@@ -42,7 +42,7 @@ namespace TweakScale
                         if (last_count == PartLoader.LoadedPartsList.Count) break;
                         last_count = PartLoader.LoadedPartsList.Count;
                         yield return null;
-                        if (0 == i) Debug.LogError("TweakScale::Timeout waiting for PartLoader.LoadedPartsList.Count!!");
+                        if (0 == i) Log.warn("Timeout waiting for PartLoader.LoadedPartsList.Count!!");
                     }
     			 }
             }
@@ -57,7 +57,7 @@ namespace TweakScale
                 for (int i = WAIT_ROUNDS; i >= 0 && (null == p.partPrefab || null == p.partPrefab.Modules || p.partPrefab.Modules.Count < 1); --i)
                 {
                     yield return null;
-                    if (0 == i) Debug.LogErrorFormat("TweakScale::Timeout waiting for {0}.prefab.Modules!!", p.name);
+                    if (0 == i) Log.error("Timeout waiting for {0}.prefab.Modules!!", p.name);
                 }
               
                 Part prefab;
@@ -91,8 +91,8 @@ namespace TweakScale
 
                     if (0 == retries)
                     {
-                        Debug.LogErrorFormat("[TweakScale] Exception on {0}.prefab.Modules.Contains: {1}", p.name, culprit);
-                        Debug.LogWarningFormat("{0}", prefab.Modules);
+                        Log.error("Exception on {0}.prefab.Modules.Contains: {1}", p.name, culprit);
+                        Log.detail("{0}", prefab.Modules);
                         continue;
                     }
 
@@ -103,9 +103,9 @@ namespace TweakScale
                 }
 #if DEBUG
                 {
-                    Debug.LogFormat("Found part named {0}. title {1}:", p.name, p.title);
+                    Log.dbg("Found part named {0}. title {1}:", p.name, p.title);
                     foreach (PartModule m in prefab.Modules)
-                        Debug.LogFormat("\tPart {0} has module {1}", p.name, m.moduleName);
+                        Log.dbg("\tPart {0} has module {1}", p.name, m.moduleName);
                 }
 #endif
                 try {
@@ -114,9 +114,9 @@ namespace TweakScale
                     if (null != (r = this.checkForSanity(prefab)))
                     {   // There are some known situations where TweakScale is capsizing. If such situations are detected, we just
                         // refuse to scale it. Sorry.
-                        Debug.LogWarningFormat("[TweakScale] Removing TweakScale support for {0}.", p.name);
+                        Log.warn("Removing TweakScale support for {0}.", p.name);
                         prefab.Modules.Remove(prefab.Modules["TweakScale"]);
-                        Debug.LogErrorFormat("[TweakScale] Part {0} didn't passed the sanity check due {1}.", p.name, r);
+                        Log.error("Part {0} didn't passed the sanity check due {1}.", p.name, r);
                         ++sanity_failures;
                         continue;
                     }
@@ -124,9 +124,9 @@ namespace TweakScale
                     if (null != (r = this.checkForShowStoppers(prefab)))
                     {   // This are situations that we should not allow the KSP to run to prevent serious corruption.
                         // This is **FAR** from a good measure, but it's the only viable.
-                        Debug.LogWarningFormat("[TweakScale] **FATAL** Found a showstopper problem on {0}.", p.name);
+                        Log.warn("**FATAL** Found a showstopper problem on {0}.", p.name);
                         prefab.Modules.Remove(prefab.Modules["TweakScale"]);
-                        Debug.LogErrorFormat("[TweakScale] **FATAL** Part {0} has a fatal problem due {1}.", p.name, r);
+                        Log.error("**FATAL** Part {0} has a fatal problem due {1}.", p.name, r);
                         ++showstoppers_failures;
                         continue;
                     }
@@ -135,7 +135,7 @@ namespace TweakScale
                     {   // This is for detect and log the Breaking Parts patches.
                         // See issue [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 ) for details.
                         // This is **FAR** from a good measure, but it's the only viable.
-                        Debug.LogWarningFormat("[TweakScale] Part {0} has the issue overrule {1}.", p.name, r);
+                        Log.warn("Part {0} has the issue overrule {1}.", p.name, r);
                         ++check_overrulled;
                         continue;
                     }
@@ -143,7 +143,7 @@ namespace TweakScale
                 catch (Exception e)
                 {
                     ++check_failures;
-                    Debug.LogErrorFormat("[TweakScale] part={0} ({1}) Exception on Sanity Checks: {2}", p.name, p.title, e);
+                    Log.error("part={0} ({1}) Exception on Sanity Checks: {2}", p.name, p.title, e);
                 }
 
 				try
@@ -154,20 +154,18 @@ namespace TweakScale
 
                     if (m.DryCost < 0)
                     {
-                        Debug.LogErrorFormat("TweakScale::PrefabDryCostWriter: negative dryCost: part={0}, DryCost={1}", p.name, m.DryCost);
+                        Log.error("PrefabDryCostWriter: negative dryCost: part={0}, DryCost={1}", p.name, m.DryCost);
                         m.DryCost = 0;
                     }
-#if DEBUG
-                    Debug.LogFormat("Part {0} has drycost {1} with ignoreResourcesForCost {2}", p.name, m.DryCost, m.ignoreResourcesForCost);
-#endif
+                    Log.dbg("Part {0} has drycost {1} with ignoreResourcesForCost {2}", p.name, m.DryCost, m.ignoreResourcesForCost);
                 }
                 catch (Exception e)
                 {
                     ++check_failures;
-                    Debug.LogErrorFormat("[TweakScale] part={0} ({1}) Exception on writeDryCost: {2}", p.name, p.title, e);
+                    Log.error("part={0} ({1}) Exception on writeDryCost: {2}", p.name, p.title, e);
                 }
             }
-            Debug.LogFormat("TweakScale::WriteDryCost: Concluded : {0} checks failed ; {1} parts with issues overruled ; {2} Show Stoppers found; {3} Sanity Check failed;", check_failures, check_overrulled, showstoppers_failures, sanity_failures);
+            Log.info("TweakScale::WriteDryCost: Concluded : {0} checks failed ; {1} parts with issues overruled ; {2} Show Stoppers found; {3} Sanity Check failed;", check_failures, check_overrulled, showstoppers_failures, sanity_failures);
             PrefabDryCostWriter.isConcluded = true;
             
             if (showstoppers_failures > 0)

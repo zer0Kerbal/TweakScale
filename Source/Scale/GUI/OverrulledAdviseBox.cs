@@ -47,7 +47,7 @@ Do not start new savegames with overruled parts. Use them only to exising ones."
                 30, 1, -1,
                 win, text
             );
-            Debug.Log("[TWEAKSCALE] \"TweakScale advises\" about overrules checks was displayed");
+            Log.detail("\"TweakScale advises\" about overrules checks was displayed");
         }
     }
 }
