@@ -30,19 +30,19 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\LIB\managed\1.4.1\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\LIB\managed\1.4.1\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="TweakableEVA">
-      <HintPath>..\..\..\..\..\LIB\plugins\TweakableEVA.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\LIB\plugins\TweakableEVA.dll</HintPath>
     </Reference>
     <Reference Include="TweakableReactionWheels">
-      <HintPath>..\..\..\..\..\LIB\plugins\TweakableReactionWheels.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\LIB\plugins\TweakableReactionWheels.dll</HintPath>
     </Reference>
     <Reference Include="TweakableDockingNode">
-      <HintPath>..\..\..\..\..\LIB\plugins\TweakableDockingNode.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\LIB\plugins\TweakableDockingNode.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\LIB\managed\1.4.1\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\LIB\managed\1.4.1\Assembly-CSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
