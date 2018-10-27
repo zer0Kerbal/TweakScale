@@ -16,7 +16,7 @@
 	+ [Homepage](http://ksp.lisias.net/add-ons/TweakScale) on L Aerospace KSP Division
 	+ [Project's README](https://github.com/net-lisias-ksp/TweakScale/blob/master/README.md)
 	+ [Change Log](./CHANGE_LOG.md)
-	+ [TODO](./TODO.md) list
+	+ [Known Issues](./KNOWN_ISSUES.md)
 * Official Distribution Sites:
 	+ [CurseForge](https://kerbal.curseforge.com/projects/tweakscale)
 	+ [SpaceDock](https://spacedock.info/mod/127/TweakScale)
