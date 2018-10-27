@@ -36,21 +36,22 @@ namespace TweakScale
 			 // I choose to be safe than sorry!
             {
                 int last_count = int.MinValue;
-			     for (int i = WAIT_ROUNDS; i >= 0; --i)
-				 {
+			    for (int i = WAIT_ROUNDS; i >= 0; --i)
+				{
                     if (last_count == PartLoader.LoadedPartsList.Count) break;
-					  last_count = PartLoader.LoadedPartsList.Count;
+					last_count = PartLoader.LoadedPartsList.Count;
+                    yield return null;
                     if (0 == i) Debug.LogError("TweakScale::Timeout waiting for PartLoader.LoadedPartsList.Count!!");
-				 }
+				}
 			 }
 
-			 foreach (AvailablePart p in PartLoader.LoadedPartsList)
+			foreach (AvailablePart p in PartLoader.LoadedPartsList)
             {
 				for (int i = WAIT_ROUNDS; i >= 0 && null == p.partPrefab && null == p.partPrefab.Modules && p.partPrefab.Modules.Count < 1; --i)
                 {
 					yield return null;
                     if (0 == i) Debug.LogErrorFormat("TweakScale::Timeout waiting for {0}.prefab.Modules!!", p.name);
-				 }
+				}
                 
                 Part prefab = p.partPrefab;
                 
