@@ -1,6 +1,6 @@
 # TweakScale :: Change Log
 
-* 2018-1027: 2.4.0.5 (Lisias) for KSP 1.4.1+; 1.5
+* 2018-1027: 2.4.0.6 (Lisias) for KSP 1.4.1+; 1.5
 	+ KSP 1.5 support certified.
 	+ Reverting some misunderstood versioning.
 	+ Moving the repository to the Official Headquarters
@@ -11,6 +11,8 @@
 	+ Bumping Release to assume official maintenance and mark the URL change.
 	+ **Properly** Reverting KSPe dependency (for while, at least).
 		- Unholy user settings files are back to the Sacred Land of GameData. Repent, Sinner!!
+* 2018-1027: 2.4.0.5 (Lisias) for KSP 1.4.1+; 1.5
+	* Move on, nothing to see here! =P 
 * 2018-1025: 2.4.0.4 (Lisias) for KSP 1.4
 	+ DITCHED
 * 2018-1019: 2.4.0.3 (Lisias) for KSP 1.4
