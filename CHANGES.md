@@ -1,6 +1,6 @@
 # TweakScale :: Changes
 
-* 2018-1027: 2.4.0.5 (Lisias) for KSP 1.4.1+; 1.5
+* 2018-1027: 2.4.0.6 (Lisias) for KSP 1.4.1+; 1.5
 	+ KSP 1.5 support certified.
 	+ Reverting some misunderstood versioning.
 	+ Moving the repository to the Official Headquarters
