@@ -12,14 +12,12 @@ namespace TweakScale
     {
 		private static readonly int WAIT_ROUNDS = 120; // @60fps, would render 2 secs.
         
-		internal static bool isConcluded;
-        private IEnumerator coroutine;
+		internal static bool isConcluded = false;
         
         [UsedImplicitly]
         private void Start()
         {
-            coroutine = WriteDryCost();
-            StartCoroutine(coroutine);
+            StartCoroutine("WriteDryCost");
         }
 
         private IEnumerator WriteDryCost()
