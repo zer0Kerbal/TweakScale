@@ -67,9 +67,7 @@ namespace TweakScale
             // can expect a future update to be available.
             //
             return 
-                    Versioning.version_major == 1 && Versioning.version_minor == 4 /*&& Versioning.Revision == 0*/ 
-                    ||
-                    Versioning.version_major == 1 && Versioning.version_minor == 5 /*&& Versioning.Revision == 0*/ 
+                    Versioning.version_major == 1 && Versioning.version_minor >= 4 /*&& Versioning.Revision == 0*/ 
                 ;
 
             /*-----------------------------------------------*\
