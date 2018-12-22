@@ -560,7 +560,7 @@ namespace TweakScale
             }
             catch (Exception e)
             {
-                Tools.LogWf("Exception during stockTextureSwitch interaction" + e.ToString());
+                Tools.LogWf("Exception during ModulePartVariants interaction" + e.ToString());
             }
 
 
