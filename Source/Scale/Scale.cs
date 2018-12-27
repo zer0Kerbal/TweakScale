@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TweakScale.Annotations;
 using UnityEngine;
-//using ModuleWheels;
 
 namespace TweakScale
 {
@@ -76,13 +76,13 @@ namespace TweakScale
         private bool _firstUpdateWithParent = true;
         private bool _setupRun;
         private bool _firstUpdate = true;
-        public bool ignoreResourcesForCost = false;
         public bool scaleMass = true;
 
         /// <summary>
         /// Updaters for different PartModules.
         /// </summary>
-        private IRescalable[] _updaters = new IRescalable[0];
+        private IRescalable20[] _updaters = new IRescalable20[0];
+        private IDryCost20 _dryCostCalculator = null;
 
         /// <summary>
         /// Cost of unscaled, empty part.
@@ -131,8 +131,6 @@ namespace TweakScale
             ScaleType = new ScaleType(ModuleNode);
             SetupFromConfig(ScaleType);
             tweakScale = currentScale = defaultScale;
-
-            tfInterface = Type.GetType("TestFlightCore.TestFlightInterface, TestFlightCore", false);
         }
 
         /// <summary>
@@ -145,7 +143,8 @@ namespace TweakScale
                 return;
             }
             _prefabPart = part.partInfo.partPrefab;
-            _updaters = TweakScaleUpdater.CreateUpdaters(part).ToArray();
+            _updaters = TweakScaleUpdater.CreateUpdaters(this.part).ToArray();
+            _dryCostCalculator = TweakScaleUpdater.CreateDryCostCalcultator(this.part);
 
             ScaleType = (_prefabPart.Modules["TweakScale"] as TweakScale).ScaleType;
             SetupFromConfig(ScaleType);
@@ -159,20 +158,12 @@ namespace TweakScale
             if (IsRescaled)
             {
                 ScalePart(false, true);
-                try
-                {
-                    CallUpdaters();
-                }
-                catch (Exception exception)
-                {
-                    Log.warn("Exception on Rescale: {0}", exception);
-                }
+                CallScallers();
+                CallUpdaters();
             }
             else
             {
-                DryCost = (float)(part.partInfo.cost - _prefabPart.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
-                if (part.Modules.Contains("FSfuelSwitch"))
-                  ignoreResourcesForCost = true;
+                DryCost = _dryCostCalculator.calculate();
                 
                 if (DryCost < 0)
                 {
@@ -301,26 +292,34 @@ namespace TweakScale
             ScalePart(true, false);
             ScaleDragCubes(false);
             MarkWindowDirty();
+            CallScallers();
             CallUpdaters();
 
             currentScale = tweakScale;
             GameEvents.onEditorShipModified.Fire(EditorLogic.fetch.ship);
         }
 
-        void OnEditorShipModified(ShipConstruct ship)
+        private void OnEditorShipModified(ShipConstruct ship)
         {
-            if (part.CrewCapacity >= _prefabPart.CrewCapacity) { return; }
-
-            UpdateCrewManifest();
+		    int len = _updaters.Length;
+            for (int i = 0; i < len; i++)  try
+            { 
+    			_updaters[i].OnShipModified();
+            }
+            catch (Exception e)
+            {
+                Log.warn("Exception on OnEditorShipModified: ", e);
+            }
         }
 
         [UsedImplicitly]
-        void Update()
+        public void Update()
         {
             if (_firstUpdate)
             {
                 _firstUpdate = false;
                 if (CheckIntegrity())
+                    Log.error("TweakScale is disabled due failure on Integrity Checks!");
                     return;
 
                 if (IsRescaled)
@@ -359,150 +358,39 @@ namespace TweakScale
                 _firstUpdateWithParent = false;
             }
 
+            CallUpdaters();
+        }
+
+        private void CallScallers()
+        {
             int len = _updaters.Length;
-            for (int i = 0; i < len; i++)
+            for (int i = 0; i < len; i++) try
             {
-                if (_updaters[i] is IUpdateable)
-                    (_updaters[i] as IUpdateable).OnUpdate();
-            }
-        }
-
-        void CallUpdaters()
-        {
-            // two passes, to depend less on the order of this list
-            int len = _updaters.Length;
-            for (int i = 0; i < len; i++)
-            {
-				// first apply the exponents
-				IRescalable updater = _updaters[i];
-                if (updater is TSGenericUpdater)
-                {
-                    try
-                    {
-                        float oldMass = part.mass;
-                        updater.OnRescale(ScalingFactor);
-                        part.mass = oldMass; // make sure we leave this in a clean state
-                    }
-                    catch (Exception e)
-                    {
-                        Log.warn("Exception on rescale: ", e);
-                    }
-                }
-            }
-            if (_prefabPart.CrewCapacity > 0)
-                UpdateCrewManifest();
-
-            if (part.Modules.Contains("ModuleDataTransmitter"))
-                UpdateAntennaPowerDisplay();
-
-            // MFT support
-            UpdateMftModule();
-
-            // TF support
-            updateTestFlight();
-
-			// send scaling part message
-			BaseEventDetails data = new BaseEventDetails(BaseEventDetails.Sender.USER);
-            data.Set<float>("factorAbsolute", ScalingFactor.absolute.linear);
-            data.Set<float>("factorRelative", ScalingFactor.relative.linear);
-            part.SendEvent("OnPartScaleChanged", data, 0);
-
-            len = _updaters.Length;
-            for (int i = 0; i < len; i++)
-            {
-				IRescalable updater = _updaters[i];
-                // then call other updaters (emitters, other mods)
-                if (updater is TSGenericUpdater)
-                    continue;
-
-                updater.OnRescale(ScalingFactor);
-            }
-        }
-
-        private void UpdateCrewManifest()
-        {
-            if (!HighLogic.LoadedSceneIsEditor) { return; } //only run the following block in the editor; it updates the crew-assignment GUI
-
-            VesselCrewManifest vcm = ShipConstruction.ShipManifest;
-            if (vcm == null) { return; }
-            PartCrewManifest pcm = vcm.GetPartCrewManifest(part.craftID);
-            if (pcm == null) { return; }
-
-            int len = pcm.partCrew.Length;
-            int newLen = Math.Min(part.CrewCapacity, _prefabPart.CrewCapacity);
-            if (len == newLen) { return; }
-
-            if (EditorLogic.fetch.editorScreen == EditorScreen.Crew)
-                EditorLogic.fetch.SelectPanelParts();
-
-            for (int i = 0; i < len; i++)
-                pcm.RemoveCrewFromSeat(i);
-
-            pcm.partCrew = new string[newLen];
-            for (int i = 0; i < newLen; i++)
-                pcm.partCrew[i] = string.Empty;
-
-            ShipConstruction.ShipManifest.SetPartManifest(part.craftID, pcm);
-        }
-
-        void UpdateMftModule()
-        {
-            try
-            {
-                if (_prefabPart.Modules.Contains("ModuleFuelTanks"))
-                {
-                    scaleMass = false;
-					PartModule m = _prefabPart.Modules["ModuleFuelTanks"];
-                    FieldInfo fieldInfo = m.GetType().GetField("totalVolume", BindingFlags.Public | BindingFlags.Instance);
-                    if (fieldInfo != null)
-                    {
-                        double oldVol = (double)fieldInfo.GetValue(m) * 0.001d;
-						BaseEventDetails data = new BaseEventDetails(BaseEventDetails.Sender.USER);
-                        data.Set<string>("volName", "Tankage");
-                        data.Set<double>("newTotalVolume", oldVol * ScalingFactor.absolute.cubic);
-                        part.SendEvent("OnPartVolumeChanged", data, 0);
-                    }
-                    else Log.warn("MFT interaction failed (fieldinfo=null)");
-                }
+                _updaters[i].OnRescale(ScalingFactor);
             }
             catch (Exception e)
             {
-                Log.warn("Exception during MFT interaction {0}", e);
+                Log.warn("Exception on rescale: ", e);
             }
-        }
-
-        public static Type tfInterface = null;
-        private void updateTestFlight()
+		}
+        
+		private void CallUpdaters()
         {
-            if (null == tfInterface) return;
-            BindingFlags tBindingFlags = BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static;
-            string name = "scale";
-            string value = ScalingFactor.absolute.linear.ToString();
-            string owner = "TweakScale";
-
-            bool valueAdded = (bool)tfInterface.InvokeMember("AddInteropValue", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] { part, name, value, owner });
-            Log.info("valueAdded={0}, value={1}", valueAdded, value);
-        }
-
-        private void UpdateAntennaPowerDisplay()
-        {
-			ModuleDataTransmitter m = part.Modules["ModuleDataTransmitter"] as ModuleDataTransmitter;
-            double p = m.antennaPower / 1000;
-            Char suffix = 'k';
-            if (p >= 1000)
+            int len = _updaters.Length;
+            for (int i = 0; i < len; i++)  try
+            { 
+                _updaters[i].OnUpdate();
+            }
+            catch (Exception e)
             {
-                p /= 1000f;
-                suffix = 'M';
-                if (p >= 1000)
-                {
-                    p /= 1000;
-                    suffix = 'G';
-                }
+                Log.warn("Exception on OnUpdate: ", e);
             }
-            p = Math.Round(p, 2);
-            string str = p.ToString() + suffix;
-            if (m.antennaCombinable) { str += " (Combinable)"; }
-            m.powerText = str;
+            
+            // send scaling part message
+            BaseEventDetails data = new BaseEventDetails(BaseEventDetails.Sender.USER);
+            data.Set<float>("factorAbsolute", ScalingFactor.absolute.linear);
+            data.Set<float>("factorRelative", ScalingFactor.relative.linear);
+            part.SendEvent("OnPartScaleChanged", data, 0);
         }
 
         /// <summary>
@@ -772,29 +660,25 @@ namespace TweakScale
 
         public float GetModuleCost(float defaultCost, ModifierStagingSituation situation)
         {
-            if (_setupRun && IsRescaled)
-                if (ignoreResourcesForCost)
-                  return (DryCost - part.partInfo.cost);
-                else
-                  return (float)(DryCost - part.partInfo.cost + part.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
-            else
-              return 0;
-        }
+			return _setupRun && IsRescaled
+				? (float)(DryCost - _dryCostCalculator.calculate())
+				: 0;
+		}
 
-        public ModifierChangeWhen GetModuleCostChangeWhen()
+		public ModifierChangeWhen GetModuleCostChangeWhen()
         {
             return ModifierChangeWhen.FIXED;
         }
 
         public float GetModuleMass(float defaultMass, ModifierStagingSituation situation)
         {
-            if (_setupRun && IsRescaled && scaleMass)
-              return _prefabPart.mass * (MassScale - 1f);
-            else
-              return 0;
+            return _setupRun && IsRescaled && scaleMass 
+                ? _prefabPart.mass * (MassScale - 1f) 
+                : 0
+            ;
         }
 
-        public ModifierChangeWhen GetModuleMassChangeWhen()
+		public ModifierChangeWhen GetModuleMassChangeWhen()
         {
             return ModifierChangeWhen.FIXED;
         }
@@ -808,11 +692,11 @@ namespace TweakScale
         public double getMassFactor(double rescaleFactor)
         {
 			double exponent = ScaleExponents.getMassExponent(ScaleType.Exponents);
-            return Math.Pow(rescaleFactor, exponent);
+           return Math.Pow(rescaleFactor, exponent);
         }
         public double getDryCostFactor(double rescaleFactor)
         {
-			double exponent = ScaleExponents.getDryCostExponent(ScaleType.Exponents);
+            double exponent = ScaleExponents.getDryCostExponent(ScaleType.Exponents);
             return Math.Pow(rescaleFactor, exponent);
         }
         public double getVolumeFactor(double rescaleFactor)

@@ -72,14 +72,13 @@ namespace TweakScale
                 {
 					TweakScale m = prefab.Modules["TweakScale"] as TweakScale;
                     m.DryCost = (float)(p.cost - prefab.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
-					m.ignoreResourcesForCost |= prefab.Modules.Contains("FSfuelSwitch");
 
                     if (m.DryCost < 0)
                     {
                         Log.error("TweakScale::PrefabDryCostWriter: negative dryCost: part={0}, DryCost={1}", p.name, m.DryCost);
                         m.DryCost = 0;
                     }
-					Log.dbg("Part {0} has drycost {1} with ignoreResourcesForCost {2}", p.name, m.DryCost, m.ignoreResourcesForCost);
+					Log.dbg("Part {0} has drycost {1}", p.name, m.DryCost);
 				}
                 catch (Exception e)
                 {
