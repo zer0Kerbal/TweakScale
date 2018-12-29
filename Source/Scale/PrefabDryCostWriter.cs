@@ -1,6 +1,8 @@
-﻿using System.Linq;
-using System;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 using UnityEngine;
 using TweakScale.Annotations;
@@ -68,7 +70,19 @@ namespace TweakScale
                     continue; // TODO: Cook a way to try again!
                 }
                 
-                try
+                {
+                    string r = this.checkForSanity(prefab);
+                    if (null != r)
+    				{   // There are some known situations where TweakScale is capsizing. If such situations are detected, we just
+                        // refuse to scale it. Sorry.
+                        Debug.LogWarningFormat("[TweakScale] Removing TweakScale support for {0}.", p.name);
+                        prefab.Modules.Remove(prefab.Modules["TweakScale"]);
+                        Debug.LogErrorFormat("[TweakScale] Part {0} didn't passed the sanity check due {1}.", p.name, r);
+                        continue;
+					}
+				}
+
+				try
                 {
 					TweakScale m = prefab.Modules["TweakScale"] as TweakScale;
                     m.DryCost = (float)(p.cost - prefab.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
@@ -91,5 +105,38 @@ namespace TweakScale
             Debug.Log("TweakScale::WriteDryCost: Concluded");
             PrefabDryCostWriter.isConcluded = true;
         }
-    }
+        
+        private string checkForSanity(Part p)
+		{
+            if (p.Modules.Contains("ModulePartVariants"))
+			{
+				PartModule m = p.Modules["ModulePartVariants"];
+                foreach(FieldInfo fi in m.ModuleAttributes.publicFields)
+				{
+                    if("variantList" != fi.Name) continue;
+                    IList variantList = (IList)fi.GetValue(m);
+                    foreach (object partVariant in variantList)
+					    foreach (PropertyInfo property in partVariant.GetType().GetProperties())
+                        { 
+						    if ("Cost" == property.Name && 0.0 != (float)property.GetValue(partVariant, null))
+                                return "having a ModulePartVariants with Cost - see issue #13 https://github.com/net-lisias-ksp/TweakScale/issues/13";                                        
+                            if ("Mass" == property.Name && 0.0 != (float)property.GetValue(partVariant, null))
+                                return "having a ModulePartVariants with Mass - see issue #13 https://github.com/net-lisias-ksp/TweakScale/issues/13";                                        
+						}
+				}
+			}
+            if (p.Modules.Contains("FSbuoyancy"))
+                return "using FSbuoyancy module - see issue #9 https://github.com/net-lisias-ksp/TweakScale/issues/9";
+
+            if (p.Modules.Contains("ModuleB9PartSwitch"))
+			{
+                if (p.Modules.Contains("FSfuelSwitch"))
+                    return "having ModuleB9PartSwitch together FSfuelSwitch - see issue #12 - https://github.com/net-lisias-ksp/TweakScale/issues/12";
+                if (p.Modules.Contains("ModuleFuelTanks"))
+                    return "having ModuleB9PartSwitch together ModuleFuelTanks - see issue #12 - https://github.com/net-lisias-ksp/TweakScale/issues/12";;
+			}
+
+			return null;
+		}
+	}
 }
