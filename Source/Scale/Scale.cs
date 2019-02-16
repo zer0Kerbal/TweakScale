@@ -76,6 +76,7 @@ namespace TweakScale
         private bool _firstUpdateWithParent = true;
         private bool _setupRun;
         private bool _firstUpdate = true;
+        private bool is_duplicate = false;
         public bool ignoreResourcesForCost = false;
         public bool scaleMass = true;
 
@@ -250,6 +251,17 @@ namespace TweakScale
                     Setup();
                 else
                     enabled = false;
+            }
+        }
+
+        public override void OnSave(ConfigNode node)
+        {
+            base.OnSave(node);
+            if (this.is_duplicate)
+            {   // Hack to prevent duplicated entries (and duplicated modules) persisting on the craft file
+                node.SetValue("name", "TweakScaleDisabled", 
+                    "Programatically tainted due duplicity or any other reason that disabled this instance. Only the first instance above should exist. This section will be eventually deleted once the craft is loaded and saved by a bug free KSP installment. You can safely ignore this section.",
+                    false);
             }
         }
 
@@ -739,20 +751,21 @@ namespace TweakScale
         /// <returns>True if something is wrong, false otherwise.</returns>
         private bool CheckIntegrity()
         {
+            if (this != part.Modules.GetModules<TweakScale>().First())
+            {
+                enabled = false; // disable TweakScale module
+                this.is_duplicate = true; // Flags this as not persistent
+                Tools.LogWf("Duplicate TweakScale module on part [{0}] {1}", part.partInfo.name, part.partInfo.title);
+                Fields["tweakScale"].guiActiveEditor = false;
+                Fields["tweakName"].guiActiveEditor = false;
+                return true;
+            }
             if (ScaleFactors.Length == 0)
             {
                 enabled = false; // disable TweakScale module
                 Tools.LogWf("{0}({1}) has no valid scale factors. This is probably caused by an invalid TweakScale configuration for the part.", part.name, part.partInfo.title);
                 Debug.Log("[TweakScale]" + this.ToString());
                 Debug.Log("[TweakScale]" + ScaleType.ToString());
-                return true;
-            }
-            if (this != part.GetComponent<TweakScale>())
-            {
-                enabled = false; // disable TweakScale module
-                Tools.LogWf("Duplicate TweakScale module on part [{0}] {1}", part.partInfo.name, part.partInfo.title);
-                Fields["tweakScale"].guiActiveEditor = false;
-                Fields["tweakName"].guiActiveEditor = false;
                 return true;
             }
             return false;
