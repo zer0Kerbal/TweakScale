@@ -108,6 +108,12 @@ namespace TweakScale
         
         private string checkForSanity(Part p)
 		{
+            {
+                TweakScale m = p.Modules.GetModule<TweakScale>();
+                if (m.Fields["tweakScale"].guiActiveEditor == m.Fields["tweakName"].guiActiveEditor)
+                    return "not being correctly initialized - see issue #30 - https://github.com/net-lisias-ksp/TweakScale/issues/30";
+            }
+            
             if (p.Modules.Contains("ModulePartVariants"))
 			{
 				PartModule m = p.Modules["ModulePartVariants"];
