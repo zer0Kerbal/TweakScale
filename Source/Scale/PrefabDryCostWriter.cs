@@ -95,6 +95,13 @@ namespace TweakScale
 
                     // End of hack. Ugly, uh? :P
                 }
+#if DEBUG
+                {
+                    Debug.LogFormat("Found part named {0}. title {1}:", p.name, p.title);
+                    foreach (PartModule m in prefab.Modules)
+                        Debug.LogFormat("\tPart {0} has module {1}", p.name, m.moduleName);
+                }
+#endif
                 {
                     string r = this.checkForSanity(prefab);
                     if (null != r)
@@ -120,7 +127,7 @@ namespace TweakScale
                         m.DryCost = 0;
                     }
 #if DEBUG
-					  Debug.LogFormat("Part {0} has drycost {1} with ignoreResourcesForCost {2}", p.name, m.DryCost, m.ignoreResourcesForCost);
+					Debug.LogFormat("Part {0} has drycost {1} with ignoreResourcesForCost {2}", p.name, m.DryCost, m.ignoreResourcesForCost);
 #endif
                 }
                 catch (Exception e)
