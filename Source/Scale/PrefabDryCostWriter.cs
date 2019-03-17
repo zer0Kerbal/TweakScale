@@ -45,6 +45,7 @@ namespace TweakScale
 				}
 			 }
 
+            int sanity_failures = 0;
 			foreach (AvailablePart p in PartLoader.LoadedPartsList)
             {
 				for (int i = WAIT_ROUNDS; i >= 0 && null == p.partPrefab && null == p.partPrefab.Modules && p.partPrefab.Modules.Count < 1; --i)
@@ -53,23 +54,47 @@ namespace TweakScale
                     if (0 == i) Debug.LogErrorFormat("TweakScale::Timeout waiting for {0}.prefab.Modules!!", p.name);
 				}
                 
-                Part prefab = p.partPrefab;
-                
-                // Historically, we had problems here.
-                // However, that co-routine stunt appears to have solved it.
-                // But we will keep this as a ghinea-pig in the case the problem happens again.
-                try 
-                {
-                    if (!prefab.Modules.Contains("TweakScale"))
+                Part prefab;
+                { 
+                    // Historically, we had problems here.
+                    // However, that co-routine stunt appears to have solved it.
+                    // But we will keep this as a ghinea-pig in the case the problem happens again.
+                    int retries = WAIT_ROUNDS;
+                    bool containsTweakScale = false;
+                    Exception culprit = null;
+                    
+                    prefab = p.partPrefab; // Reaching the prefab here in the case another Mod recreates it from zero. If such hypothecical mod recreates the whole part, we're doomed no matter what.
+                    
+                    while (retries > 0)
+                    { 
+                        bool should_yield = false;
+                        try 
+                        {
+                            containsTweakScale = prefab.Modules.Contains("TweakScale"); // Yeah. This while stunt was done just due this. All the rest is plain clutter! :D 
+                            break;
+                        }
+                        catch (Exception e)
+                        {
+                            culprit = e;
+                            --retries;
+                            should_yield = true;
+                        }
+                        if (should_yield) // This stunt is needed as we can't yield from inside a try-catch!
+                            yield return null;
+                    }
+
+                    if (0 == retries)
+                    {
+                        Debug.LogErrorFormat("[TweakScale] Exception on {0}.prefab.Modules.Contains: {1}", p.name, culprit);
+                        Debug.LogWarningFormat("{0}", prefab.Modules);
                         continue;
+                    }
+
+                    if (!containsTweakScale)
+                        continue;
+
+                    // End of hack. Ugly, uh? :P
                 }
-                catch (Exception e)
-                {
-                    Debug.LogErrorFormat("[TweakScale] Exception on {0}.prefab.Modules.Contains: {1}", p.name, e);
-					Debug.LogWarningFormat("{0}", prefab.Modules);
-                    continue; // TODO: Cook a way to try again!
-                }
-                
                 {
                     string r = this.checkForSanity(prefab);
                     if (null != r)
@@ -78,6 +103,7 @@ namespace TweakScale
                         Debug.LogWarningFormat("[TweakScale] Removing TweakScale support for {0}.", p.name);
                         prefab.Modules.Remove(prefab.Modules["TweakScale"]);
                         Debug.LogErrorFormat("[TweakScale] Part {0} didn't passed the sanity check due {1}.", p.name, r);
+                        ++sanity_failures;
                         continue;
 					}
 				}
@@ -104,6 +130,10 @@ namespace TweakScale
             }
             Debug.Log("TweakScale::WriteDryCost: Concluded");
             PrefabDryCostWriter.isConcluded = true;
+            if (sanity_failures > 0)
+            {
+                //todo MessageBox!
+            }
         }
         
         private string checkForSanity(Part p)
