@@ -1,5 +1,10 @@
 # TweakScale :: Known Issues
 
+* There's a crashing situation when using TweakScale and Infernal Robotics.
+	+ IR parts scaled down to "Small -" (small minus, the smallest of them) crashes the game when the craft is unpacked.
+	+ Aparently quitting imediatelly KSP, restarting, reloading the game and recovering the vessel from the Track Station is enough to salvage the savegame - but more tests are needed to be sure of that.
+	+ Related issues:
+		- [#39](https://github.com/net-lisias-ksp/TweakScale/issues/39) Game Crash when scaling some third party parts to the minimum
 * There's a potentially destructive problem happening due *"Unholly Interactions Between Modules"*, or as it's fondly known by it's friends, **Kraken Food**. :)
 	+ Due events absolutely beyound the TweakScale scope of actions,  some parts are being injected with more than one instance of TweakScale. This usually happens by faulty MM patches, but in the end this can happens by code or even my MM cache's editing.
 		- Things appears to work fine, except by some double Tweakables on the UI. However, crafts and savagames get corrupted when loaded by sane KSP installments, as the duplicates now takes precedence on loading config data, overwriting the real ones.
