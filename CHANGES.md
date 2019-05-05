@@ -1,9 +1,13 @@
 # TweakScale :: Changes
 
-* 2019-0216: 2.4.1.0 (Lisias) for KSP >= 1.4.1
-	+ Adding 1.875 scale as default (being now a Stock size on MH, it makes sense to properly acknowledge it). Suggested by Tyko.
-		- Closing issue [#3](https://github.com/net-lisias-ksp/TweakScale/issues/3)
-	+ Adding support for Stock Alike Station Parts. Courtesy of Speadge.
-		- Closing issue [#8](https://github.com/net-lisias-ksp/TweakScale/issues/8)
-	+ Fixed a critical craft corruption (even flying ones) as TweakScale is sometimes being injected twice (or even more) into a part. This patch does not fix the duplicity, but prevent your crafts from being corrupted once a fix is applied (yeah - fixing the bug would cause craft corruption without this patch!)
-		- Closing issue [#20](https://github.com/net-lisias-ksp/TweakScale/issues/20)
+* 2019-0505: 2.4.2.0 (Lisias) for KSP >= 1.4.1
+	+ Adding features:
+		- [#32](https://github.com/net-lisias-ksp/TweakScale/issues/32) Near Future Aeronautics Patches
+	+ Fixing bugs:
+		- [#20](https://github.com/net-lisias-ksp/TweakScale/issues/20)	Duplicated TweakScale support on some parts
+		- [#23](https://github.com/net-lisias-ksp/TweakScale/issues/23) Unhappy merge on TweakScale exponents
+		- [#24](https://github.com/net-lisias-ksp/TweakScale/issues/24) Fix that duplicated support on some parts
+		- [#30](https://github.com/net-lisias-ksp/TweakScale/issues/30) Prevent incorrectly initialized Modules to be used
+	+ [Known Issues](https://github.com/net-lisias-ksp/TweakScale/blob/master/KNOWN_ISSUES.md) update:
+		- Users of "Classic" [Infernal Robotics](https://github.com/MagicSmokeIndustries/InfernalRobotics) should avoid scaling parts to "Small -" or Krakens will be released.
+			- [Infernal Robotics/Next](https://github.com/meirumeiru/InfernalRobotics) fixes this issue.   
