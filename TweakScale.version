@@ -1,14 +1,23 @@
 {
+	"NAME"		: "TweakScale BETA - NOT TO BE PUBLISHED.",
+	"NAME"		: "This can break your KSP, ruin your Windows, kill your pet, offend your mom  and poison your kids",
+	"NAME"		: "By the Holy Kerbol that enlighten us, please use this only under my instructions, and only if I ask you to do so! Twice. :)",
+
 	"NAME"		: "TweakScale",
 	"URL"		: "https://raw.githubusercontent.com/net-lisias-ksp/TweakScale/master/TweakScale.version",
 	"DOWNLOAD"	: "https://github.com/net-lisias-ksp/TweakScale/releases",
-	"CHANGE_LOG"	: "https://github.com/net-lisias-ksp/TweakScale/blob/master/CHANGE_LOG.md",
 	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/net-lisias-ksp/TweakScale/master/CHANGES.md",
+
+	"NAME"		: "TweakScale Beta",
+	"URL"		: "https://raw.githubusercontent.com/net-lisias-ksp/TweakScale/dev/orthodox/TweakScale.version",
+	"DOWNLOAD"	: "https://github.com/net-lisias-ksp/TweakScale/issues/42",
+	"CHANGE_LOG"	: "https://github.com/net-lisias-ksp/TweakScale/blob/dev/orthodox/CHANGE_LOG.md",
+	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/net-lisias-ksp/TweakScale/dev/orthodox/CHANGES.md",
 
 	"VERSION":{
 		"MAJOR":2,
-		"MINOR":4,
-		"PATCH":2,
+		"MINOR":5,
+		"PATCH":0,
 		"BUILD":0
 		},
 	"KSP_VERSION_MIN":{
