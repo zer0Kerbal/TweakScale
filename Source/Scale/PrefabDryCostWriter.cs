@@ -49,6 +49,7 @@ namespace TweakScale
             }
             
             int sanity_failures = 0;
+            int showstoppers_failures = 0;
 			foreach (AvailablePart p in PartLoader.LoadedPartsList)
             {
 				for (int i = WAIT_ROUNDS; i >= 0 && null == p.partPrefab && null == p.partPrefab.Modules && p.partPrefab.Modules.Count < 1; --i)
@@ -106,8 +107,9 @@ namespace TweakScale
                 }
 #endif
                 {
-                    string r = this.checkForSanity(prefab);
-                    if (null != r)
+                    string r = null;
+                    // We check for fixable problems first, in the hope to prevent by luck a ShowStopper below.
+                    if (null != (r = this.checkForSanity(prefab)))
     				{   // There are some known situations where TweakScale is capsizing. If such situations are detected, we just
                         // refuse to scale it. Sorry.
                         Debug.LogWarningFormat("[TweakScale] Removing TweakScale support for {0}.", p.name);
@@ -116,6 +118,16 @@ namespace TweakScale
                         ++sanity_failures;
                         continue;
 					}
+                    
+                    if (null != (r = this.checkForShowStoppers(prefab)))
+                    {   // This are situations that we should not allow the KSP to run to prevent serious corruption.
+                        // This is **FAR** from a good measure, but it's the only viable.
+                        Debug.LogWarningFormat("[TweakScale] **FATAL** Found a showstopper problem on {0}.", p.name);
+                        prefab.Modules.Remove(prefab.Modules["TweakScale"]);
+                        Debug.LogErrorFormat("[TweakScale] **FATAL** Part {0} has a fatal problem due {1}.", p.name, r);
+                        ++showstoppers_failures;
+                        continue;
+                    }
 				}
 
 				try
@@ -140,7 +152,11 @@ namespace TweakScale
             }
             Debug.Log("TweakScale::WriteDryCost: Concluded");
             PrefabDryCostWriter.isConcluded = true;
-            if (sanity_failures > 0)
+            if (showstoppers_failures > 0)
+            {
+                //todo MessageBox!
+            }
+            else if (sanity_failures > 0)
             {
                 //todo MessageBox!
             }
@@ -184,5 +200,23 @@ namespace TweakScale
 
 			return null;
 		}
+        
+        private string checkForShowStoppers(Part p)
+        {
+            {
+                ConfigNode part = GameDatabase.Instance.GetConfigNode(p.partInfo.partUrl);
+                foreach (ConfigNode basket in part.GetNodes("MODULE"))
+                {
+                    if ("TweakScale" != basket.GetValue("name")) continue;                      
+                    foreach (ConfigNode.Value property in basket.values)
+                    {
+                        if (1 != basket.GetValues(property.name).Length)
+                            return "has duplicated properties - see issue #34 - https://github.com/net-lisias-ksp/TweakScale/issues/34";
+                    }
+                }
+            }
+            
+            return null;
+        }
 	}
 }
