@@ -153,7 +153,7 @@ namespace TweakScale
             PrefabDryCostWriter.isConcluded = true;
             if (showstoppers_failures > 0)
             {
-                GUI.ShowStopperAlertBox.show(showstoppers_failures);
+                GUI.ShowStopperAlertBox.Show(showstoppers_failures);
             }
             else if (sanity_failures > 0)
             {
