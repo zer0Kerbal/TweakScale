@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace TweakScale
 {
-    static class Tuple
+    public static class Tuple
     {
         public static Tuple<T1, T2> Create<T1, T2>(T1 a, T2 b)
         {

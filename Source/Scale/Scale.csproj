@@ -32,7 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Checker.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Hotkey.cs" />
@@ -54,6 +53,9 @@
     <Compile Include="..\Version.cs">
       <DependentUpon>Version.tt</DependentUpon>
     </Compile>
+    <Compile Include="GUI\ShowStopperAlertBox.cs" />
+    <Compile Include="GUI\AlertBox.cs" />
+    <Compile Include="GUI\SanityCheckAlertBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -85,6 +87,9 @@
       <Project>{2BE63D8B-350E-4EDD-959C-4B7397984364}</Project>
       <Name>Scale_Redist</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GUI\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

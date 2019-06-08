@@ -99,7 +99,7 @@ namespace TweakScale
 
             foreach (ConfigNode.Value value in node.values.OfType<ConfigNode.Value>().Where(a=>a.name != "name"))
             {
-                if (value.name.StartsWith("!"))
+                if (value.name.StartsWith("!", StringComparison.Ordinal))
                 {
                     _exponents[value.name.Substring(1)] = new ScalingMode(value.value, true);
                 }
@@ -261,7 +261,7 @@ namespace TweakScale
         /// <param name="part">The part the object is on.</param>
         private void UpdateFields(object obj, object baseObj, ScalingFactor factor, Part part)
         {
-            if ((object)obj == null)
+            if (obj is null)
                 return;
 
             /*if (obj is PartModule && obj.GetType().Name != _id)
@@ -273,8 +273,7 @@ namespace TweakScale
             if (ShouldIgnore(part))
                 return;
 
-			IEnumerable enumerable = obj as IEnumerable;
-            if (enumerable != null)
+            if (obj is IEnumerable enumerable)
             {
                 UpdateEnumerable(enumerable, (IEnumerable)baseObj, factor, part);
                 return;
@@ -337,7 +336,7 @@ namespace TweakScale
             }
         }
 
-        struct ModuleAndPrefab
+        private struct ModuleAndPrefab
         {
             public object Current { get; private set; }
             public object Prefab { get; private set; }
@@ -355,7 +354,7 @@ namespace TweakScale
             }
         }
 
-        struct ModulesAndExponents
+        private struct ModulesAndExponents
         {
             public object Current { get; private set; }
             public object Prefab { get; private set; }

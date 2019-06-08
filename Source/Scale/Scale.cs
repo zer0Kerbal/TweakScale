@@ -104,24 +104,12 @@ namespace TweakScale
         /// </summary>
         public ScaleType ScaleType { get; private set; }
 
-        public bool IsRescaled
-        {
-            get
-            {
-                return (Math.Abs(currentScale / defaultScale - 1f) > 1e-5f);
-            }
-        }
+        public bool IsRescaled => (Math.Abs(currentScale / defaultScale - 1f) > 1e-5f);
 
         /// <summary>
         /// The current scaling factor.
         /// </summary>
-        public ScalingFactor ScalingFactor
-        {
-            get
-            {
-                return new ScalingFactor(tweakScale / defaultScale, tweakScale / currentScale, isFreeScale ? -1 : tweakName);
-            }
-        }
+        public ScalingFactor ScalingFactor => new ScalingFactor(tweakScale / defaultScale, tweakScale / currentScale, isFreeScale ? -1 : tweakName);
 
 
         protected virtual void SetupPrefab()
@@ -172,8 +160,7 @@ namespace TweakScale
             else
             {
                 DryCost = (float)(part.partInfo.cost - _prefabPart.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
-                if (part.Modules.Contains("FSfuelSwitch"))
-                  ignoreResourcesForCost = true;
+                ignoreResourcesForCost |= part.Modules.Contains("FSfuelSwitch");
                 
                 if (DryCost < 0)
                 {
@@ -319,7 +306,7 @@ namespace TweakScale
             GameEvents.onEditorShipModified.Fire(EditorLogic.fetch.ship);
         }
 
-        void OnEditorShipModified(ShipConstruct ship)
+        private void OnEditorShipModified(ShipConstruct ship)
         {
             if (part.CrewCapacity >= _prefabPart.CrewCapacity) { return; }
 
@@ -327,7 +314,7 @@ namespace TweakScale
         }
 
         [UsedImplicitly]
-        void Update()
+        public void Update()
         {
             if (_firstUpdate)
             {
@@ -379,7 +366,7 @@ namespace TweakScale
             }
         }
 
-        void CallUpdaters()
+        private void CallUpdaters()
         {
             // two passes, to depend less on the order of this list
             int len = _updaters.Length;
@@ -457,7 +444,7 @@ namespace TweakScale
             ShipConstruction.ShipManifest.SetPartManifest(part.craftID, pcm);
         }
 
-        void UpdateMftModule()
+        private void UpdateMftModule()
         {
             try
             {
@@ -488,11 +475,11 @@ namespace TweakScale
         {
             if (null == tfInterface) return;
             BindingFlags tBindingFlags = BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static;
-            string name = "scale";
+            string _name = "scale";
             string value = ScalingFactor.absolute.linear.ToString();
             string owner = "TweakScale";
 
-            bool valueAdded = (bool)tfInterface.InvokeMember("AddInteropValue", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] { part, name, value, owner });
+            bool valueAdded = (bool)tfInterface.InvokeMember("AddInteropValue", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null, null, new System.Object[] { part, _name, value, owner });
             Debug.Log("[TweakScale] TF: valueAdded=" + valueAdded + ", value=" + value.ToString());
         }
 
@@ -600,7 +587,7 @@ namespace TweakScale
         {
             part.rescaleFactor = _prefabPart.rescaleFactor * ScalingFactor.absolute.linear;
 
-			Transform trafo = part.partTransform.FindChild("model");
+			Transform trafo = part.partTransform.Find("model");
             if (trafo != null)
             {
                 if (defaultTransformScale.x == 0.0f)
@@ -656,12 +643,10 @@ namespace TweakScale
 
         private void ScaleDragCubes(bool absolute)
         {
-            ScalingFactor.FactorSet factor;
-            if (absolute)
-                factor = ScalingFactor.absolute;
-            else
-                factor = ScalingFactor.relative;
-
+            ScalingFactor.FactorSet factor = absolute 
+                ? ScalingFactor.absolute 
+                : ScalingFactor.relative
+        ;
             if (factor.linear == 1)
                 return;
 
@@ -696,12 +681,12 @@ namespace TweakScale
 
 			Vector3 oldPosition = node.position;
 
-            if (absolute)
-                node.position = baseNode.position * ScalingFactor.absolute.linear;
-            else
-                node.position = node.position * ScalingFactor.relative.linear;
+            node.position = absolute 
+                ? baseNode.position * ScalingFactor.absolute.linear 
+                : node.position * ScalingFactor.relative.linear
+            ;
 
-			Vector3 deltaPos = node.position - oldPosition;
+            Vector3 deltaPos = node.position - oldPosition;
 
             if (movePart && node.attachedPart != null)
             {

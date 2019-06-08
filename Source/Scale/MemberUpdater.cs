@@ -13,7 +13,7 @@ namespace TweakScale
         private readonly UI_FloatRange _floatRange;
         private const BindingFlags LookupFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
-        static void ConcatSafely(string name, Func<string> a, ref string result)
+        private static void ConcatSafely(string name, Func<string> a, ref string result)
         {
             try
             {

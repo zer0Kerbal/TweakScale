@@ -12,16 +12,14 @@ namespace TweakScale
         private readonly Dictionary<string, Hotkeyable> _hotkeys = new Dictionary<string, Hotkeyable>();
         private /*readonly*/ PluginConfiguration _config;
 
-		private void Awake()
+		private new void Awake()
 		{
             base.Awake();
 
             _config = PluginConfiguration.CreateForType<TweakScale>();
 		}
 
-        public PluginConfiguration Config {
-            get { return _config; }
-        }
+        public PluginConfiguration Config => _config;
 
         [UsedImplicitly]
         private void OnGUI()
@@ -32,7 +30,7 @@ namespace TweakScale
         [UsedImplicitly]
         private void Update()
         {
-            foreach (var key in _hotkeys.Values)
+            foreach (Hotkeyable key in _hotkeys.Values)
             {
                 key.Update();
             }
