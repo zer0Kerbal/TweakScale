@@ -105,7 +105,7 @@ namespace TweakScale
                         Debug.LogFormat("\tPart {0} has module {1}", p.name, m.moduleName);
                 }
 #endif
-                {
+                try {
                     string r = null;
                     // We check for fixable problems first, in the hope to prevent by luck a ShowStopper below.
                     if (null != (r = this.checkForSanity(prefab)))
@@ -127,7 +127,11 @@ namespace TweakScale
                         ++showstoppers_failures;
                         continue;
                     }
-				}
+                }
+                catch (Exception e)
+                {
+                    Debug.LogErrorFormat("[TweakScale] part={0} ({1}) Exception on Sanity Checks: {2}", p.name, p.title, e);
+                }
 
 				try
                 {
