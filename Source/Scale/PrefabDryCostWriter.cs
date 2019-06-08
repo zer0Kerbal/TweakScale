@@ -210,7 +210,7 @@ namespace TweakScale
                     foreach (ConfigNode.Value property in basket.values)
                     {
                         if (1 != basket.GetValues(property.name).Length)
-                            return "has duplicated properties - see issue #34 - https://github.com/net-lisias-ksp/TweakScale/issues/34";
+                            return "having duplicated properties - see issue #34 - https://github.com/net-lisias-ksp/TweakScale/issues/34";
                     }
                 }
             }
