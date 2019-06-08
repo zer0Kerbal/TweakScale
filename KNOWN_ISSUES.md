@@ -1,5 +1,8 @@
 # TweakScale :: Known Issues
 
+* A new and definitively destructive *"Unholly Interactions Between Modules"*, or as it's fondly known by it's friends, **Kraken Food**, was found due some old or badly written patches ends up injecting TweakScale properties **twice** on the Node.
+	+ This is particularly nasty as it corrupts a previously working GameDatabase that infects your savegames with corrupted part info. Once a new Add'On is installed, or the bad one is uninstalled, suddenly all your savegames with the old, corrupted part info became broken. See details on the [Issue #34](https://github.com/net-lisias-ksp/TweakScale/issues/34).
+	+ This was considered **FATAL** as previously perfectly fine parts became corrupted by installing a rogue Patch, that can so be uninstalled later ruining savegames. By that reason, a very scaring warning are being issue in the Main Menu when the problem is detected.
 * There's a crashing situation when using TweakScale and [Classic Infernal Robotics](https://github.com/MagicSmokeIndustries/InfernalRobotics).
 	+ IR parts scaled down to "Small -" (small minus, the smallest of them) crashes the game when the craft is unpacked.
 	+ Aparently quitting imediatelly KSP, restarting, reloading the game and recovering the vessel from the Track Station is enough to salvage the savegame - but more tests are needed to be sure of that.
@@ -8,7 +11,7 @@
 		- [#40](https://github.com/net-lisias-ksp/TweakScale/issues/40) Feasibility Study for a runtime Sanity Check for issue #39
 	+ TweakScale advises all IR users to update to [Infernal Robotics/Next](https://github.com/meirumeiru/InfernalRobotics) where this issue was solved.
 * There's a potentially destructive problem happening due *"Unholly Interactions Between Modules"*, or as it's fondly known by it's friends, **Kraken Food**. :)
-	+ Due events absolutely beyound the TweakScale scope of actions,  some parts are being injected with more than one instance of TweakScale. This usually happens by faulty MM patches, but in the end this can happens by code or even my MM cache's editing.
+	+ Due events absolutely beyond the TweakScale scope of actions,  some parts are being injected with more than one instance of TweakScale. This usually happens by faulty MM patches, but in the end this can happens by code or even my MM cache's editing.
 		- Things appears to work fine, except by some double Tweakables on the UI. However, crafts and savagames get corrupted when loaded by sane KSP installments, as the duplicates now takes precedence on loading config data, overwriting the real ones.
 		- **Things become very ugly when by absolutely any reason (new add-on installed or deleted, or even updated) the glitch is fixed on the MM cache. Now, your KSP installment is a sane one, and all your crafts (including the flying ones) will lose their TweakScale settings!**
 	+ So, before any fix is attempted to the problem, TweakScale now is taking some measures to preserve your craft settings from being overwritten once the craft is loaded into a sane installment.
