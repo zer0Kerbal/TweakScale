@@ -26,25 +26,28 @@ namespace TweakScale
         {
             PrefabDryCostWriter.isConcluded = false;
             Debug.Log("TweakScale::WriteDryCost: Started");
-            for (int i = WAIT_ROUNDS; i >= 0 && null == PartLoader.LoadedPartsList; --i)
-            {
-                yield return null;
-                if (0 == i) Debug.LogError("TweakScale::Timeout waiting for PartLoader.LoadedPartsList!!");
-            }
 
-			 // I Don't know if this is needed, but since I don't know that this is not needed,
-			 // I choose to be safe than sorry!
-            {
-                int last_count = int.MinValue;
-			    for (int i = WAIT_ROUNDS; i >= 0; --i)
-				{
-                    if (last_count == PartLoader.LoadedPartsList.Count) break;
-					last_count = PartLoader.LoadedPartsList.Count;
+            {  // Toe Stomping Fest prevention
+                for (int i = WAIT_ROUNDS; i >= 0 && null == PartLoader.LoadedPartsList; --i)
+                {
                     yield return null;
-                    if (0 == i) Debug.LogError("TweakScale::Timeout waiting for PartLoader.LoadedPartsList.Count!!");
-				}
-			 }
-
+                    if (0 == i) Debug.LogError("TweakScale::Timeout waiting for PartLoader.LoadedPartsList!!");
+                }
+    
+    			 // I Don't know if this is needed, but since I don't know that this is not needed,
+    			 // I choose to be safe than sorry!
+                {
+                    int last_count = int.MinValue;
+    			    for (int i = WAIT_ROUNDS; i >= 0; --i)
+    				{
+                        if (last_count == PartLoader.LoadedPartsList.Count) break;
+    					last_count = PartLoader.LoadedPartsList.Count;
+                        yield return null;
+                        if (0 == i) Debug.LogError("TweakScale::Timeout waiting for PartLoader.LoadedPartsList.Count!!");
+    				}
+    			 }
+            }
+            
             int sanity_failures = 0;
 			foreach (AvailablePart p in PartLoader.LoadedPartsList)
             {
