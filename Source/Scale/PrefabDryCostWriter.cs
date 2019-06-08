@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -154,11 +153,11 @@ namespace TweakScale
             PrefabDryCostWriter.isConcluded = true;
             if (showstoppers_failures > 0)
             {
-                //todo MessageBox!
+                GUI.ShowStopperAlertBox.Show(showstoppers_failures);
             }
             else if (sanity_failures > 0)
             {
-                //todo MessageBox!
+                GUI.SanityCheckAlertBox.show(sanity_failures);
             }
         }
         
