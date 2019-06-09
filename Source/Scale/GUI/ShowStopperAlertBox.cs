@@ -9,7 +9,7 @@ namespace TweakScale.GUI
     {
         private static readonly string MSG = @"Unfortunately TweakScale found {0:} **FATAL** issue(s) on your KSP installment. This *will* corrupt your savagames sooner or later **FOR SURE**.
 
-The KSP.log is listing every comprimised part(s) on your installment, look for lines with [TweakScale] **FATAL** on the log line. Be aware that the parts being reported are not the culprits, but the Screaming Victims.
+The KSP.log is listing every compromised part(s) on your installment, look for lines with [TweakScale] **FATAL** on the log line. Be aware that the parts being reported are not the culprits, but the Screaming Victims.
 
 There's no possible automated fix for the problem, your best line of action is to call for help on Forum by clicking on the OK button below. We will help you on diagnosing the Add'On that is troubling you. Publish your KSP.log on some snippet service as GIST and Pastebin and mention it on the post.
 
