@@ -49,14 +49,15 @@ namespace TweakScale
             
             int sanity_failures = 0;
             int showstoppers_failures = 0;
-			foreach (AvailablePart p in PartLoader.LoadedPartsList)
+           
+            foreach (AvailablePart p in PartLoader.LoadedPartsList)
             {
-				for (int i = WAIT_ROUNDS; i >= 0 && null == p.partPrefab && null == p.partPrefab.Modules && p.partPrefab.Modules.Count < 1; --i)
+                for (int i = WAIT_ROUNDS; i >= 0 && (null == p.partPrefab || null == p.partPrefab.Modules || p.partPrefab.Modules.Count < 1); --i)
                 {
-					yield return null;
+                    yield return null;
                     if (0 == i) Debug.LogErrorFormat("TweakScale::Timeout waiting for {0}.prefab.Modules!!", p.name);
-				}
-                
+                }
+              
                 Part prefab;
                 { 
                     // Historically, we had problems here.
