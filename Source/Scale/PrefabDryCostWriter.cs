@@ -47,6 +47,7 @@ namespace TweakScale
     			 }
             }
             
+            int check_failures = 0;
             int sanity_failures = 0;
             int showstoppers_failures = 0;
            
@@ -131,6 +132,7 @@ namespace TweakScale
                 }
                 catch (Exception e)
                 {
+                    ++check_failures;
                     Debug.LogErrorFormat("[TweakScale] part={0} ({1}) Exception on Sanity Checks: {2}", p.name, p.title, e);
                 }
 
@@ -151,18 +153,20 @@ namespace TweakScale
                 }
                 catch (Exception e)
                 {
+                    ++check_failures;
                     Debug.LogErrorFormat("[TweakScale] part={0} ({1}) Exception on writeDryCost: {2}", p.name, p.title, e);
                 }
             }
             Debug.Log("TweakScale::WriteDryCost: Concluded");
             PrefabDryCostWriter.isConcluded = true;
+            
             if (showstoppers_failures > 0)
             {
                 GUI.ShowStopperAlertBox.Show(showstoppers_failures);
             }
-            else if (sanity_failures > 0)
+            else if (check_failures > 0 || sanity_failures > 0)
             {
-                GUI.SanityCheckAlertBox.show(sanity_failures);
+                GUI.SanityCheckAlertBox.show(sanity_failures, check_failures);
             }
         }
         
