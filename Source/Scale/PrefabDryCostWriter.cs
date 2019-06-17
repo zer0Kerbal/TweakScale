@@ -50,6 +50,7 @@ namespace TweakScale
             int check_failures = 0;
             int sanity_failures = 0;
             int showstoppers_failures = 0;
+            int check_overrulled = 0;
            
             foreach (AvailablePart p in PartLoader.LoadedPartsList)
             {
@@ -111,14 +112,14 @@ namespace TweakScale
                     string r = null;
                     // We check for fixable problems first, in the hope to prevent by luck a ShowStopper below.
                     if (null != (r = this.checkForSanity(prefab)))
-    				{   // There are some known situations where TweakScale is capsizing. If such situations are detected, we just
+                    {   // There are some known situations where TweakScale is capsizing. If such situations are detected, we just
                         // refuse to scale it. Sorry.
                         Debug.LogWarningFormat("[TweakScale] Removing TweakScale support for {0}.", p.name);
                         prefab.Modules.Remove(prefab.Modules["TweakScale"]);
                         Debug.LogErrorFormat("[TweakScale] Part {0} didn't passed the sanity check due {1}.", p.name, r);
                         ++sanity_failures;
                         continue;
-					}
+                    }
                     
                     if (null != (r = this.checkForShowStoppers(prefab)))
                     {   // This are situations that we should not allow the KSP to run to prevent serious corruption.
@@ -127,6 +128,15 @@ namespace TweakScale
                         prefab.Modules.Remove(prefab.Modules["TweakScale"]);
                         Debug.LogErrorFormat("[TweakScale] **FATAL** Part {0} has a fatal problem due {1}.", p.name, r);
                         ++showstoppers_failures;
+                        continue;
+                    }
+                    
+                    if (null != (r = this.checkForOverules(prefab)))
+                    {   // This is for detect and log the Breaking Parts patches.
+                        // See issue [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 ) for details.
+                        // This is **FAR** from a good measure, but it's the only viable.
+                        Debug.LogWarningFormat("[TweakScale] Part {0} has the overrule {1}.", p.name, r);
+                        ++check_overrulled;
                         continue;
                     }
                 }
@@ -140,7 +150,7 @@ namespace TweakScale
                 {
 					TweakScale m = prefab.Modules["TweakScale"] as TweakScale;
                     m.DryCost = (float)(p.cost - prefab.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
-					m.ignoreResourcesForCost |= prefab.Modules.Contains("FSfuelSwitch");
+                    m.ignoreResourcesForCost |= prefab.Modules.Contains("FSfuelSwitch");
 
                     if (m.DryCost < 0)
                     {
@@ -148,7 +158,7 @@ namespace TweakScale
                         m.DryCost = 0;
                     }
 #if DEBUG
-					Debug.LogFormat("Part {0} has drycost {1} with ignoreResourcesForCost {2}", p.name, m.DryCost, m.ignoreResourcesForCost);
+                    Debug.LogFormat("Part {0} has drycost {1} with ignoreResourcesForCost {2}", p.name, m.DryCost, m.ignoreResourcesForCost);
 #endif
                 }
                 catch (Exception e)
@@ -157,7 +167,7 @@ namespace TweakScale
                     Debug.LogErrorFormat("[TweakScale] part={0} ({1}) Exception on writeDryCost: {2}", p.name, p.title, e);
                 }
             }
-            Debug.LogFormat("TweakScale::WriteDryCost: Concluded : {0} checks failed ; {1} Show Stoppers found; {2} Sanity Check failed;", check_failures, showstoppers_failures, sanity_failures);
+            Debug.LogFormat("TweakScale::WriteDryCost: Concluded : {0} checks failed ; {1} parts with issues overruled ; {2} Show Stoppers found; {3} Sanity Check failed;", check_failures, check_overrulled, showstoppers_failures, sanity_failures);
             PrefabDryCostWriter.isConcluded = true;
             
             if (showstoppers_failures > 0)
@@ -167,6 +177,11 @@ namespace TweakScale
             else if (check_failures > 0 || sanity_failures > 0)
             {
                 GUI.SanityCheckAlertBox.show(sanity_failures, check_failures);
+            }
+            else if (check_overrulled > 0)
+            {
+                // Cook something to remember the user do do not create new savegames.
+                GUI.OverrulledAlertBox.show(check_overrulled);
             }
         }
         
@@ -215,11 +230,30 @@ namespace TweakScale
                 ConfigNode part = GameDatabase.Instance.GetConfigNode(p.partInfo.partUrl);
                 foreach (ConfigNode basket in part.GetNodes("MODULE"))
                 {
-                    if ("TweakScale" != basket.GetValue("name")) continue;                      
+                    if ("TweakScale" != basket.GetValue("name")) continue;
                     foreach (ConfigNode.Value property in basket.values)
                     {
+                        if (basket.HasValue("ISSUE_OVERRULE")) continue;
                         if (1 != basket.GetValues(property.name).Length)
                             return "having duplicated properties - see issue [#34]( https://github.com/net-lisias-ksp/TweakScale/issues/34 )";
+                    }
+                }
+            }
+            
+            return null;
+        }
+
+        private string checkForOverules(Part p)
+        {
+            {
+                ConfigNode part = GameDatabase.Instance.GetConfigNode(p.partInfo.partUrl);
+                foreach (ConfigNode basket in part.GetNodes("MODULE"))
+                {
+                    if ("TweakScale" != basket.GetValue("name")) continue;
+                    foreach (ConfigNode.Value property in basket.values)
+                    {
+                        if (basket.HasValue("ISSUE_OVERRULE"))
+                            return String.Format("has a issue overrule for {0}. See [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 )", basket.GetValue("ISSUE_OVERRULE");
                     }
                 }
             }
