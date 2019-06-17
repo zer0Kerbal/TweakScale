@@ -26,6 +26,7 @@ The following file layout must be present after installation:
 	[GameData]
 		[TweakScale]
 			[Plugins]
+				KSPe.Light.TweakScale.dll
 				Scale.dll
 				Scale_Redist.dll
 			[patches]
@@ -49,8 +50,9 @@ The following file layout must be present after installation:
 
 ### Dependencies
 
+* KSPe Light for TweakScale
+	+ Included
+	+ Licensed to TweakScale under [SKL 1.0](https://ksp.lisias.net/SKL-1_0.txt)
 * Module Manager 3.0.7 or later
 	+ Included
 		- Do not unzip this if you use my [Unofficial fork](https://github.com/net-lisias-kspu/ModuleManager). 
-
-
