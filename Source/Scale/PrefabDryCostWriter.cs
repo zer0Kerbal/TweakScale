@@ -175,7 +175,7 @@ namespace TweakScale
             {
                 TweakScale m = p.Modules.GetModule<TweakScale>();
                 if (m.Fields["tweakScale"].guiActiveEditor == m.Fields["tweakName"].guiActiveEditor)
-                    return "not being correctly initialized - see issue #30 - https://github.com/net-lisias-ksp/TweakScale/issues/30";
+                    return "not being correctly initialized - see issue [#30]( https://github.com/net-lisias-ksp/TweakScale/issues/30 )";
             }
             
             if (p.Modules.Contains("ModulePartVariants"))
@@ -189,21 +189,21 @@ namespace TweakScale
 					    foreach (PropertyInfo property in partVariant.GetType().GetProperties())
                         { 
 						    if ("Cost" == property.Name && 0.0 != (float)property.GetValue(partVariant, null))
-                                return "having a ModulePartVariants with Cost - see issue #13 https://github.com/net-lisias-ksp/TweakScale/issues/13";                                        
+                                return "having a ModulePartVariants with Cost - see issue [#13]( https://github.com/net-lisias-ksp/TweakScale/issues/13 )";                                        
                             if ("Mass" == property.Name && 0.0 != (float)property.GetValue(partVariant, null))
-                                return "having a ModulePartVariants with Mass - see issue #13 https://github.com/net-lisias-ksp/TweakScale/issues/13";                                        
+                                return "having a ModulePartVariants with Mass - see issue [#13]( https://github.com/net-lisias-ksp/TweakScale/issues/13 )";                                        
 						}
 				}
 			}
             if (p.Modules.Contains("FSbuoyancy"))
-                return "using FSbuoyancy module - see issue #9 https://github.com/net-lisias-ksp/TweakScale/issues/9";
+                return "using FSbuoyancy module - see issue [#9]( https://github.com/net-lisias-ksp/TweakScale/issues/9 )";
 
             if (p.Modules.Contains("ModuleB9PartSwitch"))
 			{
                 if (p.Modules.Contains("FSfuelSwitch"))
-                    return "having ModuleB9PartSwitch together FSfuelSwitch - see issue #12 - https://github.com/net-lisias-ksp/TweakScale/issues/12";
+                    return "having ModuleB9PartSwitch together FSfuelSwitch - see issue [#12]( https://github.com/net-lisias-ksp/TweakScale/issues/12 )";
                 if (p.Modules.Contains("ModuleFuelTanks"))
-                    return "having ModuleB9PartSwitch together ModuleFuelTanks - see issue #12 - https://github.com/net-lisias-ksp/TweakScale/issues/12";;
+                    return "having ModuleB9PartSwitch together ModuleFuelTanks - see issue [#12]( https://github.com/net-lisias-ksp/TweakScale/issues/12 )";
 			}
 
 			return null;
@@ -219,7 +219,7 @@ namespace TweakScale
                     foreach (ConfigNode.Value property in basket.values)
                     {
                         if (1 != basket.GetValues(property.name).Length)
-                            return "having duplicated properties - see issue #34 - https://github.com/net-lisias-ksp/TweakScale/issues/34";
+                            return "having duplicated properties - see issue [#34]( https://github.com/net-lisias-ksp/TweakScale/issues/34 )";
                     }
                 }
             }
