@@ -157,7 +157,7 @@ namespace TweakScale
                     Debug.LogErrorFormat("[TweakScale] part={0} ({1}) Exception on writeDryCost: {2}", p.name, p.title, e);
                 }
             }
-            Debug.Log("TweakScale::WriteDryCost: Concluded");
+            Debug.LogFormat("TweakScale::WriteDryCost: Concluded : {0} checks failed ; {1} Show Stoppers found; {2} Sanity Check failed;", check_failures, showstoppers_failures, sanity_failures);
             PrefabDryCostWriter.isConcluded = true;
             
             if (showstoppers_failures > 0)
