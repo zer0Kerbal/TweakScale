@@ -14,7 +14,7 @@ namespace TweakScale
 		private static readonly int WAIT_ROUNDS = 120; // @60fps, would render 2 secs.
         
 		internal static bool isConcluded = false;
-        
+
         [UsedImplicitly]
         private void Start()
         {
@@ -37,13 +37,13 @@ namespace TweakScale
     			 // I choose to be safe than sorry!
                 {
                     int last_count = int.MinValue;
-    			    for (int i = WAIT_ROUNDS; i >= 0; --i)
-    				{
+                    for (int i = WAIT_ROUNDS; i >= 0; --i)
+                    {
                         if (last_count == PartLoader.LoadedPartsList.Count) break;
-    					last_count = PartLoader.LoadedPartsList.Count;
+                        last_count = PartLoader.LoadedPartsList.Count;
                         yield return null;
                         if (0 == i) Debug.LogError("TweakScale::Timeout waiting for PartLoader.LoadedPartsList.Count!!");
-    				}
+                    }
     			 }
             }
             
@@ -135,7 +135,7 @@ namespace TweakScale
                     {   // This is for detect and log the Breaking Parts patches.
                         // See issue [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 ) for details.
                         // This is **FAR** from a good measure, but it's the only viable.
-                        Debug.LogWarningFormat("[TweakScale] Part {0} has the overrule {1}.", p.name, r);
+                        Debug.LogWarningFormat("[TweakScale] Part {0} has the issue overrule {1}.", p.name, r);
                         ++check_overrulled;
                         continue;
                     }
@@ -174,14 +174,11 @@ namespace TweakScale
             {
                 GUI.ShowStopperAlertBox.Show(showstoppers_failures);
             }
-            else if (check_failures > 0 || sanity_failures > 0)
+            else
             {
-                GUI.SanityCheckAlertBox.show(sanity_failures, check_failures);
-            }
-            else if (check_overrulled > 0)
-            {
-                // Cook something to remember the user do do not create new savegames.
-                GUI.OverrulledAlertBox.show(check_overrulled);
+                if (check_overrulled > 0)   GUI.OverrulledAdviseBox.show(check_overrulled);
+                if (sanity_failures > 0)    GUI.SanityCheckAlertBox.show(sanity_failures);
+                if (check_failures > 0)     GUI.CheckFailureAlertBox.show(check_failures);
             }
         }
         
@@ -253,7 +250,7 @@ namespace TweakScale
                     foreach (ConfigNode.Value property in basket.values)
                     {
                         if (basket.HasValue("ISSUE_OVERRULE"))
-                            return String.Format("has a issue overrule for {0}. See [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 )", basket.GetValue("ISSUE_OVERRULE");
+                            return String.Format("{0}. See [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 )", basket.GetValue("ISSUE_OVERRULE"));
                     }
                 }
             }

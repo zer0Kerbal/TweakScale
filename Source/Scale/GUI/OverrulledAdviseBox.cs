@@ -4,17 +4,16 @@ using KSPe.UI;
 
 namespace TweakScale.GUI
 {
-    internal class SanityCheckAlertBox : TimedMessageBox
-    { 
-        private static readonly string MSG = @"TweakScale found {0} parts that failed sanity checks! See KSP.log for details.
+    internal class OverrulledAdviseBox : TimedMessageBox
+    {
+        private static readonly string MSG = @"There're {0} parts with overrules detected.
 
-Parts that fails sanity check had TweakScale support withdrawn. This was necessary to prevent them to crash the game. At the present, there's no way to use them without nasty consequences.
+A overrule is a problem detected but the fix would break a savegame, so a patch to overcome the problem is applied.
 
-TweakScale is working to support that parts.";
-        
-        internal static void show(int sanity_failures)
+Do not start new savegames with overruled parts. Use them only to exising ones.";
+        internal static void show(int overrule_count)
         {
-            GameObject go = new GameObject("TweakScale.WarningBox");
+            GameObject go = new GameObject("TweakScale.AdviseBox");
             TimedMessageBox dlg = go.AddComponent<TimedMessageBox>();
             
             GUIStyle win = new GUIStyle("Window")
@@ -22,7 +21,7 @@ TweakScale is working to support that parts.";
                 fontSize = 26,
                 fontStyle = FontStyle.Bold
             };
-            win.normal.textColor = Color.yellow;
+            win.normal.textColor = Color.white;
             win.border.top = 36;
 
             GUIStyle text = new GUIStyle("Label")
@@ -43,12 +42,12 @@ TweakScale is working to support that parts.";
             }
 
             dlg.Show(
-                "TweakScale Warning", 
-                String.Format(MSG, sanity_failures),
-                30, 1, 0,
+                "TweakScale advises", 
+                String.Format(MSG, overrule_count),
+                30, 1, -1,
                 win, text
             );
-            Debug.Log("[TWEAKSCALE] \"TweakScale Warning\" about sanity checks was displayed");
+            Debug.Log("[TWEAKSCALE] \"TweakScale advises\" about overrules checks was displayed");
         }
     }
 }

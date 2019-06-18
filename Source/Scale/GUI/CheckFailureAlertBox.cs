@@ -4,15 +4,15 @@ using KSPe.UI;
 
 namespace TweakScale.GUI
 {
-    internal class SanityCheckAlertBox : TimedMessageBox
+    internal class CheckFailureAlertBox : TimedMessageBox
     { 
-        private static readonly string MSG = @"TweakScale found {0} parts that failed sanity checks! See KSP.log for details.
+        private static readonly string MSG = @"TweakScale found {0} parts that failed being checked! See KSP.log for details.
 
-Parts that fails sanity check had TweakScale support withdrawn. This was necessary to prevent them to crash the game. At the present, there's no way to use them without nasty consequences.
+This does not means that the part has a problem, it can be alright. But since TweakScale cannot know for sure, it's a concern.
 
-TweakScale is working to support that parts.";
+This usually happens due Third Parties Add'On or DLC getting into the way, botching the check. Please report, we are working hard to overcome this.";
         
-        internal static void show(int sanity_failures)
+        internal static void show(int check_failures)
         {
             GameObject go = new GameObject("TweakScale.WarningBox");
             TimedMessageBox dlg = go.AddComponent<TimedMessageBox>();
@@ -44,11 +44,11 @@ TweakScale is working to support that parts.";
 
             dlg.Show(
                 "TweakScale Warning", 
-                String.Format(MSG, sanity_failures),
-                30, 1, 0,
+                String.Format(MSG, check_failures),
+                30, 1, 1,
                 win, text
             );
-            Debug.Log("[TWEAKSCALE] \"TweakScale Warning\" about sanity checks was displayed");
+            Debug.Log("[TWEAKSCALE] \"TweakScale Warning\" about check failures was displayed");
         }
     }
 }

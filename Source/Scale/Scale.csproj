@@ -56,7 +56,8 @@
     <Compile Include="GUI\ShowStopperAlertBox.cs" />
     <Compile Include="GUI\SanityCheckAlertBox.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="GUI\OverrulledAlertBox.cs" />
+    <Compile Include="GUI\OverrulledAdviseBox.cs" />
+    <Compile Include="GUI\CheckFailureAlertBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -75,8 +76,8 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>..\..\..\..\..\..\LIB\managed\1.4.1\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="KSPe.Light">
-      <HintPath>..\..\..\..\..\..\LIB\plugins\KSPe.Light.dll</HintPath>
+    <Reference Include="KSPe.Light.TweakScale">
+      <HintPath>..\..\..\..\..\..\LIB\plugins\KSPe.Light.TweakScale.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
