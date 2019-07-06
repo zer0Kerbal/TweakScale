@@ -110,7 +110,11 @@ namespace TweakScale
 #endif
                 try {
                     string r = null;
+                    
                     // We check for fixable problems first, in the hope to prevent by luck a ShowStopper below.
+                    // These Offending Parts never worked before, or always ends in crashing KSP, so the less worse
+                    // line of action is to remove TweakScale from them in order to allow the player to at least keep
+                    // playing KSP. Current savegames can break, but they were going to crash and loose everything anyway!!
                     if (null != (r = this.checkForSanity(prefab)))
                     {   // There are some known situations where TweakScale is capsizing. If such situations are detected, we just
                         // refuse to scale it. Sorry.
@@ -121,24 +125,34 @@ namespace TweakScale
                         continue;
                     }
                     
-                    if (null != (r = this.checkForShowStoppers(prefab)))
-                    {   // This are situations that we should not allow the KSP to run to prevent serious corruption.
-                        // This is **FAR** from a good measure, but it's the only viable.
-                        Log.warn("**FATAL** Found a showstopper problem on {0}.", p.name);
-                        prefab.Modules.Remove(prefab.Modules["TweakScale"]);
-                        Log.error("**FATAL** Part {0} has a fatal problem due {1}.", p.name, r);
-                        ++showstoppers_failures;
-                        continue;
-                    }
-                    
+                    // This one is for my patches that "break things again" in a controlled way to salvage already running savegames
+                    // that would be lost by fixing things right. Sometimes, it's possible to keep the badly patched parts ongoing, as
+                    // as the nastiness will not crash KSP (besides still corrupting savegames and craft files in a way that would not
+                    // allow the user to share them).
+                    // Since we are overruling the checks, we abort the remaining ones. Yes, this allows abuse, but whatever... I can't
+                    // save the World, just the savegames. :)
                     if (null != (r = this.checkForOverules(prefab)))
                     {   // This is for detect and log the Breaking Parts patches.
                         // See issue [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 ) for details.
                         // This is **FAR** from a good measure, but it's the only viable.
                         Log.warn("Part {0} has the issue overrule {1}.", p.name, r);
                         ++check_overrulled;
-                        continue;
                     }
+                    // And now we check for the ShowStoppers.
+                    // These ones happens due rogue patches, added after a good installment could starts savegames, what ends up corrupting them!
+                    // Since we don't have how to know when this happens, and since originally the part was working fine, we don't know
+                    // how to proceeed. So the only sensible option is to scare the user enough to make him/her go to the Forum for help
+                    // so we can identify the offending patch and then provide a solution that would preserve his savegame.
+                    // We also stops any further processing, as we could damage something that is already damaged.
+                    else if (null != (r = this.checkForShowStoppers(prefab)))
+                    {   // This are situations that we should not allow the KSP to run to prevent serious corruption.
+                        // This is **FAR** from a good measure, but it's the only viable.
+                        Log.warn("**FATAL** Found a showstopper problem on {0}.", p.name);
+                        Log.error("**FATAL** Part {0} has a fatal problem due {1}.", p.name, r);
+                        ++showstoppers_failures;
+                        continue;
+                    }                    
+
                 }
                 catch (Exception e)
                 {
@@ -146,7 +160,9 @@ namespace TweakScale
                     Log.error("part={0} ({1}) Exception on Sanity Checks: {2}", p.name, p.title, e);
                 }
 
-				try
+                // If we got here, the part is good to go, or was overulled into a sane configuration that would allow us to proceed.
+				
+                try
                 {
 					TweakScale m = prefab.Modules["TweakScale"] as TweakScale;
                     m.DryCost = (float)(p.cost - prefab.Resources.Cast<PartResource>().Aggregate(0.0, (a, b) => a + b.maxAmount * b.info.unitCost));
