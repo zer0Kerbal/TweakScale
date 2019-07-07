@@ -84,8 +84,9 @@ namespace TweakScale
                 // handle special cases
                 if ((obj is PartModule) && (name == "inputResources" || name == "outputResources"))
                     return Create((obj as PartModule).resHandler, name);
-
-                Log.warn("No valid member found for {0} in {1}", name, objectType.Name);
+                    
+                string partname = (obj is PartModule) ? (obj as PartModule).part.name : "<unk>";
+                Log.warn("No valid member found for {0} in {1} for {2}", name, objectType.Name, partname);
 
                 return null;
             }
