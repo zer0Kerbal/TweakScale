@@ -46,12 +46,12 @@ namespace TweakScale
                     }
     			 }
             }
-            
+
             int check_failures = 0;
             int sanity_failures = 0;
             int showstoppers_failures = 0;
             int check_overrulled = 0;
-           
+
             foreach (AvailablePart p in PartLoader.LoadedPartsList)
             {
                 for (int i = WAIT_ROUNDS; i >= 0 && (null == p.partPrefab || null == p.partPrefab.Modules); --i)
@@ -76,7 +76,7 @@ namespace TweakScale
                         bool should_yield = false;
                         try 
                         {
-                            containsTweakScale = prefab.Modules.Contains("TweakScale"); // Yeah. This while stunt was done just due this. All the rest is plain clutter! :D 
+                            containsTweakScale = prefab.Modules.Contains("TweakScale"); // Yeah. This while stunt was done just to be able to do this. All the rest is plain clutter! :D 
                             break;
                         }
                         catch (Exception e)
@@ -97,13 +97,16 @@ namespace TweakScale
                     }
 
                     if (!containsTweakScale)
+                    {
+                        Log.dbg("The part named {0} ; title {1} doesn't supports TweakScale. Skipping.", p.name, p.title);
                         continue;
+                    }
 
                     // End of hack. Ugly, uh? :P
                 }
 #if DEBUG
                 {
-                    Log.dbg("Found part named {0}. title {1}:", p.name, p.title);
+                    Log.dbg("Found part named {0} ; title {1}:", p.name, p.title);
                     foreach (PartModule m in prefab.Modules)
                         Log.dbg("\tPart {0} has module {1}", p.name, m.moduleName);
                 }
@@ -198,6 +201,7 @@ namespace TweakScale
         
         private string checkForSanity(Part p)
 		{
+            Log.dbg("Checking Sanity for {0} at {1}", p.name, p.partInfo.partUrl);
             {
                 TweakScale m = p.Modules.GetModule<TweakScale>();
                 if (m.Fields["tweakScale"].guiActiveEditor == m.Fields["tweakName"].guiActiveEditor)
@@ -237,14 +241,22 @@ namespace TweakScale
         
         private string checkForShowStoppers(Part p)
         {
+            Log.dbg("Checking ShowStopper for {0} at {1}", p.name, p.partInfo.partUrl);
             {
                 ConfigNode part = GameDatabase.Instance.GetConfigNode(p.partInfo.partUrl);
+                if (null == part)
+                {
+                    Log.error("NULL ConfigNode for {0}!", p.partInfo.partUrl);
+                }
                 foreach (ConfigNode basket in part.GetNodes("MODULE"))
                 {
-                    if ("TweakScale" != basket.GetValue("name")) continue;
+                    string moduleName = basket.GetValue("name");
+                    if ("TweakScale" != moduleName) continue;
+                    Log.dbg("\tModule {0}", moduleName);
                     foreach (ConfigNode.Value property in basket.values)
                     {
                         if (basket.HasValue("ISSUE_OVERRULE")) continue;
+                        Log.dbg("\t\t{0} = {1}", property.name, property.value);
                         if (1 != basket.GetValues(property.name).Length)
                             return "having duplicated properties - see issue [#34]( https://github.com/net-lisias-ksp/TweakScale/issues/34 )";
                     }
@@ -256,8 +268,13 @@ namespace TweakScale
 
         private string checkForOverules(Part p)
         {
+            Log.dbg("Checking Overrule for {0} at {1}", p.name, p.partInfo.partUrl);
             {
                 ConfigNode part = GameDatabase.Instance.GetConfigNode(p.partInfo.partUrl);
+                if (null == part)
+                {
+                    Log.error("NULL ConfigNode for {0}!", p.partInfo.partUrl);
+                }
                 foreach (ConfigNode basket in part.GetNodes("MODULE"))
                 {
                     if ("TweakScale" != basket.GetValue("name")) continue;
