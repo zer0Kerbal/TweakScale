@@ -54,7 +54,7 @@ namespace TweakScale
            
             foreach (AvailablePart p in PartLoader.LoadedPartsList)
             {
-                for (int i = WAIT_ROUNDS; i >= 0 && (null == p.partPrefab || null == p.partPrefab.Modules || p.partPrefab.Modules.Count < 1); --i)
+                for (int i = WAIT_ROUNDS; i >= 0 && (null == p.partPrefab || null == p.partPrefab.Modules); --i)
                 {
                     yield return null;
                     if (0 == i) Log.error("Timeout waiting for {0}.prefab.Modules!!", p.name);
