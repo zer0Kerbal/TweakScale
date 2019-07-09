@@ -138,7 +138,7 @@ namespace TweakScale
                     {   // This is for detect and log the Breaking Parts patches.
                         // See issue [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 ) for details.
                         // This is **FAR** from a good measure, but it's the only viable.
-                        Log.warn("Part {0} has the issue overrule {1}.", p.name, r);
+                        Log.warn("Part {0} has the issue(s) overrule(s) {1}. See [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 ) for details.", p.name, r);
                         ++check_overrulled;
                     }
                     // And now we check for the ShowStoppers.
@@ -252,10 +252,10 @@ namespace TweakScale
                 {
                     string moduleName = basket.GetValue("name");
                     if ("TweakScale" != moduleName) continue;
+                    if (basket.HasValue("ISSUE_OVERRULE")) continue; // TODO: Check if the issue overrule is for #34 or any other that is checked here.
                     Log.dbg("\tModule {0}", moduleName);
                     foreach (ConfigNode.Value property in basket.values)
                     {
-                        if (basket.HasValue("ISSUE_OVERRULE")) continue;
                         Log.dbg("\t\t{0} = {1}", property.name, property.value);
                         if (1 != basket.GetValues(property.name).Length)
                             return "having duplicated properties - see issue [#34]( https://github.com/net-lisias-ksp/TweakScale/issues/34 )";
@@ -278,11 +278,8 @@ namespace TweakScale
                 foreach (ConfigNode basket in part.GetNodes("MODULE"))
                 {
                     if ("TweakScale" != basket.GetValue("name")) continue;
-                    foreach (ConfigNode.Value property in basket.values)
-                    {
-                        if (basket.HasValue("ISSUE_OVERRULE"))
-                            return String.Format("{0}. See [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 )", basket.GetValue("ISSUE_OVERRULE"));
-                    }
+                    if (basket.HasValue("ISSUE_OVERRULE"))
+                        return basket.GetValue("ISSUE_OVERRULE");
                 }
             }
             
