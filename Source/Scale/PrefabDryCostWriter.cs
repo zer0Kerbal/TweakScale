@@ -121,9 +121,9 @@ namespace TweakScale
                     if (null != (r = this.checkForSanity(prefab)))
                     {   // There are some known situations where TweakScale is capsizing. If such situations are detected, we just
                         // refuse to scale it. Sorry.
-                        Log.warn("Removing TweakScale support for {0}.", p.name);
+                        Log.warn("Removing TweakScale support for {0} ({1}).", p.name, p.title);
                         prefab.Modules.Remove(prefab.Modules["TweakScale"]);
-                        Log.error("Part {0} didn't passed the sanity check due {1}.", p.name, r);
+                        Log.error("Part {0} ({1}) didn't passed the sanity check due {1}.", p.name, p.title, r);
                         ++sanity_failures;
                         continue;
                     }
@@ -138,7 +138,7 @@ namespace TweakScale
                     {   // This is for detect and log the Breaking Parts patches.
                         // See issue [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 ) for details.
                         // This is **FAR** from a good measure, but it's the only viable.
-                        Log.warn("Part {0} has the issue(s) overrule(s) {1}. See [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 ) for details.", p.name, r);
+                        Log.warn("Part {0} ({1}) has the issue(s) overrule(s) {1}. See [#56]( https://github.com/net-lisias-ksp/TweakScale/issues/56 ) for details.", p.name, p.title, r);
                         ++check_overrulled;
                     }
                     // And now we check for the ShowStoppers.
@@ -150,8 +150,8 @@ namespace TweakScale
                     else if (null != (r = this.checkForShowStoppers(prefab)))
                     {   // This are situations that we should not allow the KSP to run to prevent serious corruption.
                         // This is **FAR** from a good measure, but it's the only viable.
-                        Log.warn("**FATAL** Found a showstopper problem on {0}.", p.name);
-                        Log.error("**FATAL** Part {0} has a fatal problem due {1}.", p.name, r);
+                        Log.warn("**FATAL** Found a showstopper problem on {0} ({1}).", p.name, p.title);
+                        Log.error("**FATAL** Part {0} ({1}) has a fatal problem due {2}.", p.name, p.title, r);
                         ++showstoppers_failures;
                         continue;
                     }                    
@@ -176,7 +176,7 @@ namespace TweakScale
                         Log.error("PrefabDryCostWriter: negative dryCost: part={0}, DryCost={1}", p.name, m.DryCost);
                         m.DryCost = 0;
                     }
-                    Log.dbg("Part {0} has drycost {1} with ignoreResourcesForCost {2}", p.name, m.DryCost, m.ignoreResourcesForCost);
+                    Log.dbg("Part {0} ({1}) has drycost {2} with ignoreResourcesForCost {3}",  p.name, p.title, m.DryCost, m.ignoreResourcesForCost);
                 }
                 catch (Exception e)
                 {
