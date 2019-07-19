@@ -14,11 +14,11 @@ namespace TweakScale.GUI
                 fontStyle = FontStyle.Bold
             };
             style.normal.textColor = Color.yellow;
-            style.border.top = 24;
-            
+            style.border.top = 8;
+
             return style;
         }
-        
+
         internal static GUIStyle createTextStyle ()
         {
             GUIStyle style = new GUIStyle("Label")
@@ -37,7 +37,7 @@ namespace TweakScale.GUI
                 tex.Apply();
                 style.normal.background = tex;
             }
-            
+
             return style;
         }
     }

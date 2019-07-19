@@ -10,8 +10,8 @@ namespace TweakScale.GUI
 
 Parts that fails sanity check had TweakScale support withdrawn. This was necessary to prevent them to crash the game. At the present, there's no way to use them without nasty consequences.
 
-TweakScale is working to support that parts.";
-        
+TweakScale is working to support these parts.";
+
         internal static void show(int sanity_failures)
         {
             GameObject go = new GameObject("TweakScale.WarningBox");
@@ -23,7 +23,7 @@ TweakScale is working to support that parts.";
             dlg.Show(
                 "TweakScale Warning", 
                 String.Format(MSG, sanity_failures),
-                30, 1, 0,
+                30, 1, -1,
                 win, text
             );
             Log.detail("\"TweakScale Warning\" about sanity checks was displayed");

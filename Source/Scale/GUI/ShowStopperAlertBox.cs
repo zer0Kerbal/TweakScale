@@ -7,16 +7,16 @@ namespace TweakScale.GUI
 {
     internal static class ShowStopperAlertBox
     {
-        private static readonly string MSG = @"Unfortunately TweakScale found {0:} **FATAL** issue(s) on your KSP installment! This *will* corrupt your savagames sooner or later **FOR SURE**!
+        private static readonly string MSG = @"Unfortunately TweakScale found {0} **FATAL** issue(s) on your KSP installment! This *will* corrupt your savagames sooner or later **FOR SURE**!
 
-The KSP.log is listing every compromised part(s) on your installment, look for lines with [TweakScale] **FATAL** on the log line. Be aware that the parts being reported are not the culprits, but the Screaming Victims.
+The KSP.log is listing every compromised part(s) on your installment, look for lines with '[TweakScale] ERROR: **FATAL**' on the log line. Be aware that the parts being reported are not the culprits, but the Screaming Victims.
 
-There's no possible automated fix for the problem, your best line of action is to call for help on Forum by clicking on the OK button below. We will help you on diagnosing the Add'On that is troubling you. Publish your KSP.log on some snippet service as GIST and Pastebin and mention it on the post.
+There's no possible automated fix for the problem, your best line of action is to call for help on Forum by clicking on the OK button below. We will help you on diagnosing the Add'On that is troubling you. Publish your KSP.log on some file share service and mention it on the post.
 
-Be adivised that by not closing KSP right now, your savegames can get corrupted at any time, even when things appear to work by now - and the salvage can be harder.
+Be advised that by not closing KSP right now, your savegames can get corrupted at any time, even when things appear to work by now - and the salvage can be harder.
 
-Backup everything *NOW* if you choose to ignore this message and proceed.";
-        
+Backup everything *NOW* if you choose to ignore this message and proceed - TweakScale recommends S.A.V.E. to automate this task for you.";
+
         internal static void Show(int failure_count)
         {
             GameObject go = new GameObject("TweakScale.AlertBox");
@@ -46,7 +46,7 @@ Backup everything *NOW* if you choose to ignore this message and proceed.";
                 tex.Apply();
                 text.normal.background = tex;
             }
-            
+
             dlg.Show(
                 "Houston, we have a Problem!", 
                 String.Format(MSG, failure_count),

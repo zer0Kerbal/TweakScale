@@ -8,9 +8,10 @@ namespace TweakScale.GUI
     {
         private static readonly string MSG = @"There're {0} parts with overrules detected.
 
-A overrule is a problem detected but the fix would break a savegame, so a patch to overcome the problem is applied.
+A overrule is applied to problems already detected but the fix would break a savegame, so a patch to overcome this new problem is applied.
 
-Do not start new savegames with overruled parts. Use them only to exising ones.";
+Do not start new savegames with overruled parts as they make your artifacts non standard and, so, no shareable. Use them only to exising savegames to keep them going.";
+
         internal static void show(int overrule_count)
         {
             GameObject go = new GameObject("TweakScale.AdviseBox");
@@ -22,7 +23,7 @@ Do not start new savegames with overruled parts. Use them only to exising ones."
             dlg.Show(
                 "TweakScale advises", 
                 String.Format(MSG, overrule_count),
-                30, 1, -1,
+                30, 0, -1,
                 win, text
             );
             Log.detail("\"TweakScale advises\" about overrules checks was displayed");
