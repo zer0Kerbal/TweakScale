@@ -198,10 +198,11 @@ namespace TweakScale
                 if (check_failures > 0)     GUI.CheckFailureAlertBox.show(check_failures);
             }
         }
-        
+
         private string checkForSanity(Part p)
 		{
             Log.dbg("Checking Sanity for {0} at {1}", p.name, p.partInfo.partUrl);
+            
             {
                 TweakScale m = p.Modules.GetModule<TweakScale>();
                 if (m.Fields["tweakScale"].guiActiveEditor == m.Fields["tweakName"].guiActiveEditor)
@@ -238,16 +239,12 @@ namespace TweakScale
 
 			return null;
 		}
-        
+
         private string checkForShowStoppers(Part p)
         {
             Log.dbg("Checking ShowStopper for {0} at {1}", p.name, p.partInfo.partUrl);
+            ConfigNode part = this.GetMeThatConfigNode(p);
             {
-                ConfigNode part = GameDatabase.Instance.GetConfigNode(p.partInfo.partUrl);
-                if (null == part)
-                {
-                    Log.error("NULL ConfigNode for {0}!", p.partInfo.partUrl);
-                }
                 foreach (ConfigNode basket in part.GetNodes("MODULE"))
                 {
                     string moduleName = basket.GetValue("name");
@@ -262,19 +259,14 @@ namespace TweakScale
                     }
                 }
             }
-            
             return null;
         }
 
         private string checkForOverules(Part p)
         {
             Log.dbg("Checking Overrule for {0} at {1}", p.name, p.partInfo.partUrl);
+            ConfigNode part = this.GetMeThatConfigNode(p);
             {
-                ConfigNode part = GameDatabase.Instance.GetConfigNode(p.partInfo.partUrl);
-                if (null == part)
-                {
-                    Log.error("NULL ConfigNode for {0}!", p.partInfo.partUrl);
-                }
                 foreach (ConfigNode basket in part.GetNodes("MODULE"))
                 {
                     if ("TweakScale" != basket.GetValue("name")) continue;
@@ -282,8 +274,32 @@ namespace TweakScale
                         return basket.GetValue("ISSUE_OVERRULE");
                 }
             }
-            
             return null;
         }
-	}
+
+        private ConfigNode GetMeThatConfigNode(Part p)
+		{
+            // Check the forum for the rationale:
+            //      https://forum.kerbalspaceprogram.com/index.php?/topic/7542-the-official-unoffical-quothelp-a-fellow-plugin-developerquot-thread/&do=findComment&comment=3631853
+            //      https://forum.kerbalspaceprogram.com/index.php?/topic/7542-the-official-unoffical-quothelp-a-fellow-plugin-developerquot-thread/&do=findComment&comment=3631908
+            //      https://forum.kerbalspaceprogram.com/index.php?/topic/7542-the-official-unoffical-quothelp-a-fellow-plugin-developerquot-thread/&do=findComment&comment=3632139
+
+            // First try the canonnical way - there must be a config file somewhere!
+            ConfigNode r = GameDatabase.Instance.GetConfigNode(p.partInfo.partUrl);
+            if (null == r)
+            {
+                // But if that doesn't works, let's try the partConfig directly.
+                //
+                // I have reasons to believe that partConfig may not be an identical copy from the Config since Making History
+                // (but I have, by now, no hard evidences yet) - but I try first the config file nevertheless. There's no point]
+                // on risking pinpointing something that cannot be found on the config file.
+                //
+                // What will happen if the problems start to appear on the partConfig and not in the config file is something I
+                // don't dare to imagine...
+                Log.warn("NULL ConfigNode for {0} (unholly characters on the name?). Trying partConfig instead!", p.partInfo.partUrl);
+                r = p.partInfo.partConfig;
+            }
+            return r;
+        }
+    }
 }
