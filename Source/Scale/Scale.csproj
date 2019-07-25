@@ -59,6 +59,7 @@
     <Compile Include="GUI\OverrulledAdviseBox.cs" />
     <Compile Include="GUI\CheckFailureAlertBox.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="GUI\CommonBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
