@@ -1,5 +1,11 @@
 # TweakScale :: Change Log
 
+* 2019-0804: 2.4.3.2 (Lisias) for KSP >= 1.4.1
+	+ This is an Emergencial Release due an Emergencial Release due an Emergencial Release. I love recursion, don't you? :P
+	+ Closing or reworking the following issues:
+		- [#65](https://github.com/net-lisias-ksp/TweakScale/issues/65) Support for new Nertea's Cryo Engines
+			- Thanks to [friznet](https://github.com/friznit) and [marr75](https://github.com/marr75).
+		- Fixing some tyops :P on Logging and Dialog Boxes.
 * 2019-0725: 2.4.3.1 (Lisias) for KSP >= 1.4.1
 	+ This is an emergencial Release due a Emergencial Release. :P
 	+ Adding KSPe Light facilites:
