@@ -77,23 +77,6 @@ namespace TweakScale
         /// </summary>
         /// <param name="format">The format string.</param>
         /// <param name="args">The arguments to the format.</param>
-        [StringFormatMethod("format")]
-        public static void Logf(string format, params object[] args)
-        {
-            Debug.Log("[TweakScale] " + string.Format(format, args.Select(a => a.PreFormat()).ToArray()) + Environment.NewLine + StackTraceUtility.ExtractStackTrace());
-        }
-
-        /// <summary>
-        /// Writes destination log message to output_log.txt.
-        /// </summary>
-        /// <param name="format">The format string.</param>
-        /// <param name="args">The arguments to the format.</param>
-        [StringFormatMethod("format")]
-        public static void LogWf(string format, params object[] args)
-        {
-            Debug.LogWarning("[TweakScale Warning] " + string.Format(format, args.Select(a => a.PreFormat()).ToArray()) + Environment.NewLine + StackTraceUtility.ExtractStackTrace());
-        }
-
         /// <summary>
         /// Formats certain types to make them more readable.
         /// </summary>
@@ -140,7 +123,7 @@ namespace TweakScale
             {
                 if (ex is InvalidCastException || ex is FormatException || ex is OverflowException || ex is ArgumentNullException)
                 {
-                    LogWf("Failed to convert string value \"{0}\" to type {1}", cfgValue, typeof(T).Name);
+                    Log.warn("Failed to convert string value \"{0}\" to type {1}", cfgValue, typeof(T).Name);
                     return defaultValue;
                 }
                 throw;
@@ -182,7 +165,7 @@ namespace TweakScale
                 if (!(ex is InvalidCastException) && !(ex is FormatException) && !(ex is OverflowException) &&
                     !(ex is ArgumentNullException))
                     throw;
-                LogWf("Failed to convert string value \"{0}\" to type {1}", value, typeof(T).Name);
+                Log.warn("Failed to convert string value \"{0}\" to type {1}", value, typeof(T).Name);
                 return defaultValue;
             }
         }

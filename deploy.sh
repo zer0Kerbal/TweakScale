@@ -8,8 +8,8 @@ check() {
 		mkdir -p "./GameData/$TARGETBINDIR/"
 	fi
 
-	if [ ! -f "./GameData/$TARGETBINDIR/KSPe.Light.dll" ] ; then
-		echo "KSPe.Light not found!!! Aborting."
+	if [ ! -f "./GameData/$TARGETBINDIR/KSPe.Light.TweakScale.dll" ] ; then
+		echo "KSPe.Light.TweakScale not found!!! Aborting."
 		read line
 		exit -1
 	fi
@@ -54,7 +54,7 @@ cp *LICENSE "./GameData/$TARGETDIR"
 cp NOTICE "./GameData/$TARGETDIR"
 deploy_md README.md
 
-for dll in Scale Scale_Redist; do
+for dll in Scale Scale_Redist KSPe.Light.TweakScale ; do
     deploy_dev $dll
     deploy_bin $dll
 done

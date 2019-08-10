@@ -56,6 +56,10 @@
     <Compile Include="GUI\ShowStopperAlertBox.cs" />
     <Compile Include="GUI\SanityCheckAlertBox.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="GUI\OverrulledAdviseBox.cs" />
+    <Compile Include="GUI\CheckFailureAlertBox.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="GUI\CommonBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -74,8 +78,8 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>..\..\..\..\..\..\LIB\managed\1.4.1\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="KSPe.Light">
-      <HintPath>..\..\..\..\..\..\LIB\plugins\KSPe.Light.dll</HintPath>
+    <Reference Include="KSPe.Light.TweakScale">
+      <HintPath>..\..\..\..\..\..\LIB\plugins\KSPe.Light.TweakScale.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -95,7 +99,7 @@
     <Folder Include="GUI\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
